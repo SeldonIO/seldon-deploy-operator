@@ -1,0 +1,15 @@
+scorecard:
+  # Setting a global scorecard option
+  output: json
+  plugins:
+    - basic:
+        init-timeout: 60
+        namespace: seldon-system
+        cr-manifest:
+          - "deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml"
+    - olm:
+        init-timeout: 60
+        namespace: seldon-system
+        cr-manifest:
+          - "deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml"
+        csv-path: "deploy/olm-catalog/seldon-deploy-operator/0.6.0/seldon-deploy-operator.v0.6.0.clusterserviceversion.yaml"

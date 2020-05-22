@@ -1,0 +1,148 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "seldon-deploy.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+    helm.sh/chart: {{ include "seldon-deploy.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    helm.sh/created: {{ date "20060102150405" .Release.Time | quote }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: webhook
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SELDON_DEPLOY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value }}
+            {{- end }}
+            {{- if .Values.enableAppAuth }}
+            - name: "ENABLE_APP_AUTH"
+              value: "{{ .Values.enableAppAuth }}"
+            {{- end}}
+            {{- if .Values.enableAppAnalytics }}
+            - name: "ENABLE_APP_ANALYTICS"
+              value: "{{ .Values.enableAppAnalytics }}"
+            {{- end}}
+            {{- if .Values.docker.user }}
+            - name: "DOCKER_USER"
+              value: "{{ .Values.docker.user }}"
+            {{- end}}
+            - name: "LOADTEST_IMAGE_REPOSITORY"
+              value: "{{ .Values.loadtest.image.repository }}"
+            - name: "LOADTEST_IMAGE_TAG"
+              value: "{{ .Values.loadtest.image.tag }}"
+            {{- if .Values.github.user }}
+            - name: "GIT_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seldon-deploy.fullname" . }}
+                  key: username
+            - name: "GIT_TOKEN"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seldon-deploy.fullname" . }}
+                  key: token
+            - name: "GIT_EMAIL"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seldon-deploy.fullname" . }}
+                  key: email
+            {{- end }}
+            {{- if .Values.external.protocol }}
+            - name: "EXTERNAL_PROTOCOL"
+              value: "{{ .Values.external.protocol }}"
+            {{- end }}
+            {{- if .Values.external.host }}
+            - name: "EXTERNAL_HOST"
+              value: "{{ .Values.external.host }}"
+            {{- end }}
+            {{- if .Values.kfserving.protocol }}
+            - name: "KFSERVING_PROTOCOL"
+              value: "{{ .Values.kfserving.protocol }}"
+            {{- end }}
+            - name: "INFERENCESERVICES"
+              value: "{{ .Values.kfserving.enabled }}"
+            - name: "SELDONDEPLOYMENTS"
+              value: "{{ .Values.seldon.enabled }}"
+            {{- if .Values.lite }}
+            - name: "LITE"
+              value: "{{ .Values.lite }}"
+            {{- end }}
+            {{- if .Values.virtualService.create }}
+            - name: "EXTERNAL_PREFIX"
+              value: "{{ .Values.virtualService.prefix }}"
+            {{- end }}
+            {{- if .Values.elasticsearch.jwtSecretName }}
+            - name: "ELASTICSEARCH_TOKEN"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearch.jwtSecretName }}
+                  key: {{ .Values.elasticsearch.jwtSecretKey }}
+            {{- end }}
+          {{- if .Values.lite }}
+          livenessProbe:
+            httpGet:
+              path: /seldon-deploy/
+              port: http
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /seldon-deploy/
+              port: http
+            initialDelaySeconds: 30
+          {{- else }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      serviceAccount: {{ include "seldon-deploy.serviceAccountName" . }}
+      serviceAccountName: {{ include "seldon-deploy.serviceAccountName" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}

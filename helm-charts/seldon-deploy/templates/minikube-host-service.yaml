@@ -1,0 +1,9 @@
+{{- if .Values.minikubeIP }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: minikube-host
+spec:
+    type: ExternalName
+    externalName: {{ .Values.minikubeIP }}
+{{- end }}

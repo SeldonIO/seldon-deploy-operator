@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seldon-deploy-config
+data:
+  prometheusSeldonUrl: {{ .Values.prometheus.seldon.url }}
+  prometheusKnativeUrl: {{ .Values.prometheus.knative.url }}
+  prometheusNamespaceMetricName: {{ .Values.prometheus.seldon.namespaceMetricName }}
+  prometheusServiceMetricName: {{ .Values.prometheus.seldon.serviceMetricName }}
+  elasticsearchUrl: {{ .Values.elasticsearch.url }}
+  argocdUrl: {{ .Values.argocd.url }}
+  skipVerifyGit: '{{ .Values.skipVerifyGit }}'
+  skipVerifyHttpCalls: '{{ .Values.skipVerifyHttpCalls }}'

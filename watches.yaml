@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: machinelearning.seldon.io
+  kind: SeldonDeploy
+  chart: helm-charts/seldon-deploy

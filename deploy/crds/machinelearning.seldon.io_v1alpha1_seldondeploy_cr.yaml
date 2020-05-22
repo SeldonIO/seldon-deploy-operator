@@ -1,0 +1,79 @@
+apiVersion: machinelearning.seldon.io/v1alpha1
+kind: SeldonDeploy
+metadata:
+  name: example-seldondeploy
+spec:
+  # Default values copied from <project_dir>/helm-charts/seldon-deploy/values.yaml
+  
+  affinity: {}
+  argocd:
+    url: https://argocd-server.argocd.svc.cluster.local
+  docker:
+    user: unkown
+  elasticsearch:
+    url: http://elasticsearch-master.logs.svc.cluster.local:9200
+  enableAppAnalytics: true
+  enableAppAuth: false
+  env:
+    GITOPS_FORMAT: json
+    USERID_CLAIM_KEY: name
+  external:
+    host: ""
+    protocol: http
+  fullnameOverride: ""
+  github:
+    email: ""
+    token: ""
+    user: ""
+  image:
+    pullPolicy: Always
+    repository: seldonio/seldon-deploy
+    tag: 0.6.0
+  imagePullSecrets:
+  - name: regcred
+  ingress:
+    annotations: {}
+    enabled: false
+    hosts:
+    - host: chart-example.local
+      paths: []
+    tls: []
+  kfserving:
+    enabled: true
+    protocol: http
+  lite: false
+  loadtest:
+    image:
+      repository: seldonio/hey-loadtester
+      tag: 0.1
+  nameOverride: ""
+  nodeSelector: {}
+  prometheus:
+    knative:
+      url: http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/
+    seldon:
+      namespaceMetricName: kubernetes_namespace
+      serviceMetricName: service
+      url: http://seldon-core-analytics-prometheus-seldon.seldon-system/api/v1/
+  rbac:
+    clusterWide: false
+    create: true
+  replicaCount: 1
+  resources: {}
+  seldon:
+    enabled: true
+  service:
+    port: 80
+    type: ClusterIP
+  serviceAccount:
+    create: true
+  serviceAccountName: seldon-deploy
+  skipVerifyGit: true
+  skipVerifyHttpCalls: true
+  tolerations: []
+  virtualService:
+    create: false
+    gateways:
+    - kubeflow-gateway.kubeflow.svc.cluster.local
+    prefix: /seldon-deploy/
+  
