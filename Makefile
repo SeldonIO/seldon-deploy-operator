@@ -60,7 +60,7 @@ validate-bundle:
 	operator-courier verify --ui_validate_io deploy/olm-catalog/seldon-deploy-operator/
 
 scorecard:
-	operator-sdk scorecard -o text --bundle deploy/olm-catalog/seldon-deploy-operator --kubeconfig ~/.kube/config
+	operator-sdk scorecard -o text --bundle deploy/olm-catalog/seldon-deploy-operator --kubeconfig ~/.kube/config --verbose
 
 
 # See https://github.com/operator-framework/community-operators/blob/master/docs/testing-operators.md

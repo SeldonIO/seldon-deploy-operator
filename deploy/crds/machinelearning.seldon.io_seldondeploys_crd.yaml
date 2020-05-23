@@ -12,10 +12,102 @@ spec:
   scope: Namespaced
   subresources:
     status: {}
+    
   validation:
     openAPIV3Schema:
-      type: object
-      x-kubernetes-preserve-unknown-fields: true
+      x-kubernetes-preserve-unknown-fields: true      
+      description: SeldonDeployment is the Schema for the seldondeployments API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          type: object          
+          description: SeldonDeploySpec defines the desired state of the Seldon Deploy App
+          properties:
+            argocd:
+              type: object
+            lite:
+              type: boolean
+            replicaCount:
+              type: integer
+            serviceAccount:
+              type: object
+            tolerations:
+              type: array
+              items:
+                type: object
+            virtualService:
+              type: object
+            affinity:
+              type: object
+            github:
+              type: object
+            kfserving:
+              type: object
+            service:
+              type: object
+            fullnameOverride:
+              type: string
+            imagePullSecrets:
+              type: array
+              items:
+                type: object
+            resources:
+              type: object
+            serviceAccountName:
+              type: string
+            nodeSelector:
+              type: object
+            elasticsearch:
+              type: object
+            image:
+              type: object
+            nameOverride:
+              type: string
+            prometheus:
+              type: object
+            enableAppAnalytics:
+              type: boolean
+            enableAppAuth:
+              type: boolean
+            rbac:
+              type: object
+            skipVerifyGit:
+              type: boolean
+            docker:
+              type: object
+            ingress:
+              type: object
+            loadtest:
+              type: object
+            seldon:
+              type: object
+            skipVerifyHttpCalls:
+              type: boolean
+            env:
+              type: object
+            external:
+              type: object
+        status:
+          description: SeldonDeploymentStatus defines the observed state of SeldonDeployment
+          properties:
+            conditions:
+              type: array
+              items:
+                type: object
+            deployedRelease:
+              type: object
+          type: object
   version: v1alpha1
   versions:
   - name: v1alpha1
