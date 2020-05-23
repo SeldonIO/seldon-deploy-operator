@@ -146,7 +146,7 @@ metadata:
             "image": {
               "pullPolicy": "Always",
               "repository": "seldonio/seldon-deploy",
-              "tag": "0.0.0"
+              "tag": "0.6.0"
             },
             "imagePullSecrets": [
               {
@@ -631,7 +631,7 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: seldon-deploy-operator
-                image: seldonio/seldon-deploy-operator:0.0.1
+                image: seldonio/seldon-deploy-operator:0.6.0
                 imagePullPolicy: IfNotPresent
                 name: seldon-deploy-operator
                 resources: {}

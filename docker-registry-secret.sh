@@ -13,6 +13,11 @@ STARTUP_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 DOCKERCREDS_FILE=${HOME}/.config/seldon/seldon-deploy/dockercreds.txt
 
+if [ "$#" -ne 1 ]; then
+    echo "parameter <namespace> requied"
+    exit 1
+fi
+
 source "${DOCKERCREDS_FILE}"
 kubectl create secret docker-registry regcred \
     --namespace=$1 \
