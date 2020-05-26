@@ -10,7 +10,7 @@ docker-build:
 docker-push:
 	docker push ${IMG}
 
-kind-image-install:
+kind-image-install: docker-build
 	kind load -v 3 docker-image ${IMG}
 
 update-yaml: docker-build
@@ -27,22 +27,24 @@ yaml-install-crd:
 	kubectl apply -f deploy/crds/machinelearning.seldon.io_seldondeploys_crd.yaml
 
 yaml-install-operator:
-	kubectl create -f deploy/service_account.yaml
-	kubectl create -f deploy/role.yaml
-	kubectl create -f deploy/role_binding.yaml
-	kubectl create -f deploy/operator.yaml
+	kubectl create ns seldon-system || echo "Namespace seldon-system already exists"
+	kubectl apply -f deploy/service_account.yaml -n seldon-system
+	kubectl apply -f deploy/role.yaml -n seldon-system
+	kubectl apply -f deploy/role_binding.yaml -n seldon-system
+	kubectl apply -f deploy/operator.yaml -n seldon-system
 
 yaml-uninstall-operator:
-	kubectl delete -f deploy/service_account.yaml
-	kubectl delete -f deploy/role.yaml
-	kubectl delete -f deploy/role_binding.yaml
-	kubectl delete -f deploy/operator.yaml
+	kubectl delete -f deploy/service_account.yaml -n seldon-system
+	kubectl delete -f deploy/role.yaml -n seldon-system
+	kubectl delete -f deploy/role_binding.yaml -n seldon-system
+	kubectl delete -f deploy/operator.yaml -n seldon-system
+	kubectl delete ns seldon-system
 
 yaml-run-seldon-deploy:
-	kubectl apply -f deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml
+	kubectl apply -f deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml -n seldon-system
 
 yaml-delete-seldon-deploy:
-	kubectl delete -f deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml
+	kubectl delete -f deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml -n seldon-system
 
 
 #
