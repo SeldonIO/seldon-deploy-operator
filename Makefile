@@ -55,6 +55,7 @@ yaml-delete-seldon-deploy:
 generate-csv:
 	operator-sdk generate csv --csv-version ${VERSION} --make-manifests=false --verbose
 
+#bundle is future way, currently just using csv
 generate-bundle:
 	operator-sdk bundle create --generate-only --directory ./deploy/olm-catalog/seldon-deploy-operator/0.6.0/
 
@@ -62,6 +63,7 @@ validate-bundle:
 	operator-courier verify --ui_validate_io deploy/olm-catalog/seldon-deploy-operator/
 
 scorecard:
+	kubectl create ns seldon-system || true
 	operator-sdk scorecard -o text --bundle deploy/olm-catalog/seldon-deploy-operator --kubeconfig ~/.kube/config --verbose
 
 

@@ -8,211 +8,111 @@ metadata:
           "apiVersion": "machinelearning.seldon.io/v1alpha1",
           "kind": "SeldonDeploy",
           "metadata": {
-            "name": "example-seldondeploy"
+            "name": "example-seldondeploy",
+            "namespace": "seldon",
           },
           "spec": {
-            "affinity": {},
-            "argocd": {
-              "url": "https://argocd-server.argocd.svc.cluster.local"
-            },
             "docker": {
               "user": "unkown"
             },
-            "elasticsearch": {
-              "url": "http://elasticsearch-master.logs.svc.cluster.local:9200"
-            },
-            "enableAppAnalytics": true,
-            "enableAppAuth": false,
-            "env": {
-              "GITOPS_FORMAT": "json",
-              "USERID_CLAIM_KEY": "name"
-            },
-            "external": {
-              "host": "",
-              "protocol": "http"
-            },
-            "fullnameOverride": "",
-            "github": {
-              "email": "",
-              "token": "",
-              "user": ""
-            },
-            "image": {
-              "pullPolicy": "Always",
-              "repository": "seldonio/seldon-deploy",
-              "tag": "0.6.0"
-            },
-            "imagePullSecrets": [
-              {
-                "name": "regcred"
-              }
-            ],
-            "ingress": {
-              "annotations": {},
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": []
-                }
-              ],
-              "tls": []
-            },
-            "kfserving": {
-              "enabled": true,
-              "protocol": "http"
-            },
-            "lite": false,
-            "loadtest": {
-              "image": {
-                "repository": "seldonio/hey-loadtester",
-                "tag": 0.1
-              }
-            },
-            "nameOverride": "",
             "nodeSelector": {},
-            "prometheus": {
-              "knative": {
-                "url": "http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/"
-              },
-              "seldon": {
-                "namespaceMetricName": "kubernetes_namespace",
-                "serviceMetricName": "service",
-                "url": "http://seldon-core-analytics-prometheus-seldon.seldon-system/api/v1/"
-              }
-            },
-            "rbac": {
-              "clusterWide": false,
-              "create": true
-            },
-            "replicaCount": 1,
-            "resources": {},
-            "seldon": {
-              "enabled": true
-            },
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "create": true
-            },
             "serviceAccountName": "seldon-deploy",
-            "skipVerifyGit": true,
-            "skipVerifyHttpCalls": true,
-            "tolerations": [],
-            "virtualService": {
-              "create": false,
-              "gateways": [
-                "kubeflow-gateway.kubeflow.svc.cluster.local"
-              ],
-              "prefix": "/seldon-deploy/"
+            "imagePullSecrets": [
+            {
+              "name": "regcred"
             }
-          }
-        },
-        {
-          "apiVersion": "machinelearning.seldon.io/v1alpha1",
-          "kind": "SeldonDeploy",
-          "metadata": {
-            "name": "example-seldondeploy"
-          },
-          "spec": {
-            "affinity": {},
-            "argocd": {
-              "url": "https://argocd-server.argocd.svc.cluster.local"
-            },
-            "docker": {
-              "user": "unkown"
-            },
-            "elasticsearch": {
-              "url": "http://elasticsearch-master.logs.svc.cluster.local:9200"
-            },
-            "enableAppAnalytics": true,
-            "enableAppAuth": false,
-            "env": {
-              "GITOPS_FORMAT": "json",
-              "USERID_CLAIM_KEY": "name"
-            },
-            "external": {
-              "host": "",
-              "protocol": "http"
-            },
-            "fullnameOverride": "",
+            ],
             "github": {
               "email": "",
               "token": "",
               "user": ""
             },
-            "image": {
-              "pullPolicy": "Always",
-              "repository": "seldonio/seldon-deploy",
-              "tag": "0.6.0"
-            },
-            "imagePullSecrets": [
-              {
-                "name": "regcred"
-              }
-            ],
-            "ingress": {
-              "annotations": {},
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": []
-                }
-              ],
-              "tls": []
-            },
-            "kfserving": {
-              "enabled": true,
-              "protocol": "http"
-            },
-            "lite": false,
-            "loadtest": {
-              "image": {
-                "repository": "seldonio/hey-loadtester",
-                "tag": 0.1
-              }
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "prometheus": {
-              "knative": {
-                "url": "http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/"
-              },
-              "seldon": {
-                "namespaceMetricName": "kubernetes_namespace",
-                "serviceMetricName": "service",
-                "url": "http://seldon-core-analytics-prometheus-seldon.seldon-system/api/v1/"
-              }
-            },
-            "rbac": {
-              "clusterWide": false,
-              "create": true
-            },
-            "replicaCount": 1,
             "resources": {},
+            "enableAppAuth": false,
+            "fullnameOverride": "",
+            "affinity": {},
+            "enableAppAnalytics": true,
             "seldon": {
               "enabled": true
             },
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
+            "prometheus": {
+              "knative": {
+                "url": "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
+              },
+              "seldon": {
+                "jwtSecretKey": "jwt-elastic.txt",
+                "jwtSecretName": "jwt-elastic",
+                "namespaceMetricName": "namespace",
+                "resourceMetricsUrl": "https://prometheus-k8s.openshift-monitoring:9091/api/v1/",
+                "serviceMetricName": "exported_service",
+                "url": "http://prometheus-operated.seldon:9090/api/v1/"
+              }
             },
-            "serviceAccount": {
-              "create": true
-            },
-            "serviceAccountName": "seldon-deploy",
-            "skipVerifyGit": true,
-            "skipVerifyHttpCalls": true,
-            "tolerations": [],
             "virtualService": {
               "create": true,
               "gateways": [
-                "kubeflow-gateway.kubeflow.svc.cluster.local"
+                "seldon-gateway.istio-system.svc.cluster.local"
               ],
               "prefix": "/seldon-deploy/"
+            },
+            "external": {
+              "host": "",
+              "protocol": "http"
+            },
+            "env": {
+              "GITOPS_FORMAT": "json",
+              "USERID_CLAIM_KEY": "name"
+            },
+            "lite": false,
+            "kfserving": {
+              "enabled": false,
+              "protocol": "http"
+            },
+            "rbac": {
+              "clusterWide": false,
+              "create": true
+            },
+            "skipVerifyHttpCalls": true,
+            "ingress": {
+              "annotations": {},
+              "enabled": false,
+              "hosts": [
+              {
+                "host": "chart-example.local",
+                "paths": []
+              }
+              ],
+              "tls": []
+            },
+            "service": {
+              "port": 80,
+              "type": "ClusterIP"
+            },
+            "replicaCount": 1,
+            "nameOverride": "",
+            "serviceAccount": {
+              "create": true
+            },
+            "loadtest": {
+              "image": {
+                "repository": "seldonio/hey-loadtester",
+                "tag": 0.1
+              }
+            },
+            "skipVerifyGit": true,
+            "argocd": {
+              "url": "https://argocd-server.argocd.svc.cluster.local"
+            },
+            "image": {
+              "pullPolicy": "Always",
+              "repository": "ryandawsonuk/seldon-deploy",
+              "tag": "0.7.0-dev"
+            },
+            "tolerations": [],
+            "elasticsearch": {
+              "jwtSecretKey": "jwt-elastic.txt",
+              "jwtSecretName": "jwt-elastic",
+              "url": "https://elasticsearch.openshift-logging:9200"
             }
           }
         }
@@ -240,7 +140,6 @@ spec:
       displayName: Seldon Delpoyment
       kind: SeldonDeploy
       name: seldondeploys.machinelearning.seldon.io
-      version: v1alpha1
       resources:
       - kind: SeldonDeploy
         name: seldondeploys.machinelearning.seldon.io
@@ -288,7 +187,6 @@ spec:
       - description: virtualService
         displayName: virtualService
         path: virtualService
-
       - description: Environment vars to add
         displayName: env
         path: env
@@ -380,6 +278,7 @@ spec:
       - description: deploy version released
         displayName: deployedRelease
         path: deployedRelease
+      version: v1alpha1
   description: The Seldon deploy operator allows the creation of Seldon Deploy applications
     to provide management, monitoring and updating of machine learning models from
     a range of technologies. It includes the ability to run explanations as well as
@@ -488,125 +387,7 @@ spec:
           verbs:
           - '*'
         serviceAccountName: seldon-deploy-operator
-      - rules:
-        - apiGroups:
-          - ""
-          resources:
-          - namespaces
-          verbs:
-          - get
-        - apiGroups:
-          - ""
-          resources:
-          - configmaps
-          - secrets
-          verbs:
-          - '*'
-        - apiGroups:
-          - ""
-          resources:
-          - events
-          verbs:
-          - create
-        - apiGroups:
-          - rbac.authorization.k8s.io
-          resources:
-          - clusterrolebindings
-          - clusterroles
-          verbs:
-          - '*'
-        - apiGroups:
-          - ""
-          resources:
-          - configmaps
-          - serviceaccounts
-          - services
-          verbs:
-          - '*'
-        - apiGroups:
-          - rbac.authorization.k8s.io
-          resources:
-          - rolebindings
-          - roles
-          verbs:
-          - '*'
-        - apiGroups:
-          - apps
-          resources:
-          - deployments
-          verbs:
-          - '*'
-        - apiGroups:
-          - monitoring.coreos.com
-          resources:
-          - servicemonitors
-          verbs:
-          - get
-          - create
-        - apiGroups:
-          - apps
-          resourceNames:
-          - seldon-deploy-operator
-          resources:
-          - deployments/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - ""
-          resources:
-          - pods
-          verbs:
-          - get
-        - apiGroups:
-          - apps
-          resources:
-          - replicasets
-          - deployments
-          verbs:
-          - get
-        - apiGroups:
-          - machinelearning.seldon.io
-          resources:
-          - '*'
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        serviceAccountName: seldon-deploy-operator
       deployments:
-      - name: seldon-deploy-operator
-        spec:
-          replicas: 1
-          selector:
-            matchLabels:
-              name: seldon-deploy-operator
-          strategy: {}
-          template:
-            metadata:
-              labels:
-                name: seldon-deploy-operator
-            spec:
-              containers:
-              - env:
-                - name: WATCH_NAMESPACE
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.annotations['olm.targetNamespaces']
-                - name: POD_NAME
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.name
-                - name: OPERATOR_NAME
-                  value: seldon-deploy-operator
-                image: seldonio/seldon-deploy-operator:0.6.0
-                imagePullPolicy: IfNotPresent
-                name: seldon-deploy-operator
-                resources: {}
-              serviceAccountName: seldon-deploy-operator
       - name: seldon-deploy-operator
         spec:
           replicas: 1

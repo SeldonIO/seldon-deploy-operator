@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: iris-default
+  namespace: seldon
+  labels:
+    seldon-monitor: iris-default
+spec:
+  selector:
+    matchLabels:
+      seldon-app: iris-default
+  endpoints:
+  - port: http

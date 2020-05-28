@@ -24,17 +24,10 @@ enableAppAuth: false
 # boolean to enable app-analytics (defaults to "true")
 enableAppAnalytics: true
 
-#empty env vars will not be used
 env:
   GITOPS_FORMAT: "json"
   USERID_CLAIM_KEY: "name" # claim to be used as userid (defaults to "preferred_username")
-  OIDC_PROVIDER: ""
-  CLIENT_ID: ""
-  CLIENT_SECRET: ""
-  REDIRECT_URL: ""
-  OIDC_SCOPES: ""
-  APP_ANALYTICS_TOKEN: ""
-  # if using app level auth then set below env vars (replacing where above)
+  # if using app level auth then set below env vars
   # OIDC_PROVIDER oidc providerURL
   # CLIENT_ID oidc client ID
   # CLIENT_SECRET oidc client secret
@@ -49,8 +42,8 @@ docker:
 ingress:
   enabled: false
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
       paths: []
@@ -66,11 +59,11 @@ resources: {}
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
 
 serviceAccount:
   create: true
@@ -82,7 +75,7 @@ github:
 
 kfserving:
   protocol: "http"
-  enabled: true
+  enabled: false
 
 seldon:
   enabled: true
@@ -98,7 +91,7 @@ virtualService:
   create: true
   prefix: "/seldon-deploy/"
   gateways:
-    - kubeflow-gateway.kubeflow.svc.cluster.local
+    - seldon-gateway.istio-system.svc.cluster.local
 
 rbac:
   create: true
@@ -119,26 +112,26 @@ skipVerifyHttpCalls: true
 
 prometheus:
   seldon:
-    url: "http://seldon-core-analytics-prometheus-seldon.seldon-system/api/v1/"
+    url: "http://prometheus-operated.seldon:9090/api/v1/"
     # resource metrics may come from different prometheus than req metrics - set only if different
-    resourceMetricsUrl: ""
+    resourceMetricsUrl: "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
     # see https://github.com/openshift/cluster-monitoring-operator/issues/768
-    namespaceMetricName: "kubernetes_namespace"
-    serviceMetricName: "service"
+    namespaceMetricName: "namespace"
+    serviceMetricName: "exported_service"
     #leave below empty/commented for prom without token-based auth
     #basic auth can be handled by putting user:pass in url.
-    jwtSecretName: ""
-    jwtSecretKey: ""
+    jwtSecretName: "jwt-elastic"
+    jwtSecretKey: "jwt-elastic.txt"
   knative:
     url: "http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/"
 
 
 elasticsearch:
-  url: "http://elasticsearch-master.seldon-logs.svc.cluster.local:9200"
+  url: "https://elasticsearch.openshift-logging:9200"
   #leave below empty/commented for elastic without token-based auth
   #basic auth can be handled by putting user:pass in urls.elasticsearch
-  jwtSecretName: ""
-  jwtSecretKey: ""
+  jwtSecretName: "jwt-elastic"
+  jwtSecretKey: "jwt-elastic.txt"
 
 argocd:
   url: "https://argocd-server.argocd.svc.cluster.local"

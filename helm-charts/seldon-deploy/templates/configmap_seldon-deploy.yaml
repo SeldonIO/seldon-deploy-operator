@@ -4,6 +4,11 @@ metadata:
   name: seldon-deploy-config
 data:
   prometheusSeldonUrl: {{ .Values.prometheus.seldon.url }}
+{{- if .Values.prometheus.seldon.resourceMetricsUrl }}
+  prometheusSeldonResourceUrl: {{ .Values.prometheus.seldon.resourceMetricsUrl }}
+{{- else }}
+  prometheusSeldonResourceUrl: {{ .Values.prometheus.seldon.url }}
+{{- end }}
   prometheusKnativeUrl: {{ .Values.prometheus.knative.url }}
   prometheusNamespaceMetricName: {{ .Values.prometheus.seldon.namespaceMetricName }}
   prometheusServiceMetricName: {{ .Values.prometheus.seldon.serviceMetricName }}
