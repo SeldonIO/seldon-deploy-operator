@@ -9,32 +9,71 @@ metadata:
           "kind": "SeldonDeploy",
           "metadata": {
             "name": "example-seldondeploy",
-            "namespace": "seldon",
+            "namespace": "seldon"
           },
           "spec": {
+            "affinity": {},
+            "argocd": {
+              "url": "https://argocd-server.argocd.svc.cluster.local"
+            },
             "docker": {
               "user": "unkown"
             },
-            "nodeSelector": {},
-            "serviceAccountName": "seldon-deploy",
-            "imagePullSecrets": [
-            {
-              "name": "regcred"
-            }
-            ],
+            "elasticsearch": {
+              "jwtSecretKey": "jwt-elastic.txt",
+              "jwtSecretName": "jwt-elastic",
+              "url": "https://elasticsearch.openshift-logging:9200"
+            },
+            "enableAppAnalytics": true,
+            "enableAppAuth": false,
+            "env": {
+              "GITOPS_FORMAT": "json",
+              "USERID_CLAIM_KEY": "name"
+            },
+            "external": {
+              "host": "",
+              "protocol": "http"
+            },
+            "fullnameOverride": "",
             "github": {
               "email": "",
               "token": "",
               "user": ""
             },
-            "resources": {},
-            "enableAppAuth": false,
-            "fullnameOverride": "",
-            "affinity": {},
-            "enableAppAnalytics": true,
-            "seldon": {
-              "enabled": true
+            "image": {
+              "pullPolicy": "Always",
+              "repository": "ryandawsonuk/seldon-deploy",
+              "tag": "0.7.0-dev"
             },
+            "imagePullSecrets": [
+              {
+                "name": "regcred"
+              }
+            ],
+            "ingress": {
+              "annotations": {},
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "chart-example.local",
+                  "paths": []
+                }
+              ],
+              "tls": []
+            },
+            "kfserving": {
+              "enabled": false,
+              "protocol": "http"
+            },
+            "lite": false,
+            "loadtest": {
+              "image": {
+                "repository": "seldonio/hey-loadtester",
+                "tag": 0.1
+              }
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
             "prometheus": {
               "knative": {
                 "url": "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
@@ -48,71 +87,32 @@ metadata:
                 "url": "http://prometheus-operated.seldon:9090/api/v1/"
               }
             },
+            "rbac": {
+              "clusterWide": true,
+              "create": true
+            },
+            "replicaCount": 1,
+            "resources": {},
+            "seldon": {
+              "enabled": true
+            },
+            "service": {
+              "port": 80,
+              "type": "ClusterIP"
+            },
+            "serviceAccount": {
+              "create": true
+            },
+            "serviceAccountName": "seldon-deploy",
+            "skipVerifyGit": true,
+            "skipVerifyHttpCalls": true,
+            "tolerations": [],
             "virtualService": {
               "create": true,
               "gateways": [
                 "seldon-gateway.istio-system.svc.cluster.local"
               ],
               "prefix": "/seldon-deploy/"
-            },
-            "external": {
-              "host": "",
-              "protocol": "http"
-            },
-            "env": {
-              "GITOPS_FORMAT": "json",
-              "USERID_CLAIM_KEY": "name"
-            },
-            "lite": false,
-            "kfserving": {
-              "enabled": false,
-              "protocol": "http"
-            },
-            "rbac": {
-              "clusterWide": false,
-              "create": true
-            },
-            "skipVerifyHttpCalls": true,
-            "ingress": {
-              "annotations": {},
-              "enabled": false,
-              "hosts": [
-              {
-                "host": "chart-example.local",
-                "paths": []
-              }
-              ],
-              "tls": []
-            },
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "replicaCount": 1,
-            "nameOverride": "",
-            "serviceAccount": {
-              "create": true
-            },
-            "loadtest": {
-              "image": {
-                "repository": "seldonio/hey-loadtester",
-                "tag": 0.1
-              }
-            },
-            "skipVerifyGit": true,
-            "argocd": {
-              "url": "https://argocd-server.argocd.svc.cluster.local"
-            },
-            "image": {
-              "pullPolicy": "Always",
-              "repository": "ryandawsonuk/seldon-deploy",
-              "tag": "0.7.0-dev"
-            },
-            "tolerations": [],
-            "elasticsearch": {
-              "jwtSecretKey": "jwt-elastic.txt",
-              "jwtSecretName": "jwt-elastic",
-              "url": "https://elasticsearch.openshift-logging:9200"
             }
           }
         }
