@@ -1,3 +1,54 @@
+#apiVersion: eventing.knative.dev/v1alpha1
+#kind: Trigger
+#metadata:
+#  name: seldon-request-logger-trigger
+#  namespace: seldon-logs
+#spec:
+#  subscriber:
+#    ref:
+#      apiVersion: serving.knative.dev/v1
+#      kind: Service
+#      name: seldon-request-logger
+#---
+#apiVersion: serving.knative.dev/v1
+#kind: Service
+#metadata:
+#  name: seldon-request-logger
+#  namespace: seldon-logs
+#spec:
+#  template:
+#    metadata:
+#      labels:
+#        fluentd: "true"
+#        maistra.io/expose-route: "true"
+#      annotations:
+#        autoscaling.knative.dev/minScale: "1"
+#        autoscaling.knative.dev/maxScale: "1"
+#    spec:
+#      containers:
+#        - image: docker.io/seldonio/seldon-request-logger:0.3.1
+#          imagePullPolicy: Always
+#          env:
+#            - name: ELASTICSEARCH_HOST
+#              value: "elasticsearch.openshift-logging"
+#            - name: ELASTICSEARCH_PORT
+#              value: "9200"
+#            - name: ELASTICSEARCH_PROTOCOL
+#              value: "https"
+#            - name: ELASTICSEARCH_TOKEN
+#              valueFrom:
+#                secretKeyRef:
+#                  name: jwt-elastic
+#                  key: jwt-elastic.txt
+#          resources:
+#            limits:
+#              cpu: "0.8"
+#              memory: 200M
+#            requests:
+#              cpu: 200m
+#              memory: 100M
+#COMMENTING AS KNATIVE FLAKY ON OPENSHFIT
+
 apiVersion: eventing.knative.dev/v1alpha1
 kind: Trigger
 metadata:
@@ -6,27 +57,30 @@ metadata:
 spec:
   subscriber:
     ref:
-      apiVersion: serving.knative.dev/v1
+      apiVersion: v1
       kind: Service
       name: seldon-request-logger
 ---
-apiVersion: serving.knative.dev/v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: seldon-request-logger
   namespace: seldon-logs
+  labels:
+    app: seldon-request-logger
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seldon-request-logger
   template:
     metadata:
       labels:
-        fluentd: "true"
-        maistra.io/expose-route: "true"
-      annotations:
-        autoscaling.knative.dev/minScale: "1"
-        autoscaling.knative.dev/maxScale: "1"
+        app: seldon-request-logger
     spec:
       containers:
-        - image: docker.io/seldonio/seldon-request-logger:0.3.1
+        - name: user-container
+          image: docker.io/seldonio/seldon-request-logger:0.3.1
           imagePullPolicy: Always
           env:
             - name: ELASTICSEARCH_HOST
@@ -40,10 +94,16 @@ spec:
                 secretKeyRef:
                   name: jwt-elastic
                   key: jwt-elastic.txt
-          resources:
-            limits:
-              cpu: "0.8"
-              memory: 200M
-            requests:
-              cpu: 200m
-              memory: 100M
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seldon-request-logger
+  namespace: seldon-logs
+spec:
+  selector:
+    app: seldon-request-logger
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

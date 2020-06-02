@@ -47,7 +47,7 @@ spec:
     enabled: false
     protocol: http
   rbac:
-    clusterWide: true
+    clusterWide: false
     create: true
   skipVerifyHttpCalls: true
   ingress:

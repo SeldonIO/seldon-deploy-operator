@@ -166,7 +166,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   creationTimestamp: null
-  name: seldon-deploy-role
+  name: seldon-deploy-role-{{ include "seldon-deploy.fullname" . }}
   namespace: istio-system
 rules:
   - apiGroups:

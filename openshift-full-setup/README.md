@@ -113,7 +113,7 @@ TODO: seldon 1.2 is needed to default the broker to seldon-logs namespace
 
 Install the request logger. Check `kubectl get trigger -n seldon-logs` before proceeding.
 
-Setup deploy and install the iris example. If not defaulted then set req logger url to http://default-broker.seldon-logs
+Setup Seldon Deploy (namespaced and in seldon ns - need OperatorSource if not published) and then install the iris example. If not defaulted then set req logger url to http://default-broker.seldon-logs
 
 Then run scripts from seldon-iris-example directory.
 

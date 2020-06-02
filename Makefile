@@ -3,6 +3,7 @@ VERSION ?= $(shell cat version.txt)
 PREV_VERSION=0.5.0
 IMG=seldonio/seldon-deploy-operator:${VERSION}
 
+#build image when changing helm chart templates
 .PHONY: docker-build
 docker-build:
 	operator-sdk build ${IMG}
