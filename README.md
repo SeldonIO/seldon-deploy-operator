@@ -1,13 +1,15 @@
-# Seldon Deploy Installation
+# Seldon Deploy Operator Installation
+
+Note this directory must be named `seldon-deploy-operator`. Operator-sdk [uses the directory name](https://github.com/operator-framework/operator-sdk/issues/2333).
 
 Tested with: 
 
-operator-courrier 2.7.1
+operator-courier 2.7.1
 operator-sdk v0.17.1
 
 First check you can run scorecard from Makefile against empty kind cluster.
 
-Then build csv and push to quay. Have to get token from quay and set QUAY_TOKEN env var in order to push.
+Then build csv and push to quay. Have to [get token from quay](https://github.com/operator-framework/community-operators/blob/master/docs/testing-operators.md#quay-login) and set QUAY_TOKEN env var in order to push.
 
 Make the application in quay.io public so cluster can access.
 

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# sd-install
+#
+set -o nounset
+set -o errexit
+set -o pipefail
+set -o noclobber
+set -o noglob
+#set -o xtrace
+
+STARTUP_DIR="$( cd "$( dirname "$0" )" && pwd )"
+
+DOCKERCREDS_FILE=${HOME}/.config/seldon/seldon-deploy/dockercreds.txt
+
+source "${DOCKERCREDS_FILE}"
+
+HELM_CHARTS_DIR=${STARTUP_DIR}/helm-charts
+
+${STARTUP_DIR}/docker-registry-secret.sh seldon
+
+IMAGE_NAME=seldon-deploy
+IMAGE_TAG=0.7.0-dev
+
+kubectl create namespace seldon || true
+
+kubectl label ns seldon seldon.restricted=false --overwrite=true
+
+#TODO: switch to point at values-redhat.yaml
+helm upgrade seldon-deploy ${HELM_CHARTS_DIR}/seldon-deploy/ \
+	--namespace=seldon \
+	--set image.repository=${DOCKER_REPO}/${IMAGE_NAME} \
+	--set docker.user=$DOCKER_USER \
+	--set image.tag=${IMAGE_TAG} \
+	-f ${HELM_CHARTS_DIR}/seldon-deploy/values.yaml \
+	--install --recreate-pods
+
+sleep 5
+
+kubectl rollout status deployment/seldon-deploy  -n seldon

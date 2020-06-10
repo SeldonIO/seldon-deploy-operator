@@ -15,8 +15,8 @@ spec:
       serviceAccountName: seldon-deploy-operator
       containers:
         - name: seldon-deploy-operator
-          image: seldonio/seldon-deploy-operator:0.6.0
-          imagePullPolicy: IfNotPresent
+          image: seldonio/seldon-deploy-operator:0.6.9
+          imagePullPolicy: Always
           env:
             - name: WATCH_NAMESPACE
               valueFrom:

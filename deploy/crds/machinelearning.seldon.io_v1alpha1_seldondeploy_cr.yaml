@@ -2,7 +2,6 @@ apiVersion: machinelearning.seldon.io/v1alpha1
 kind: SeldonDeploy
 metadata:
   name: example-seldondeploy
-  namespace: seldon
 spec:
   docker:
     user: unkown
@@ -19,8 +18,35 @@ spec:
   fullnameOverride: ''
   affinity: {}
   enableAppAnalytics: true
+  kfserving:
+    protocol: "http"
+    enabled: false
+    #Change ip to hostname on AWS. Or put real cluster IP after install.
+    curlForm: |
+      MODEL_NAME={{ .ModelName }}<br>
+      CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+      SERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d "/" -f 3)<br>
+      curl -v -H "Host: ${SERVICE_HOSTNAME}" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'
+    #Form for cluster-internal calls.
+    requestForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
+    explainForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain"
+
   seldon:
     enabled: true
+    #Below are templates that can be changed to adjust how requests are made and what curl option is shown to user.
+    #Change ip to hostname on AWS. Or put real cluster IP after install. Shown to user for calls outside cluster.
+    curlForm: |
+      CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+      curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'
+    tensorFlowCurlForm: |
+      CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+      curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'
+    #Forms for cluster-internal calls.
+    #e.g. could be changed to skip ingress by setting to "http://{{ .ModelName }}-{{ .ModelName }}-{{ .Predictor }}.{{ .Namespace }}:8000/api/v0.1/predictions"
+    seldonRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions"
+    tensorflowRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
+    #explainer call for seldon can go straight to predictor rather than ingress as not worried about loadbalancing a canary
+    explainForm: "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain"
   prometheus:
     knative:
       url: 'https://prometheus-k8s.openshift-monitoring:9091/api/v1/'
@@ -33,6 +59,9 @@ spec:
       url: 'http://prometheus-operated.seldon:9090/api/v1/'
   virtualService:
     create: true
+    istioIngressService: "istio-ingressgateway"
+    kfServingIngressService: "kfserving-ingressgateway"
+    istioNamespace: "istio-system"
     gateways:
       - seldon-gateway.istio-system.svc.cluster.local
     prefix: /seldon-deploy/
@@ -42,10 +71,6 @@ spec:
   env:
     GITOPS_FORMAT: json
     USERID_CLAIM_KEY: name
-  lite: false
-  kfserving:
-    enabled: false
-    protocol: http
   rbac:
     clusterWide: false
     create: true
@@ -80,3 +105,34 @@ spec:
     jwtSecretKey: jwt-elastic.txt
     jwtSecretName: jwt-elastic
     url: 'https://elasticsearch.openshift-logging:9200'
+  openshiftMarketplace:
+    cleanupClusterServiceVersions: true
+    seldonCore:
+      subscription:
+        create: true
+        metricsPath: "/metrics"
+        istioEnabled: true
+        requestLoggerEndpoint: "http://default-broker.seldon-logs"
+      istioGateway:
+        create: false
+        name: "seldon-gateway"
+        namespace: "istio-system"
+    istio:
+      subscription:
+        create: true
+      memberRoll:
+        create: false
+        namespace: "istio-system"
+        members:
+          - seldon
+      controlPlane:
+        create: false
+        namespace: "istio-system"
+    knative:
+      #KNATIVE SUBSCRIPTION IS CHANNEL-SPECIFIC - COULD DO IT AND PARAMETERISE IT?
+      #CAN WE REFER TO 'STABLE'?
+      #DO THE SAME FOR EFK?
+      eventing:
+        create: true
+      serving:
+        create: false

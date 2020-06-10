@@ -24,17 +24,10 @@ enableAppAuth: false
 # boolean to enable app-analytics (defaults to "true")
 enableAppAnalytics: true
 
-#empty env vars will not be used
 env:
   GITOPS_FORMAT: "json"
   USERID_CLAIM_KEY: "name" # claim to be used as userid (defaults to "preferred_username")
-  OIDC_PROVIDER: ""
-  CLIENT_ID: ""
-  CLIENT_SECRET: ""
-  REDIRECT_URL: ""
-  OIDC_SCOPES: ""
-  APP_ANALYTICS_TOKEN: ""
-  # if using app level auth then set below env vars (replacing where above)
+  # if using app level auth then set below env vars
   # OIDC_PROVIDER oidc providerURL
   # CLIENT_ID oidc client ID
   # CLIENT_SECRET oidc client secret
@@ -49,8 +42,8 @@ docker:
 ingress:
   enabled: false
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
       paths: []
@@ -64,13 +57,13 @@ resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
 
 serviceAccount:
   create: true
@@ -82,23 +75,47 @@ github:
 
 kfserving:
   protocol: "http"
-  enabled: true
+  enabled: false
+  #Change ip to hostname on AWS. Or put real cluster IP after install.
+  curlForm: |
+    MODEL_NAME={{ .ModelName }}<br>
+    CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+    SERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d "/" -f 3)<br>
+    curl -v -H "Host: ${SERVICE_HOSTNAME}" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'
+  #Form for cluster-internal calls.
+  requestForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
+  explainForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain"
 
 seldon:
   enabled: true
+  #Below are templates that can be changed to adjust how requests are made and what curl option is shown to user.
+  #Change ip to hostname on AWS. Or put real cluster IP after install. Shown to user for calls outside cluster.
+  curlForm: |
+    CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+    curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'
+  tensorFlowCurlForm: |
+    CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+    curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'
+  #Forms for cluster-internal calls.
+  #e.g. could be changed to skip ingress by setting to "http://{{ .ModelName }}-{{ .ModelName }}-{{ .Predictor }}.{{ .Namespace }}:8000/api/v0.1/predictions"
+  seldonRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions"
+  tensorflowRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
+  #explainer call for seldon can go straight to predictor rather than ingress as not worried about loadbalancing a canary
+  explainForm: "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain"
 
 external:
   protocol: "http"
-  host: ""
-
 
 serviceAccountName: seldon-deploy
 
 virtualService:
+  istioIngressService: "istio-ingressgateway"
+  kfServingIngressService: "kfserving-ingressgateway"
+  istioNamespace: "istio-system"
   create: true
   prefix: "/seldon-deploy/"
   gateways:
-    - kubeflow-gateway.kubeflow.svc.cluster.local
+    - seldon-gateway.istio-system.svc.cluster.local
 
 rbac:
   create: true
@@ -119,28 +136,72 @@ skipVerifyHttpCalls: true
 
 prometheus:
   seldon:
-    url: "http://seldon-core-analytics-prometheus-seldon.seldon-system/api/v1/"
+    url: "http://prometheus-operated.seldon:9090/api/v1/"
     # resource metrics may come from different prometheus than req metrics - set only if different
-    resourceMetricsUrl: ""
+    resourceMetricsUrl: "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
     # see https://github.com/openshift/cluster-monitoring-operator/issues/768
-    namespaceMetricName: "kubernetes_namespace"
-    serviceMetricName: "service"
+    namespaceMetricName: "namespace"
+    serviceMetricName: "exported_service"
     #leave below empty/commented for prom without token-based auth
     #basic auth can be handled by putting user:pass in url.
-    jwtSecretName: ""
-    jwtSecretKey: ""
+    jwtSecretName: "jwt-elastic"
+    jwtSecretKey: "jwt-elastic.txt"
   knative:
     url: "http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/"
 
 
 elasticsearch:
-  url: "http://elasticsearch-master.seldon-logs.svc.cluster.local:9200"
+  url: "https://elasticsearch.openshift-logging:9200"
   #leave below empty/commented for elastic without token-based auth
   #basic auth can be handled by putting user:pass in urls.elasticsearch
-  jwtSecretName: ""
-  jwtSecretKey: ""
+  jwtSecretName: "jwt-elastic"
+  jwtSecretKey: "jwt-elastic.txt"
 
 argocd:
   url: "https://argocd-server.argocd.svc.cluster.local"
 
-lite: false
+requestLogger:
+  create: true
+  image: docker.io/seldonio/seldon-request-logger:0.3.1
+  imagePullPolicy: IfNotPresent
+  elasticsearch:
+    host: "elasticsearch.openshift-logging"
+    port: "9200"
+    protocol: "https"
+    jwtSecretName: "jwt-elastic"
+    jwtSecretKey: "jwt-elastic.txt"
+  namespace:
+    create: false
+    name: seldon-logs
+
+openshiftMarketplace:
+  cleanupClusterServiceVersions: true
+  seldonCore:
+    subscription:
+      create: true
+      metricsPath: "/metrics"
+      istioEnabled: true
+      requestLoggerEndpoint: "http://default-broker.seldon-logs"
+    istioGateway:
+      create: true
+      name: "seldon-gateway"
+      namespace: "istio-system"
+  istio:
+    subscription:
+      create: true
+    memberRoll:
+      create: true
+      namespace: "istio-system"
+      members:
+        - seldon
+    controlPlane:
+      create: false
+      namespace: "istio-system"
+  knative:
+    #KNATIVE SUBSCRIPTION IS CHANNEL-SPECIFIC - COULD DO IT AND PARAMETERISE IT?
+    #CAN WE REFER TO 'STABLE'?
+    #DO THE SAME FOR EFK?
+    eventing:
+      create: true
+    serving:
+      create: false

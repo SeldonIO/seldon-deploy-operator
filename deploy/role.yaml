@@ -95,5 +95,43 @@ rules:
   - networking.istio.io
   resources:
   - virtualservices
+  - gateways
+  verbs:
+  - '*'
+- apiGroups:
+  - operators.coreos.com
+  resources:
+  - subscriptions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - maistra.io
+  resources:
+  - servicemeshcontrolplanes
+  - servicemeshmemberrolls
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - eventing.knative.dev
+  resources:
+  - triggers
+  verbs:
+  - '*'
+- apiGroups:
+  - batch
+  resources:
+  - jobs
   verbs:
   - '*'

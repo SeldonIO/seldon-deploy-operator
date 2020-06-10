@@ -100,6 +100,8 @@ Note that elasticsearch won't work until you login via the OpenShift UI. Have to
 
 The token being used for elastic is really a kubernetes service account token so in the above it is being re-used for prometheus.
 
+Deploy should be accessible on the `/seldon-deploy/` path from the host given by `oc get route -n istio-system istio-ingressgateway -o jsonpath='{.spec.host}'`
+
 Then setup seldon examples - seldon-iris-example and seldon-cifar10-example. For this first setup the namespace:
 
 ```

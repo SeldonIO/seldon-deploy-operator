@@ -1,0 +1,121 @@
+{{- if .Values.openshiftMarketplace.cleanupClusterServiceVersions -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  creationTimestamp: null
+  name: delete-hook-seldon-role
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+rules:
+  - apiGroups:
+      - operators.coreos.com
+    resources:
+      - clusterserviceversions
+    verbs:
+      - get
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: delete-hook-seldon-rolebinding
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: delete-hook-seldon-role
+subjects:
+  - kind: ServiceAccount
+    name: delete-hook-seldon
+    namespace: openshift-operators
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: delete-hook-seldon
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": hook-succeeded
+---
+{{- if .Values.openshiftMarketplace.seldonCore.subscription.create -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: delete-job-seldon-operator-seldon
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "-2"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: delete-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: post-install-job
+          image: "bitnami/kubectl:1.16.3"
+          command: ["kubectl","delete","clusterserviceversion","-n","openshift-operators","seldon-operator.v1.1.0"]
+      serviceAccount: delete-hook-seldon
+      serviceAccountName: delete-hook-seldon
+---
+{{- end -}}
+{{- if .Values.openshiftMarketplace.istio.subscription.create -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: delete-job-seldon-operator-istio
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "-1"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: delete-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: post-install-job
+          image: "bitnami/kubectl:1.16.3"
+          command: ["kubectl","delete","clusterserviceversion","-n","openshift-operators","servicemeshoperator.v1.1.2.2"]
+      serviceAccount: delete-hook-seldon
+      serviceAccountName: delete-hook-seldon
+{{- end -}}
+{{- end -}}

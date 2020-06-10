@@ -1,14 +1,8 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  creationTimestamp: '2020-05-14T12:42:53Z'
-  generation: 1
   name: servicemeshoperator
   namespace: openshift-operators
-  resourceVersion: '10124715'
-  selfLink: >-
-    /apis/operators.coreos.com/v1alpha1/namespaces/openshift-operators/subscriptions/servicemeshoperator
-  uid: fcfae000-24cc-4dd0-b1cc-cfa69f8a1d87
 spec:
   channel: stable
   installPlanApproval: Automatic

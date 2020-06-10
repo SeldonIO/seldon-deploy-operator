@@ -12,20 +12,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "seldon-deploy.serviceAccountName" . }}
     namespace: '{{ .Release.Namespace }}'
----
-{{- if .Values.virtualService.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: seldon-deploy-rolebinding-{{ include "seldon-deploy.fullname" . }}
-  namespace: istio-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: seldon-deploy-role-{{ include "seldon-deploy.fullname" . }}
-subjects:
-  - kind: ServiceAccount
-    name: seldon-deploy
-    namespace: '{{ .Release.Namespace }}'
-{{- end }}
 {{- end }}

@@ -58,7 +58,7 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
+# limits:
 #   cpu: 100m
 #   memory: 128Mi
 # requests:
@@ -76,18 +76,42 @@ github:
 kfserving:
   protocol: "http"
   enabled: false
+  #Change ip to hostname on AWS. Or put real cluster IP after install.
+  curlForm: |
+    MODEL_NAME={{ .ModelName }}<br>
+    CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+    SERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d "/" -f 3)<br>
+    curl -v -H "Host: ${SERVICE_HOSTNAME}" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'
+  #Form for cluster-internal calls.
+  requestForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
+  explainForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain"
 
 seldon:
   enabled: true
+  #Below are templates that can be changed to adjust how requests are made and what curl option is shown to user.
+  #Change ip to hostname on AWS. Or put real cluster IP after install. Shown to user for calls outside cluster.
+  curlForm: |
+    CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+    curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'
+  tensorFlowCurlForm: |
+    CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+    curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'
+  #Forms for cluster-internal calls.
+  #e.g. could be changed to skip ingress by setting to "http://{{ .ModelName }}-{{ .ModelName }}-{{ .Predictor }}.{{ .Namespace }}:8000/api/v0.1/predictions"
+  seldonRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions"
+  tensorflowRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
+  #explainer call for seldon can go straight to predictor rather than ingress as not worried about loadbalancing a canary
+  explainForm: "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain"
 
 external:
   protocol: "http"
-  host: ""
-
 
 serviceAccountName: seldon-deploy
 
 virtualService:
+  istioIngressService: "istio-ingressgateway"
+  kfServingIngressService: "kfserving-ingressgateway"
+  istioNamespace: "istio-system"
   create: true
   prefix: "/seldon-deploy/"
   gateways:
@@ -136,4 +160,8 @@ elasticsearch:
 argocd:
   url: "https://argocd-server.argocd.svc.cluster.local"
 
-lite: false
+openshiftMarketplace:
+  seldonCore:
+    subscription: true
+    istioGateway: true
+  istio: true

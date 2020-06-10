@@ -2,6 +2,7 @@ SHEL=/bin/bash
 VERSION ?= $(shell cat version.txt)
 PREV_VERSION=0.5.0
 IMG=seldonio/seldon-deploy-operator:${VERSION}
+QUAY_USER=rd0
 
 #build image when changing helm chart templates
 .PHONY: docker-build
@@ -71,8 +72,11 @@ scorecard:
 # See https://github.com/operator-framework/community-operators/blob/master/docs/testing-operators.md
 # Used to push bundle to quay.io for testing
 quay-push:
-	operator-courier push deploy/olm-catalog/seldon-deploy-operator seldon seldon-deploy-operator ${VERSION} "$$QUAY_TOKEN"
+	operator-courier push deploy/olm-catalog/seldon-deploy-operator ${QUAY_USER} seldon-deploy-operator ${VERSION} "$$QUAY_TOKEN"
 
+
+helm-install:
+	./sd-install-openshift
 
 #
 # install operator for OLM
@@ -91,4 +95,6 @@ olm-cleanup-operator:
 	operator-sdk cleanup --olm --operator-version ${VERSION}
 
 
-
+open_cluster_with_istio:
+	ISTIO_INGRESS=$$(oc get route -n istio-system istio-ingressgateway -o jsonpath='{.spec.host}'); \
+	xdg-open http://$$ISTIO_INGRESS/seldon-deploy/

@@ -94,10 +94,6 @@ spec:
               value: "{{ .Values.kfserving.enabled }}"
             - name: "SELDONDEPLOYMENTS"
               value: "{{ .Values.seldon.enabled }}"
-            {{- if .Values.lite }}
-            - name: "LITE"
-              value: "{{ .Values.lite }}"
-            {{- end }}
             {{- if .Values.virtualService.create }}
             - name: "EXTERNAL_PREFIX"
               value: "{{ .Values.virtualService.prefix }}"

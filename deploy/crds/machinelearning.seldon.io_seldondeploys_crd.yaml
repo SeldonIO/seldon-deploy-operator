@@ -86,6 +86,8 @@ spec:
               type: boolean
             docker:
               type: object
+            openshiftMarketplace:
+              type: object
             ingress:
               type: object
             loadtest:

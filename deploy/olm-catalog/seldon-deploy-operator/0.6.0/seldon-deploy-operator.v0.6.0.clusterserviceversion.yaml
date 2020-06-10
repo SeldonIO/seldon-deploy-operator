@@ -271,6 +271,9 @@ spec:
       - description: docker
         displayName: docker
         path: docker
+      - description: openshiftMarketplace
+        displayName: openshiftMarketplace
+        path: openshiftMarketplace
       statusDescriptors:
       - description: conditions
         displayName: conditions
