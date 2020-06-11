@@ -2,7 +2,7 @@ SHEL=/bin/bash
 VERSION ?= $(shell cat version.txt)
 PREV_VERSION=0.5.0
 IMG=seldonio/seldon-deploy-operator:${VERSION}
-QUAY_USER=rd0
+QUAY_USER=seldon
 
 #build image when changing helm chart templates
 .PHONY: docker-build
