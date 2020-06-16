@@ -4,6 +4,15 @@ kind: Subscription
 metadata:
   name: servicemeshoperator
   namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-failed
 spec:
   channel: stable
   installPlanApproval: Automatic
@@ -12,6 +21,32 @@ spec:
   sourceNamespace: openshift-marketplace
   startingCSV: servicemeshoperator.v1.1.2.2
 ---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wait-for-istio-subscription-job
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+spec:
+  template:
+    metadata:
+      name: wait-for-istio-subscription-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: hook1-container
+          image: seldonio/kubectl:1.14.3
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'sleep 40 && echo "done sleeping" || true']
+---
 {{- end -}}
 {{- if .Values.openshiftMarketplace.istio.controlPlane.create -}}
 apiVersion: maistra.io/v1
@@ -19,6 +54,15 @@ kind: ServiceMeshControlPlane
 metadata:
   name: full-install
   namespace: {{ .Values.openshiftMarketplace.istio.controlPlane.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-delete-policy": hook-failed
 spec:
 
   istio:
@@ -71,13 +115,74 @@ spec:
     jaeger:
       template: all-in-one
 ---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wait-for-istio-control-plane-seldon-job
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "4"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+spec:
+  template:
+    metadata:
+      name: wait-for-istio-control-plane-seldon-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: hook1-container
+          image: seldonio/kubectl:1.14.3
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'sleep 80 && echo "done sleeping" || true']
+---
 {{- end -}}
 {{- if .Values.openshiftMarketplace.istio.memberRoll.create -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wait-for-istio-control-plane-seldon-job
+  namespace: openshift-operators
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "4"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+spec:
+  template:
+    metadata:
+      name: wait-for-istio-control-plane-seldon-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: hook1-container
+          image: seldonio/kubectl:1.14.3
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'sleep 80 && echo "done sleeping" || true']
+---
 apiVersion: maistra.io/v1
 kind: ServiceMeshMemberRoll
 metadata:
   name: default
   namespace: {{ .Values.openshiftMarketplace.istio.memberRoll.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": hook-failed
   finalizers:
     - maistra.io/istio-operator
 spec:

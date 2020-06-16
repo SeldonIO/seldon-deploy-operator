@@ -133,6 +133,7 @@ metadata:
             },
             "openshiftMarketplace": {
               "cleanupClusterServiceVersions": true,
+              "cleanupIstioCRDs": false,
               "seldonCore": {
                 "subscription": {
                   "create": true,
@@ -141,7 +142,7 @@ metadata:
                   "requestLoggerEndpoint": "http://default-broker.seldon-logs"
                 },
                 "istioGateway": {
-                  "create": false,
+                  "create": true,
                   "name": "seldon-gateway",
                   "namespace": "istio-system"
                 }
@@ -151,14 +152,14 @@ metadata:
                   "create": true
                 },
                 "memberRoll": {
-                  "create": false,
+                  "create": true,
                   "namespace": "istio-system",
                   "members": [
                     "seldon"
                   ]
                 },
                 "controlPlane": {
-                  "create": false,
+                  "create": true,
                   "namespace": "istio-system"
                 }
               },
@@ -170,6 +171,22 @@ metadata:
                   "create": false
                 }
               }
+            },
+            "requestLogger": {
+                "create": true,
+                "image": "docker.io/seldonio/seldon-request-logger:0.3.1",
+                "imagePullPolicy": "IfNotPresent",
+                "elasticsearch": {
+                  "host": "elasticsearch.openshift-logging",
+                  "port": "9200",
+                  "protocol": "https",
+                  "jwtSecretName": "jwt-elastic",
+                  "jwtSecretKey": "jwt-elastic.txt"
+                },
+                "namespace": {
+                  "create": false,
+                  "name": "seldon-logs"
+                }
             }
           }
         }
@@ -421,6 +438,8 @@ spec:
                 - pods
               verbs:
                 - get
+                - update
+                - patch
             - apiGroups:
                 - apps
               resources:
@@ -472,6 +491,43 @@ spec:
                 - patch
                 - update
                 - watch
+            - apiGroups:
+                - eventing.knative.dev
+              resources:
+                - triggers
+              verbs:
+                - '*'
+            - apiGroups:
+                - batch
+              resources:
+                - jobs
+              verbs:
+                - '*'
+            - apiGroups:
+                - operator.knative.dev
+              resources:
+                - knativeeventings
+                - knativeservings
+              verbs:
+                - '*'
+            - apiGroups:
+                - project.openshift.io
+              resources:
+                - projects
+              verbs:
+                - '*'
+            - apiGroups:
+                - ''
+              resources:
+                - namespaces
+              verbs:
+                - '*'
+            - apiGroups:
+                - k8s.cni.cncf.io
+              resources:
+                - networkattachmentdefinitions
+              verbs:
+                - '*'
           serviceAccountName: seldon-deploy-operator
       deployments:
       - name: seldon-deploy-operator

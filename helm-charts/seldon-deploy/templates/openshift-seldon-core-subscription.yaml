@@ -2,14 +2,9 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  creationTimestamp: '2020-05-14T13:04:01Z'
   generation: 1
   name: seldon-operator-certified
   namespace: openshift-operators
-  resourceVersion: '10135240'
-  selfLink: >-
-    /apis/operators.coreos.com/v1alpha1/namespaces/openshift-operators/subscriptions/seldon-operator-certified
-  uid: 474d8da7-2e4e-49ab-933f-c7442354d345
 spec:
   channel: alpha
   installPlanApproval: Automatic

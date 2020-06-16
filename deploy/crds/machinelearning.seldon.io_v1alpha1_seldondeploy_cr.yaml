@@ -107,6 +107,7 @@ spec:
     url: 'https://elasticsearch.openshift-logging:9200'
   openshiftMarketplace:
     cleanupClusterServiceVersions: true
+    cleanupIstioCRDs: false
     seldonCore:
       subscription:
         create: true

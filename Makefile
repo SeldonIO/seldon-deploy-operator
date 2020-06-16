@@ -48,7 +48,15 @@ yaml-run-seldon-deploy:
 yaml-delete-seldon-deploy:
 	kubectl delete -f deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml -n seldon-system
 
+build-kubectl-image:
+	docker build . --file=./Dockerfile.kubectl \
+			--tag=seldonio/kubectl:1.14.3
+push-kubectl-image:
+	docker push seldonio/kubectl:1.14.3
 
+refresh-operator-catalog:
+	kubectl scale deployment seldon-operators --replicas=0 -n openshift-marketplace
+	kubectl scale deployment seldon-operators --replicas=1 -n openshift-marketplace
 #
 # Bundle and CSV
 # Still using package manifests: see https://github.com/operator-framework/operator-sdk/issues/3079
@@ -77,6 +85,9 @@ quay-push:
 
 helm-install:
 	./sd-install-openshift
+
+helm-delete:
+	helm delete seldon-deploy -n seldon
 
 #
 # install operator for OLM

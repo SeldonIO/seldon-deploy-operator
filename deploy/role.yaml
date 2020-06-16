@@ -55,6 +55,7 @@ rules:
   - monitoring.coreos.com
   resources:
   - servicemonitors
+  - podmonitors
   verbs:
   - get
   - create
@@ -72,6 +73,8 @@ rules:
   - pods
   verbs:
   - get
+  - update
+  - patch
 - apiGroups:
   - apps
   resources:
@@ -133,5 +136,33 @@ rules:
   - batch
   resources:
   - jobs
+  verbs:
+  - '*'
+- apiGroups:
+  - operator.knative.dev
+  - knativeservings
+  resources:
+  - knativeeventings
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+- apiGroups:
+  - project.openshift.io
+  resources:
+  - projects
+  verbs:
+  - '*'
+- apiGroups:
+  - ''
+  resources:
+  - namespaces
+  verbs:
+  - '*'
+- apiGroups:
+  - k8s.cni.cncf.io
+  resources:
+  - networkattachmentdefinitions
   verbs:
   - '*'

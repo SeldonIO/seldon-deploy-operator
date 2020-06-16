@@ -175,10 +175,12 @@ requestLogger:
     name: seldon-logs
 
 openshiftMarketplace:
-  cleanupClusterServiceVersions: true
+  cleanupClusterServiceVersions: false
+  #takes ages to delete istio crds (see https://docs.openshift.com/container-platform/4.3/service_mesh/service_mesh_install/removing-ossm.html#ossm-remove-cleanup_removing-ossm)
+  cleanupIstioCRDs: false
   seldonCore:
     subscription:
-      create: true
+      create: false
       metricsPath: "/metrics"
       istioEnabled: true
       requestLoggerEndpoint: "http://default-broker.seldon-logs"
@@ -188,9 +190,9 @@ openshiftMarketplace:
       namespace: "istio-system"
   istio:
     subscription:
-      create: true
+      create: false
     memberRoll:
-      create: true
+      create: false
       namespace: "istio-system"
       members:
         - seldon
