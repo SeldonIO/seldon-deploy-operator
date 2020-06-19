@@ -56,12 +56,13 @@ spec:
       namespaceMetricName: namespace
       resourceMetricsUrl: 'https://prometheus-k8s.openshift-monitoring:9091/api/v1/'
       serviceMetricName: exported_service
-      url: 'http://prometheus-operated.seldon:9090/api/v1/'
+      url: "https://prometheus-user-workload.openshift-user-workload-monitoring:9091/api/v1/"
+  ingressGateway:
+    seldonIngressService: "istio-ingressgateway"
+    kfServingIngressService: "kfserving-ingressgateway"
+    ingressNamespace: "istio-system"
   virtualService:
     create: true
-    istioIngressService: "istio-ingressgateway"
-    kfServingIngressService: "kfserving-ingressgateway"
-    istioNamespace: "istio-system"
     gateways:
       - seldon-gateway.istio-system.svc.cluster.local
     prefix: /seldon-deploy/
@@ -105,9 +106,21 @@ spec:
     jwtSecretKey: jwt-elastic.txt
     jwtSecretName: jwt-elastic
     url: 'https://elasticsearch.openshift-logging:9200'
+  requestLogger:
+    create: true
+    image: docker.io/seldonio/seldon-request-logger:0.3.1
+    imagePullPolicy: IfNotPresent
+    elasticsearch:
+      host: "elasticsearch.openshift-logging"
+      port: "9200"
+      protocol: "https"
+      jwtSecretName: "jwt-elastic"
+      jwtSecretKey: "jwt-elastic.txt"
+    namespace:
+      create: false
+      name: seldon-logs
   openshiftMarketplace:
     cleanupClusterServiceVersions: true
-    cleanupIstioCRDs: false
     seldonCore:
       subscription:
         create: true
@@ -115,25 +128,6 @@ spec:
         istioEnabled: true
         requestLoggerEndpoint: "http://default-broker.seldon-logs"
       istioGateway:
-        create: false
+        create: true
         name: "seldon-gateway"
         namespace: "istio-system"
-    istio:
-      subscription:
-        create: true
-      memberRoll:
-        create: false
-        namespace: "istio-system"
-        members:
-          - seldon
-      controlPlane:
-        create: false
-        namespace: "istio-system"
-    knative:
-      #KNATIVE SUBSCRIPTION IS CHANNEL-SPECIFIC - COULD DO IT AND PARAMETERISE IT?
-      #CAN WE REFER TO 'STABLE'?
-      #DO THE SAME FOR EFK?
-      eventing:
-        create: true
-      serving:
-        create: false

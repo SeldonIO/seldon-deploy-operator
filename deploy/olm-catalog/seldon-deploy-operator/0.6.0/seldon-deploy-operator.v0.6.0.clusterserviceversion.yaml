@@ -76,11 +76,25 @@ metadata:
             },
             "nameOverride": "",
             "nodeSelector": {},
+            "ingressGateway": {
+                "seldonIngressService": "istio-ingressgateway",
+                "kfServingIngressService": "kfserving-ingressgateway",
+                "ingressNamespace": "istio-system"
+            },
             "openshiftMarketplace": {
-              "istio": true,
+              "cleanupClusterServiceVersions": true,
               "seldonCore": {
-                "istioGateway": true,
-                "subscription": true
+                "subscription": {
+                  "create": true,
+                  "metricsPath": "/metrics",
+                  "istioEnabled": true,
+                  "requestLoggerEndpoint": "http://default-broker.seldon-logs"
+                },
+                "istioGateway": {
+                  "create": true,
+                  "name": "seldon-gateway",
+                  "namespace": "istio-system"
+                }
               }
             },
             "prometheus": {
@@ -93,7 +107,7 @@ metadata:
                 "namespaceMetricName": "namespace",
                 "resourceMetricsUrl": "https://prometheus-k8s.openshift-monitoring:9091/api/v1/",
                 "serviceMetricName": "exported_service",
-                "url": "http://prometheus-operated.seldon:9090/api/v1/"
+                "url": "https://prometheus-user-workload.openshift-user-workload-monitoring:9091/api/v1/"
               }
             },
             "rbac": {
@@ -126,51 +140,7 @@ metadata:
               "gateways": [
                 "seldon-gateway.istio-system.svc.cluster.local"
               ],
-              "istioIngressService": "istio-ingressgateway",
-              "istioNamespace": "istio-system",
-              "kfServingIngressService": "kfserving-ingressgateway",
               "prefix": "/seldon-deploy/"
-            },
-            "openshiftMarketplace": {
-              "cleanupClusterServiceVersions": true,
-              "cleanupIstioCRDs": false,
-              "seldonCore": {
-                "subscription": {
-                  "create": true,
-                  "metricsPath": "/metrics",
-                  "istioEnabled": true,
-                  "requestLoggerEndpoint": "http://default-broker.seldon-logs"
-                },
-                "istioGateway": {
-                  "create": true,
-                  "name": "seldon-gateway",
-                  "namespace": "istio-system"
-                }
-              },
-              "istio": {
-                "subscription": {
-                  "create": true
-                },
-                "memberRoll": {
-                  "create": true,
-                  "namespace": "istio-system",
-                  "members": [
-                    "seldon"
-                  ]
-                },
-                "controlPlane": {
-                  "create": true,
-                  "namespace": "istio-system"
-                }
-              },
-              "knative": {
-                "eventing": {
-                  "create": true
-                },
-                "serving": {
-                  "create": false
-                }
-              }
             },
             "requestLogger": {
                 "create": true,
@@ -258,6 +228,9 @@ spec:
           - description: resources
             displayName: resources
             path: rsources
+          - description: ingressGateway
+            displayName: ingressGateway
+            path: ingressGateway
           - description: virtualService
             displayName: virtualService
             path: virtualService
@@ -375,7 +348,7 @@ spec:
               resources:
                 - namespaces
               verbs:
-                - get
+                - '*'
             - apiGroups:
                 - ""
               resources:
@@ -508,24 +481,6 @@ spec:
               resources:
                 - knativeeventings
                 - knativeservings
-              verbs:
-                - '*'
-            - apiGroups:
-                - project.openshift.io
-              resources:
-                - projects
-              verbs:
-                - '*'
-            - apiGroups:
-                - ''
-              resources:
-                - namespaces
-              verbs:
-                - '*'
-            - apiGroups:
-                - k8s.cni.cncf.io
-              resources:
-                - networkattachmentdefinitions
               verbs:
                 - '*'
           serviceAccountName: seldon-deploy-operator

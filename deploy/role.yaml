@@ -9,7 +9,7 @@ rules:
   resources:
   - namespaces
   verbs:
-  - get
+  - '*'
 - apiGroups:
   - ""
   resources:
@@ -143,26 +143,5 @@ rules:
   - knativeservings
   resources:
   - knativeeventings
-  verbs:
-  - '*'
-- apiGroups:
-  - ""
-  resources:
-- apiGroups:
-  - project.openshift.io
-  resources:
-  - projects
-  verbs:
-  - '*'
-- apiGroups:
-  - ''
-  resources:
-  - namespaces
-  verbs:
-  - '*'
-- apiGroups:
-  - k8s.cni.cncf.io
-  resources:
-  - networkattachmentdefinitions
   verbs:
   - '*'

@@ -46,6 +46,8 @@ spec:
               type: array
               items:
                 type: object
+            ingressGateway:
+              type: object
             virtualService:
               type: object
             affinity:
