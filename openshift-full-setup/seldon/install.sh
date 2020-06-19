@@ -1,4 +1,3 @@
-kubectl create namespace seldon-system || true 
 kubectl apply -f clusterserviceversion.yaml --validate=false
 kubectl apply -f subscription.yaml --validate=false
 #TODO: do this other way round - should be able to put something in the namespace to add it to member role

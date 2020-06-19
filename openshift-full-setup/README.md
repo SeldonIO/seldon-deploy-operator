@@ -59,12 +59,10 @@ The `oc` client is needed.
 First do an `oc login`. Then run the install scripts in this order:
 
 1. EFK
-2. Prometheus
+2. Prometheus cluster monitoring (or community operator but cluster monitoring preferred)
 3. Istio
 4. Knative-serving
 5. Knative-eventing
-6. Seldon
-7. Request logger
 
 Next install Seldon Deploy. This is [the usual install](https://deploy.seldon.io) but with an OpenShift-specific helm values file.
 

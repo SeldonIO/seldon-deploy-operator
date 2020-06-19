@@ -16,9 +16,9 @@ data:
   argocdUrl: {{ .Values.argocd.url }}
   skipVerifyGit: '{{ .Values.skipVerifyGit }}'
   skipVerifyHttpCalls: '{{ .Values.skipVerifyHttpCalls }}'
-  istioIngressService: {{ .Values.virtualService.istioIngressService }}
-  istioNamespace: {{ .Values.virtualService.istioNamespace }}
-  kfServingIngressService: {{ .Values.virtualService.kfServingIngressService }}
+  seldonIngressService: {{ .Values.ingressGateway.seldonIngressService }}
+  ingressNamespace: {{ .Values.ingressGateway.ingressNamespace }}
+  kfServingIngressService: {{ .Values.ingressGateway.kfServingIngressService }}
   kfServingCurlForm: {{ .Values.kfserving.curlForm | quote }}
   kfServingRequestForm: {{ .Values.kfserving.requestForm | quote }}
   kfServingExplainForm: {{ .Values.kfserving.explainForm | quote }}

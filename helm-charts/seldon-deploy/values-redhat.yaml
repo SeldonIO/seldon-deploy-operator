@@ -108,10 +108,12 @@ external:
 
 serviceAccountName: seldon-deploy
 
-virtualService:
-  istioIngressService: "istio-ingressgateway"
+ingressGateway:
+  seldonIngressService: "istio-ingressgateway"
   kfServingIngressService: "kfserving-ingressgateway"
-  istioNamespace: "istio-system"
+  ingressNamespace: "istio-system"
+
+virtualService:
   create: true
   prefix: "/seldon-deploy/"
   gateways:
@@ -136,7 +138,8 @@ skipVerifyHttpCalls: true
 
 prometheus:
   seldon:
-    url: "http://prometheus-operated.seldon:9090/api/v1/"
+    url: "https://prometheus-user-workload.openshift-user-workload-monitoring:9091/api/v1/"
+    # if using community operator then above becomes "http://prometheus-operated.seldon:9090/api/v1/"
     # resource metrics may come from different prometheus than req metrics - set only if different
     resourceMetricsUrl: "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
     # see https://github.com/openshift/cluster-monitoring-operator/issues/768

@@ -15,4 +15,6 @@ oc create serviceaccount -n openshift-logging elasticseldon
 oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:openshift-logging:elasticseldon
 JWT=$(oc serviceaccounts get-token -n openshift-logging elasticseldon)
 echo -n $JWT > ./jwt-elastic.txt
-kubectl create secret generic jwt-elastic -n seldon-system --from-file=./jwt-elastic.txt --dry-run -o yaml | kubectl apply -f -
+kubectl create secret generic jwt-elastic -n seldon --from-file=./jwt-elastic.txt --dry-run -o yaml | kubectl apply -f -
+kubectl create namespace seldon-logs || true
+kubectl create secret generic jwt-elastic -n seldon-logs --from-file=./jwt-elastic.txt --dry-run -o yaml | kubectl apply -f -

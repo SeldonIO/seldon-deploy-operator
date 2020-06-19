@@ -6,4 +6,5 @@ metadata:
 spec:
   members:
     - seldon
+    - openshift-user-workload-monitoring
  

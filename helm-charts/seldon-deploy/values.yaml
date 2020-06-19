@@ -108,10 +108,12 @@ external:
 
 serviceAccountName: seldon-deploy
 
-virtualService:
-  istioIngressService: "istio-ingressgateway"
+ingressGateway:
+  seldonIngressService: "istio-ingressgateway"
   kfServingIngressService: "kfserving-ingressgateway"
-  istioNamespace: "istio-system"
+  ingressNamespace: "istio-system"
+
+virtualService:
   create: true
   prefix: "/seldon-deploy/"
   gateways:
@@ -136,7 +138,8 @@ skipVerifyHttpCalls: true
 
 prometheus:
   seldon:
-    url: "http://prometheus-operated.seldon:9090/api/v1/"
+    url: "https://prometheus-user-workload.openshift-user-workload-monitoring:9091/api/v1/"
+    # if using community operator then above becomes "http://prometheus-operated.seldon:9090/api/v1/"
     # resource metrics may come from different prometheus than req metrics - set only if different
     resourceMetricsUrl: "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
     # see https://github.com/openshift/cluster-monitoring-operator/issues/768
@@ -175,12 +178,10 @@ requestLogger:
     name: seldon-logs
 
 openshiftMarketplace:
-  cleanupClusterServiceVersions: false
-  #takes ages to delete istio crds (see https://docs.openshift.com/container-platform/4.3/service_mesh/service_mesh_install/removing-ossm.html#ossm-remove-cleanup_removing-ossm)
-  cleanupIstioCRDs: false
+  cleanupClusterServiceVersions: true
   seldonCore:
     subscription:
-      create: false
+      create: true
       metricsPath: "/metrics"
       istioEnabled: true
       requestLoggerEndpoint: "http://default-broker.seldon-logs"
@@ -188,22 +189,3 @@ openshiftMarketplace:
       create: true
       name: "seldon-gateway"
       namespace: "istio-system"
-  istio:
-    subscription:
-      create: false
-    memberRoll:
-      create: false
-      namespace: "istio-system"
-      members:
-        - seldon
-    controlPlane:
-      create: false
-      namespace: "istio-system"
-  knative:
-    #KNATIVE SUBSCRIPTION IS CHANNEL-SPECIFIC - COULD DO IT AND PARAMETERISE IT?
-    #CAN WE REFER TO 'STABLE'?
-    #DO THE SAME FOR EFK?
-    eventing:
-      create: true
-    serving:
-      create: false
