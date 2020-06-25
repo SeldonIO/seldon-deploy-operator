@@ -24,7 +24,7 @@ metadata:
               "jwtSecretName": "jwt-elastic",
               "url": "https://elasticsearch.openshift-logging:9200"
             },
-            "enableAppAnalytics": true,
+            "enableAppAnalytics": false,
             "enableAppAuth": false,
             "env": {
               "GITOPS_FORMAT": "json",
@@ -42,8 +42,7 @@ metadata:
             },
             "image": {
               "pullPolicy": "Always",
-              "repository": "ryandawsonuk/seldon-deploy",
-              "tag": "0.7.0-dev"
+              "image": "ryandawsonuk/seldon-deploy:0.7.0-dev"
             },
             "imagePullSecrets": [
               {
@@ -62,17 +61,17 @@ metadata:
               "tls": []
             },
             "kfserving": {
-              "curlForm": "MODEL_NAME={{ .ModelName }}\u003cbr\u003e\nCLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')\u003cbr\u003e\nSERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d \"/\" -f 3)\u003cbr\u003e\ncurl -v -H \"Host: ${SERVICE_HOSTNAME}\" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'\n",
+              "curlForm": "MODEL_NAME={{ .ModelName }}\u003cbr\u003e\nCLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\nSERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d \"/\" -f 3)\u003cbr\u003e\ncurl -v -H \"Host: ${SERVICE_HOSTNAME}\" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'\n",
               "enabled": false,
               "explainForm": "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain",
               "protocol": "http",
               "requestForm": "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
             },
             "loadtest": {
-              "image": {
-                "repository": "seldonio/hey-loadtester",
-                "tag": 0.1
-              }
+              "image": "seldonio/hey-loadtester:0.1"
+            },
+            "alibidetect": {
+              "image": "seldonio/alibi-detect-server:0.0.1"
             },
             "nameOverride": "",
             "nodeSelector": {},
@@ -88,12 +87,19 @@ metadata:
                   "create": true,
                   "metricsPath": "/metrics",
                   "istioEnabled": true,
-                  "requestLoggerEndpoint": "http://default-broker.seldon-logs"
+                  "requestLoggerEndpoint": "http://default-broker.seldon-logs",
+                  "apiVersion": "operators.coreos.com/v1alpha1",
+                  "channel": "alpha"
                 },
                 "istioGateway": {
                   "create": true,
                   "name": "seldon-gateway",
                   "namespace": "istio-system"
+                }
+              },
+              "prometheus": {
+                "monitorSpecs": {
+                  "create": true
                 }
               }
             },
@@ -117,11 +123,11 @@ metadata:
             "replicaCount": 1,
             "resources": {},
             "seldon": {
-              "curlForm": "CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')\u003cbr\u003e\ncurl -k -H \"X-Auth-Token: {{ .Token }} \" -H \"Content-Type: application/json\" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'\n",
+              "curlForm": "CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\ncurl -k -H \"Content-Type: application/json\" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'\n",
               "enabled": true,
               "explainForm": "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain",
               "seldonRequestForm": "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions",
-              "tensorFlowCurlForm": "CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')\u003cbr\u003e\ncurl -k -H \"X-Auth-Token: {{ .Token }} \" -H \"Content-Type: application/json\" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'\n",
+              "tensorFlowCurlForm": "CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\ncurl -k -H \"Content-Type: application/json\" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'\n",
               "tensorflowRequestForm": "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
             },
             "service": {
@@ -156,6 +162,9 @@ metadata:
                 "namespace": {
                   "create": false,
                   "name": "seldon-logs"
+                },
+                "trigger": {
+                  "apiVersion": "eventing.knative.dev/v1alpha1"
                 }
             }
           }
@@ -258,6 +267,9 @@ spec:
           - description: loadtest
             displayName: loadtest
             path: loadtest
+          - description: alibidetect
+            displayName: alibidetect
+            path: alibidetect
           - description: ingress
             displayName: ingress
             path: ingress

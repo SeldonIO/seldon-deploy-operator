@@ -94,6 +94,8 @@ spec:
               type: object
             loadtest:
               type: object
+            alibidetect:
+              type: object
             seldon:
               type: object
             skipVerifyHttpCalls:

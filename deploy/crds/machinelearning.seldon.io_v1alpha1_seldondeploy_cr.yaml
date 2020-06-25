@@ -17,7 +17,7 @@ spec:
   enableAppAuth: false
   fullnameOverride: ''
   affinity: {}
-  enableAppAnalytics: true
+  enableAppAnalytics: false
   kfserving:
     protocol: "http"
     enabled: false
@@ -91,16 +91,15 @@ spec:
   serviceAccount:
     create: true
   loadtest:
-    image:
-      repository: seldonio/hey-loadtester
-      tag: 0.1
+    image: seldonio/hey-loadtester:0.1
+  alibidetect:
+    image: seldonio/alibi-detect-server:0.0.1
   skipVerifyGit: true
   argocd:
     url: 'https://argocd-server.argocd.svc.cluster.local'
   image:
     pullPolicy: Always
-    repository: ryandawsonuk/seldon-deploy
-    tag: 0.7.0-dev
+    image: ryandawsonuk/seldon-deploy:0.7.0-dev
   tolerations: []
   elasticsearch:
     jwtSecretKey: jwt-elastic.txt
@@ -119,11 +118,15 @@ spec:
     namespace:
       create: false
       name: seldon-logs
+    trigger:
+      apiVersion: "eventing.knative.dev/v1alpha1"
   openshiftMarketplace:
     cleanupClusterServiceVersions: true
     seldonCore:
       subscription:
         create: true
+        apiVersion: "operators.coreos.com/v1alpha1"
+        channel: "alpha"
         metricsPath: "/metrics"
         istioEnabled: true
         requestLoggerEndpoint: "http://default-broker.seldon-logs"
@@ -131,3 +134,6 @@ spec:
         create: true
         name: "seldon-gateway"
         namespace: "istio-system"
+    prometheus:
+      monitorSpecs:
+        create: true

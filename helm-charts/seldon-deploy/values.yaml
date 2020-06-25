@@ -2,14 +2,14 @@
 replicaCount: 1
 
 image:
-  repository: seldonio/seldon-deploy
-  tag: 0.0.0
+  image: seldonio/seldon-deploy:0.0.0
   pullPolicy: Always
 
 loadtest:
-  image:
-    repository: seldonio/hey-loadtester
-    tag: 0.1
+  image: seldonio/hey-loadtester:0.1
+
+alibidetect:
+  image: seldonio/alibi-detect-server:0.0.1
 
 nameOverride: ""
 fullnameOverride: ""
@@ -22,7 +22,7 @@ service:
 enableAppAuth: false
 
 # boolean to enable app-analytics (defaults to "true")
-enableAppAnalytics: true
+enableAppAnalytics: false
 
 env:
   GITOPS_FORMAT: "json"
@@ -76,6 +76,7 @@ github:
 kfserving:
   protocol: "http"
   enabled: false
+  #Below are templates that can be changed to adjust how requests are made and what curl option is shown to user.
   #Change ip to hostname on AWS. Or put real cluster IP after install.
   curlForm: |
     MODEL_NAME={{ .ModelName }}<br>
@@ -176,12 +177,16 @@ requestLogger:
   namespace:
     create: false
     name: seldon-logs
+  trigger:
+    apiVersion: "eventing.knative.dev/v1alpha1"
 
 openshiftMarketplace:
   cleanupClusterServiceVersions: true
   seldonCore:
     subscription:
       create: true
+      apiVersion: "operators.coreos.com/v1alpha1"
+      channel: "alpha"
       metricsPath: "/metrics"
       istioEnabled: true
       requestLoggerEndpoint: "http://default-broker.seldon-logs"
@@ -189,3 +194,6 @@ openshiftMarketplace:
       create: true
       name: "seldon-gateway"
       namespace: "istio-system"
+  prometheus:
+    monitorSpecs:
+      create: true

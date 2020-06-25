@@ -1,0 +1,29 @@
+{{- if .Values.openshiftMarketplace.prometheus.monitorSpecs.create -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: seldon-podmonitor-default
+  namespace: seldon
+  labels:
+    seldon-monitor: seldon-default
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/managed-by: seldon-core
+  podMetricsEndpoints:
+    - port: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: seldon-servicemonitor-default
+  namespace: seldon
+  labels:
+    seldon-monitor: seldon-default
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/managed-by: seldon-core
+  endpoints:
+    - port: http
+{{- end -}}

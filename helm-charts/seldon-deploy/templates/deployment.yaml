@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -55,10 +55,10 @@ spec:
             - name: "DOCKER_USER"
               value: "{{ .Values.docker.user }}"
             {{- end}}
-            - name: "LOADTEST_IMAGE_REPOSITORY"
-              value: "{{ .Values.loadtest.image.repository }}"
-            - name: "LOADTEST_IMAGE_TAG"
-              value: "{{ .Values.loadtest.image.tag }}"
+            - name: "LOADTEST_IMAGE"
+              value: "{{ .Values.loadtest.image }}"
+            - name: "ALIBI_DETECT_SERVER_IMAGE"
+              value: "{{ .Values.alibidetect.image }}"
             {{- if .Values.github.user }}
             - name: "GIT_USER"
               valueFrom:

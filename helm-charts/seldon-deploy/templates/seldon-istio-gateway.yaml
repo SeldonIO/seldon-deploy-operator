@@ -4,6 +4,11 @@ kind: Gateway
 metadata:
   name: {{ .Values.openshiftMarketplace.seldonCore.istioGateway.name }}
   namespace: {{ .Values.openshiftMarketplace.seldonCore.istioGateway.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+    helm.sh/chart: {{ include "seldon-deploy.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   selector:
     istio: ingressgateway # use istio default controller

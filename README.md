@@ -24,3 +24,6 @@ Can then run on cluster.
  * [Local Kind cluster](docs/samples/operator/local/README.md).
  * [Operator Lifecycle Manager](docs/samples/operator/olm/README.md)
  * [Openshift cluster](docs/samples/operator/openshift/README.md)
+
+## Maintaining This Project
+
