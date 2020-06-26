@@ -82,6 +82,7 @@ metadata:
             },
             "openshiftMarketplace": {
               "cleanupClusterServiceVersions": true,
+              "kubectlCleanupImage": "docker.io/seldonio/kubectl:1.14.3",
               "seldonCore": {
                 "subscription": {
                   "create": true,
@@ -521,6 +522,16 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: seldon-deploy-operator
+                - name: RELATED_IMAGE_DEPLOYMENT
+                  value: ryandawsonuk/seldon-deploy:0.7.0-dev
+                - name: RELATED_IMAGE_LOADTEST
+                  value: seldonio/hey-loadtester:0.1
+                - name: RELATED_IMAGE_ALIBIDETECT
+                  value: seldonio/alibi-detect-server:0.0.1
+                - name: RELATED_IMAGE_REQUESTLOGGER
+                  value: docker.io/seldonio/seldon-request-logger:0.3.1
+                - name: RELATED_IMAGE_KUBECTL
+                  value: docker.io/seldonio/kubectl:1.14.3
                 image: seldonio/seldon-deploy-operator:0.6.0
                 imagePullPolicy: Always
                 name: seldon-deploy-operator

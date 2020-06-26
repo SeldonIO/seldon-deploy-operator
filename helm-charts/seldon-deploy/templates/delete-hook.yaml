@@ -192,7 +192,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: hook1-container
-          image: seldonio/kubectl:1.14.3
+          image: "{{ .Values.openshiftMarketplace.kubectlCleanupImage }}"
           imagePullPolicy: IfNotPresent
           command: ['sh', '-c', 'sleep 15 && seldon=$(kubectl get packagemanifest seldon-operator -n openshift-marketplace -o=jsonpath="{.status.channels[?(@.name==\"alpha\")].currentCSV}") && kubectl delete clusterserviceversion -n openshift-operators $seldon || true']
       serviceAccount: delete-hook-seldon

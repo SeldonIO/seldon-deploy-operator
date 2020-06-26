@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  image: seldonio/seldon-deploy:0.0.0
+  image: ryandawsonuk/seldon-deploy:0.7.0-dev
   pullPolicy: Always
 
 loadtest:
@@ -182,6 +182,7 @@ requestLogger:
 
 openshiftMarketplace:
   cleanupClusterServiceVersions: true
+  kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
   seldonCore:
     subscription:
       create: true

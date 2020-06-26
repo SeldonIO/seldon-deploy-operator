@@ -3,7 +3,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: seldon-podmonitor-default
-  namespace: seldon
   labels:
     seldon-monitor: seldon-default
 spec:
@@ -17,7 +16,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: seldon-servicemonitor-default
-  namespace: seldon
   labels:
     seldon-monitor: seldon-default
 spec:

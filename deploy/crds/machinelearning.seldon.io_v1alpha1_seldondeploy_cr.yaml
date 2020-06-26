@@ -122,6 +122,7 @@ spec:
       apiVersion: "eventing.knative.dev/v1alpha1"
   openshiftMarketplace:
     cleanupClusterServiceVersions: true
+    kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
     seldonCore:
       subscription:
         create: true
