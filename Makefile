@@ -12,6 +12,14 @@ docker-build:
 docker-push:
 	docker push ${IMG}
 
+#password can be found at https://connect.redhat.com/project/4805411/view
+redhat-image-scan: docker-build docker-push
+	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
+		echo $${rh_password_seldondeploy_operator} | docker login -u unused scan.connect.redhat.com --password-stdin
+	docker tag ${IMG} scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
+	docker push scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
+
+
 kind-image-install: docker-build
 	kind load -v 3 docker-image ${IMG}
 
@@ -53,6 +61,13 @@ build-kubectl-image:
 			--tag=seldonio/kubectl:1.14.3
 push-kubectl-image:
 	docker push seldonio/kubectl:1.14.3
+
+#password can be found at https://connect.redhat.com/project/4903751/view
+redhat-kubectl-image-scan: build-kubectl-image push-kubectl-image
+	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
+		echo $${rh_password_kubectl} | docker login -u unused scan.connect.redhat.com --password-stdin
+	docker tag seldonio/kubectl:1.14.3 scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
+	docker push scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
 
 refresh-operator-catalog:
 	kubectl scale deployment seldon-operators --replicas=0 -n openshift-marketplace
