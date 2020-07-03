@@ -68,7 +68,7 @@ metadata:
               "requestForm": "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
             },
             "loadtest": {
-              "image": "seldonio/hey-loadtester:0.1"
+              "image": "seldonio/hey-loadtester-ubi:0.1"
             },
             "alibidetect": {
               "image": "seldonio/alibi-detect-server:0.0.1"
@@ -525,7 +525,7 @@ spec:
                 - name: RELATED_IMAGE_DEPLOYMENT
                   value: docker.io/seldonio/seldon-deploy-ubi:0.7.0-dev
                 - name: RELATED_IMAGE_LOADTEST
-                  value: docker.io/seldonio/hey-loadtester:0.1
+                  value: docker.io/seldonio/hey-loadtester-ubi:0.1
                 - name: RELATED_IMAGE_ALIBIDETECT
                   value: docker.io/seldonio/alibi-detect-server:0.0.1
                 - name: RELATED_IMAGE_REQUESTLOGGER
