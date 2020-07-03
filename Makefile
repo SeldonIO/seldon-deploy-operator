@@ -1,6 +1,6 @@
 SHEL=/bin/bash
 VERSION ?= $(shell cat version.txt)
-PREV_VERSION=0.5.0
+PREV_VERSION=0.6.0
 IMG=seldonio/seldon-deploy-operator:${VERSION}
 QUAY_USER=seldon
 

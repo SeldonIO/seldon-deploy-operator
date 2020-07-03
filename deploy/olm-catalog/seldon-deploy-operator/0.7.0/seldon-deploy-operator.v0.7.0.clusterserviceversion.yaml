@@ -174,7 +174,7 @@ metadata:
     capabilities: Seamless Upgrades
     categories: AI/Machine Learning
     certified: "false"
-    containerImage: seldonio/seldon-deploy-operator:0.6.0
+    containerImage: seldonio/seldon-deploy-operator:0.7.0
     createdAt: "2020-05-21 15:00:00"
     description: The Seldon deploy operator allows the creation of Seldon Deploy applications
       to provide management, monitoring and updating of machine learning models from
@@ -184,7 +184,7 @@ metadata:
       as full GitOps operations to allow full auditing and recovery of updated models.
     repository: https://github.com/SeldonIO/seldon-core
     support: Seldon Dev
-  name: seldon-deploy-operator.v0.6.0
+  name: seldon-deploy-operator.v0.7.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -532,7 +532,7 @@ spec:
                   value: docker.io/seldonio/seldon-request-logger:0.3.1
                 - name: RELATED_IMAGE_KUBECTL
                   value: docker.io/seldonio/kubectl:1.14.3
-                image: seldonio/seldon-deploy-operator:0.6.0
+                image: seldonio/seldon-deploy-operator:0.7.0
                 imagePullPolicy: Always
                 name: seldon-deploy-operator
                 resources: {}
@@ -548,11 +548,21 @@ spec:
   - supported: true
     type: AllNamespaces
   keywords:
-  - ""
+    - mlops
+    - aiops
+    - production
+    - monitoring
+  labels:
+    name: seldon-operator
+  links:
+    - name: Website
+      url: https://www.seldon.io/
+    - name: Documentation
+      url: https://deploy.seldon.io
   maintainers:
     - email: hello@seldon.io
       name: Seldon Technologies
   maturity: alpha
   provider:
     name: Seldon Technologies
-  version: 0.6.0
+  version: 0.7.0

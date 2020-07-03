@@ -1,5 +1,6 @@
 ARG VERSION
 FROM seldonio/seldon-deploy-operator:$VERSION
+ARG VERSION
 LABEL name="Seldon Deploy Operator" \
       vendor="Seldon Technologies" \
       version=$VERSION \
