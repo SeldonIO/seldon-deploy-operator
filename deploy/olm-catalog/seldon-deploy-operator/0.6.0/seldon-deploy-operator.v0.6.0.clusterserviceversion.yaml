@@ -42,7 +42,7 @@ metadata:
             },
             "image": {
               "pullPolicy": "Always",
-              "image": "ryandawsonuk/seldon-deploy:0.7.0-dev"
+              "image": "seldonio/seldon-deploy-ubi:0.7.0-dev"
             },
             "imagePullSecrets": [
               {
@@ -523,11 +523,11 @@ spec:
                 - name: OPERATOR_NAME
                   value: seldon-deploy-operator
                 - name: RELATED_IMAGE_DEPLOYMENT
-                  value: ryandawsonuk/seldon-deploy:0.7.0-dev
+                  value: docker.io/seldonio/seldon-deploy-ubi:0.7.0-dev
                 - name: RELATED_IMAGE_LOADTEST
-                  value: seldonio/hey-loadtester:0.1
+                  value: docker.io/seldonio/hey-loadtester:0.1
                 - name: RELATED_IMAGE_ALIBIDETECT
-                  value: seldonio/alibi-detect-server:0.0.1
+                  value: docker.io/seldonio/alibi-detect-server:0.0.1
                 - name: RELATED_IMAGE_REQUESTLOGGER
                   value: docker.io/seldonio/seldon-request-logger:0.3.1
                 - name: RELATED_IMAGE_KUBECTL
@@ -539,9 +539,9 @@ spec:
               serviceAccountName: seldon-deploy-operator
     strategy: deployment
   installModes:
-  - supported: true
+  - supported: false
     type: OwnNamespace
-  - supported: true
+  - supported: false
     type: SingleNamespace
   - supported: false
     type: MultiNamespace
@@ -550,7 +550,9 @@ spec:
   keywords:
   - ""
   maintainers:
-  - {}
+    - email: hello@seldon.io
+      name: Seldon Technologies
   maturity: alpha
-  provider: {}
+  provider:
+    name: Seldon Technologies
   version: 0.6.0

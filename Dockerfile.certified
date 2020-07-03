@@ -1,0 +1,9 @@
+FROM seldonio/seldon-deploy-operator:0.6.0
+ARG VERSION
+LABEL name="Seldon Deploy Operator" \
+      vendor="Seldon Technologies" \
+      version=$VERSION \
+      release=$VERSION \
+      summary="Seldon Deploy Operator" \
+      description="Helm-based Operator for installing Seldon Deploy."
+COPY deployenterpriselicense.txt licenses/license.txt

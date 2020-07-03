@@ -16,7 +16,8 @@ docker-push:
 redhat-image-scan: docker-build docker-push
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_operator} | docker login -u unused scan.connect.redhat.com --password-stdin
-	docker tag ${IMG} scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
+	docker build . --file=./Dockerfile.certified --build-arg VERSION=${VERSION} --tag=seldonio/seldon-deploy-operator-certified:${VERSION}
+	docker tag seldonio/seldon-deploy-operator-certified:${VERSION} scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
 	docker push scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
 
 
