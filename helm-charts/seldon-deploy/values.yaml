@@ -181,7 +181,7 @@ requestLogger:
     apiVersion: "eventing.knative.dev/v1alpha1"
 
 openshiftMarketplace:
-  cleanupClusterServiceVersions: true
+  cleanupClusterServiceVersions: false
   kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
   seldonCore:
     subscription:

@@ -61,11 +61,11 @@ metadata:
               "tls": []
             },
             "kfserving": {
-              "curlForm": "MODEL_NAME={{ .ModelName }}\u003cbr\u003e\nCLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\nSERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d \"/\" -f 3)\u003cbr\u003e\ncurl -v -H \"Host: ${SERVICE_HOSTNAME}\" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'\n",
+              "curlForm": "MODEL_NAME={{ .ModelName }}\u003cbr\u003e\nCLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\nSERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d \"/\" -f 3)\u003cbr\u003e\ncurl -v -H \"Host: ${SERVICE_HOSTNAME}\" {{ .KfServingProtocol }}://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'\n",
               "enabled": false,
-              "explainForm": "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain",
+              "explainForm": "{{ .KfServingProtocol }}://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain",
               "protocol": "http",
-              "requestForm": "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
+              "requestForm": "{{ .KfServingProtocol }}://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
             },
             "loadtest": {
               "image": "seldonio/hey-loadtester-ubi:0.1"
@@ -81,7 +81,7 @@ metadata:
                 "ingressNamespace": "istio-system"
             },
             "openshiftMarketplace": {
-              "cleanupClusterServiceVersions": true,
+              "cleanupClusterServiceVersions": false,
               "kubectlCleanupImage": "docker.io/seldonio/kubectl:1.14.3",
               "seldonCore": {
                 "subscription": {
@@ -124,12 +124,13 @@ metadata:
             "replicaCount": 1,
             "resources": {},
             "seldon": {
-              "curlForm": "CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\ncurl -k -H \"Content-Type: application/json\" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'\n",
+              "curlForm": "CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\ncurl -k -H \"Content-Type: application/json\" {{ .SeldonProtocol }}://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'\n",
               "enabled": true,
+              "protocol": "http",
               "explainForm": "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain",
-              "seldonRequestForm": "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions",
-              "tensorFlowCurlForm": "CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\ncurl -k -H \"Content-Type: application/json\" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'\n",
-              "tensorflowRequestForm": "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
+              "seldonRequestForm": "{{ .SeldonProtocol }}://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions",
+              "tensorFlowCurlForm": "CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')\u003cbr\u003e\ncurl -k -H \"Content-Type: application/json\" {{ .SeldonProtocol }}://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'\n",
+              "tensorflowRequestForm": "{{ .SeldonProtocol }}://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
             },
             "service": {
               "port": 80,

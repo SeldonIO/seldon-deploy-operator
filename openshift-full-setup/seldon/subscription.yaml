@@ -23,4 +23,6 @@ spec:
       value: "/metrics"
     - name: ENGINE_PROMETHEUS_PATH
       value: "/metrics"
-  startingCSV: seldon-operator.v1.1.0
+    - name: EXECUTOR_REQUEST_LOGGER_DEFAULT_ENDPOINT
+      value: "http://default-broker.seldon-logs"
+  startingCSV: seldon-operator.v1.2.1

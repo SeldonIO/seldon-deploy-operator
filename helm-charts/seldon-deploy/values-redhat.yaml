@@ -76,30 +76,32 @@ github:
 kfserving:
   protocol: "http"
   enabled: false
+  #Below are templates that can be changed to adjust how requests are made and what curl option is shown to user.
   #Change ip to hostname on AWS. Or put real cluster IP after install.
   curlForm: |
     MODEL_NAME={{ .ModelName }}<br>
     CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')<br>
     SERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d "/" -f 3)<br>
-    curl -v -H "Host: ${SERVICE_HOSTNAME}" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'
+    curl -v -H "Host: ${SERVICE_HOSTNAME}" {{ .KfServingProtocol }}://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'
   #Form for cluster-internal calls.
-  requestForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
-  explainForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain"
+  requestForm: "{{ .KfServingProtocol }}://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
+  explainForm: "{{ .KfServingProtocol }}://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain"
 
 seldon:
+  protocol: "http"
   enabled: true
   #Below are templates that can be changed to adjust how requests are made and what curl option is shown to user.
   #Change ip to hostname on AWS. Or put real cluster IP after install. Shown to user for calls outside cluster.
   curlForm: |
     CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')<br>
-    curl -k -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'
+    curl -k -H "Content-Type: application/json" {{ .SeldonProtocol }}://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'
   tensorFlowCurlForm: |
     CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')<br>
-    curl -k -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'
+    curl -k -H "Content-Type: application/json" {{ .SeldonProtocol }}://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'
   #Forms for cluster-internal calls.
   #e.g. could be changed to skip ingress by setting to "http://{{ .ModelName }}-{{ .ModelName }}-{{ .Predictor }}.{{ .Namespace }}:8000/api/v0.1/predictions"
-  seldonRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions"
-  tensorflowRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
+  seldonRequestForm: "{{ .SeldonProtocol }}://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions"
+  tensorflowRequestForm: "{{ .SeldonProtocol }}://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
   #explainer call for seldon can go straight to predictor rather than ingress as not worried about loadbalancing a canary
   explainForm: "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain"
 
@@ -164,7 +166,7 @@ argocd:
   url: "https://argocd-server.argocd.svc.cluster.local"
 
 openshiftMarketplace:
-  cleanupClusterServiceVersions: true
+  cleanupClusterServiceVersions: false
   kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
   seldonCore:
     subscription:
