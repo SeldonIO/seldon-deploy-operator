@@ -7,6 +7,8 @@ metadata:
     helm.sh/chart: {{ include "seldon-deploy.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    helm.sh/created: {{ date "20060102150405" .Release.Time | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -38,10 +40,8 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             {{- range $key, $value := .Values.env }}
-            {{- if $value }}
             - name: {{ $key }}
-              value: {{ $value }}
-            {{- end }}
+              value: {{ $value | quote }}
             {{- end }}
             {{- if .Values.enableAppAuth }}
             - name: "ENABLE_APP_AUTH"
@@ -80,14 +80,6 @@ spec:
             - name: "EXTERNAL_PROTOCOL"
               value: "{{ .Values.external.protocol }}"
             {{- end }}
-            {{- if .Values.external.host }}
-            - name: "EXTERNAL_HOST"
-              value: "{{ .Values.external.host }}"
-            {{- end }}
-            {{- if .Values.kfserving.protocol }}
-            - name: "KFSERVING_PROTOCOL"
-              value: "{{ .Values.kfserving.protocol }}"
-            {{- end }}
             - name: "INFERENCESERVICES"
               value: "{{ .Values.kfserving.enabled }}"
             - name: "SELDONDEPLOYMENTS"
@@ -113,22 +105,22 @@ spec:
           {{- if .Values.lite }}
           livenessProbe:
             httpGet:
-              path: /seldon-deploy/
+              path: /seldon-deploy/api/status
               port: http
             initialDelaySeconds: 30
           readinessProbe:
             httpGet:
-              path: /seldon-deploy/
+              path: /seldon-deploy/api/status
               port: http
             initialDelaySeconds: 30
           {{- else }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/status
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/status
               port: http
           {{- end }}
           resources:

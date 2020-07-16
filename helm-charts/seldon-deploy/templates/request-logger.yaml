@@ -55,7 +55,7 @@ spec:
     spec:
       containers:
         - name: user-container
-          image: {{ .Values.requestLogger.image }}
+          image: "{{ .Values.requestLogger.image }}"
           imagePullPolicy: {{ .Values.requestLogger.imagePullPolicy }}
           env:
             - name: ELASTICSEARCH_HOST

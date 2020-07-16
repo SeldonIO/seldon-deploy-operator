@@ -1,6 +1,7 @@
 
 replicaCount: 1
 
+#TODO: these should be RH UBI images
 image:
   image: seldonio/seldon-deploy:0.0.0
   pullPolicy: Always
@@ -56,8 +57,8 @@ ingress:
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
 # limits:
 #   cpu: 100m
 #   memory: 128Mi
@@ -164,6 +165,24 @@ elasticsearch:
 
 argocd:
   url: "https://argocd-server.argocd.svc.cluster.local"
+
+#only create request logger if you've not already installed it outside of helm (or first delete existing install)
+#if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
+requestLogger:
+  create: true
+  image: docker.io/seldonio/seldon-request-logger:0.3.1
+  imagePullPolicy: IfNotPresent
+  elasticsearch:
+    host: "elasticsearch.openshift-logging"
+    port: "9200"
+    protocol: "https"
+    jwtSecretName: "jwt-elastic"
+    jwtSecretKey: "jwt-elastic.txt"
+  namespace:
+    create: false
+    name: seldon-logs
+  trigger:
+    apiVersion: "eventing.knative.dev/v1alpha1"
 
 openshiftMarketplace:
   cleanupClusterServiceVersions: false

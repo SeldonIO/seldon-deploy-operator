@@ -4,7 +4,7 @@ Note this directory must be named `seldon-deploy-operator`. Operator-sdk [uses t
 
 Tested with: 
 
-operator-courier 2.7.1
+operator-courier 2.1.7
 operator-sdk v0.17.1
 
 First check you can run scorecard from Makefile against empty kind cluster.
@@ -29,11 +29,13 @@ Can then run on cluster.
 
 Each new release needs to be based on the latest seldon deploy helm chart. The release version should match a deploy release version. This involves:
 
-1) Updating the helm chart here.
-2) Create a new folder for the new version in the deploy/olm-catalog/seldon-deploy-operator directory - copy the contents from the previous.
-3) Any differences between the new helm values file and the last one need to be reflected by updating the alm-examples section of the clusterserviceversion. It's basically a json version of a values file.
-4) Make sure any references to the previous release version in what was copied are changed to the new version.
-5) Update the version.txt, operator.yaml and osdk-scorecard.yaml to point to the new version.
-6) Update PREV_VERSION in the Makefile to point to the old version.
-7) Test as per the Installation section above.
-8) When ready then push new image to https://connect.redhat.com/project/4805411/view
+1) See redhat.md in notes in seldon-deploy repo. Make sure image is published.
+2) Compare the values-redhat.yaml and values.yaml in a yaml compare tool or in goland to make sure that values-redhat.yaml has every section and points to RH images.
+3) Put the deploy version in get-helm-chart.sh and get the new deploy helm chart here using `make get_helm_chart`.
+4) Create a new folder for the new version in the deploy/olm-catalog/seldon-deploy-operator directory - copy the contents from the previous.
+5) Any differences between the new helm values file and the last one need to be reflected by updating the alm-examples section of the clusterserviceversion. It's basically a json version of a values file.
+6) Make sure any references to the previous release version in what was copied are changed to the new version.
+7) Update the version.txt, operator.yaml and osdk-scorecard.yaml to point to the new version.
+8) Update PREV_VERSION in the Makefile to point to the old version.
+9) Test as per the Installation section above.
+10) When ready then push new image to https://connect.redhat.com/project/4805411/view

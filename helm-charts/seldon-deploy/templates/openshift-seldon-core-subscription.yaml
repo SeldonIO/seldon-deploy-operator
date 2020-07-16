@@ -1,12 +1,12 @@
 {{- if .Values.openshiftMarketplace.seldonCore.subscription.create -}}
-apiVersion: operators.coreos.com/v1alpha1
+apiVersion: {{ .Values.openshiftMarketplace.seldonCore.subscription.apiVersion }}
 kind: Subscription
 metadata:
   generation: 1
   name: seldon-operator-certified
   namespace: openshift-operators
 spec:
-  channel: alpha
+  channel: {{ .Values.openshiftMarketplace.seldonCore.subscription.channel }}
   installPlanApproval: Automatic
   name: seldon-operator-certified
   source: certified-operators

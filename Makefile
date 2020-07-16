@@ -98,6 +98,8 @@ scorecard:
 quay-push:
 	operator-courier push deploy/olm-catalog/seldon-deploy-operator ${QUAY_USER} seldon-deploy-operator ${VERSION} "$$QUAY_TOKEN"
 
+get-helm-chart:
+	./get-helm-chart.sh
 
 helm-install:
 	./sd-install-openshift

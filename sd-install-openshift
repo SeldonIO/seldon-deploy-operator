@@ -32,7 +32,7 @@ helm upgrade seldon-deploy ${HELM_CHARTS_DIR}/seldon-deploy/ \
 	--set image.repository=${DOCKER_REPO}/${IMAGE_NAME} \
 	--set docker.user=$DOCKER_USER \
 	--set image.tag=${IMAGE_TAG} \
-	-f ${HELM_CHARTS_DIR}/seldon-deploy/values.yaml \
+	-f ${HELM_CHARTS_DIR}/seldon-deploy/values-redhat.yaml \
 	--install --recreate-pods
 
 sleep 5
