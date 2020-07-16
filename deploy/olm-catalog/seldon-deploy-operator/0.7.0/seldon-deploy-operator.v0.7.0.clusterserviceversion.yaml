@@ -523,16 +523,22 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: seldon-deploy-operator
+#registry.connect.redhat.com/seldonio/seldon-deploy:0.7
                 - name: RELATED_IMAGE_DEPLOYMENT
-                  value: docker.io/seldonio/seldon-deploy-ubi:0.7.0-dev
+                  value: docker.io/seldonio/seldon-deploy-ubi:0.7.0
+#registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
                 - name: RELATED_IMAGE_LOADTEST
                   value: docker.io/seldonio/hey-loadtester-ubi:0.1
+#registry.connect.redhat.com/seldonio/alibi-detect-server:1.2.1
                 - name: RELATED_IMAGE_ALIBIDETECT
                   value: docker.io/seldonio/alibi-detect-server:0.0.1
+#registry.connect.redhat.com/seldonio/seldon-request-logger:1.2.1
                 - name: RELATED_IMAGE_REQUESTLOGGER
                   value: docker.io/seldonio/seldon-request-logger:0.3.1
+#registry.connect.redhat.com/seldonio/kubectl:1.14.3
                 - name: RELATED_IMAGE_KUBECTL
                   value: docker.io/seldonio/kubectl:1.14.3
+#registry.connect.redhat.com/seldonio/seldon-deploy-operator:0.7.0
                 image: seldonio/seldon-deploy-operator:0.7.0
                 imagePullPolicy: Always
                 name: seldon-deploy-operator

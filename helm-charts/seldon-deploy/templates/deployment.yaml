@@ -7,8 +7,6 @@ metadata:
     helm.sh/chart: {{ include "seldon-deploy.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  annotations:
-    helm.sh/created: {{ date "20060102150405" .Release.Time | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
