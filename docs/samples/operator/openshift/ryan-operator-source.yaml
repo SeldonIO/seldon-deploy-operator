@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorSource
+metadata:
+  name: ryan-operators
+  namespace: openshift-marketplace
+spec:
+  type: appregistry
+  endpoint: https://quay.io/cnr
+  registryNamespace: rd0
+  displayName: "Ryan Testing"
+  publisher: "Ryan"

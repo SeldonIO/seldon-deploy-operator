@@ -3,3 +3,9 @@
   group: machinelearning.seldon.io
   kind: SeldonDeploy
   chart: helm-charts/seldon-deploy
+  overrideValues:
+    image.image: $RELATED_IMAGE_DEPLOYMENT
+    loadtest.image: $RELATED_IMAGE_LOADTEST
+    alibidetect.image: $RELATED_IMAGE_ALIBIDETECT
+    requestLogger.image: $RELATED_IMAGE_REQUESTLOGGER
+    openshiftMarketplace.kubectlCleanupImage: $RELATED_IMAGE_KUBECTL

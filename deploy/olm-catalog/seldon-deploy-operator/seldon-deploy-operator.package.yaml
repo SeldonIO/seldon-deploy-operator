@@ -1,5 +1,5 @@
 channels:
-- currentCSV: seldon-deploy-operator.v0.6.0
+- currentCSV: seldon-deploy-operator.v0.7.0
   name: alpha
 defaultChannel: alpha
 packageName: seldon-deploy-operator

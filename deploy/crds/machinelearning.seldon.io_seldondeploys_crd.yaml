@@ -46,6 +46,8 @@ spec:
               type: array
               items:
                 type: object
+            ingressGateway:
+              type: object
             virtualService:
               type: object
             affinity:
@@ -86,9 +88,13 @@ spec:
               type: boolean
             docker:
               type: object
+            openshiftMarketplace:
+              type: object
             ingress:
               type: object
             loadtest:
+              type: object
+            alibidetect:
               type: object
             seldon:
               type: object

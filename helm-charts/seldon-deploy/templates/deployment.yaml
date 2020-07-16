@@ -7,8 +7,6 @@ metadata:
     helm.sh/chart: {{ include "seldon-deploy.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  annotations:
-    helm.sh/created: {{ date "20060102150405" .Release.Time | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -25,7 +23,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -41,7 +39,7 @@ spec:
                   fieldPath: metadata.namespace
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
-              value: {{ $value }}
+              value: {{ $value | quote }}
             {{- end }}
             {{- if .Values.enableAppAuth }}
             - name: "ENABLE_APP_AUTH"
@@ -55,10 +53,10 @@ spec:
             - name: "DOCKER_USER"
               value: "{{ .Values.docker.user }}"
             {{- end}}
-            - name: "LOADTEST_IMAGE_REPOSITORY"
-              value: "{{ .Values.loadtest.image.repository }}"
-            - name: "LOADTEST_IMAGE_TAG"
-              value: "{{ .Values.loadtest.image.tag }}"
+            - name: "LOADTEST_IMAGE"
+              value: "{{ .Values.loadtest.image }}"
+            - name: "ALIBI_DETECT_SERVER_IMAGE"
+              value: "{{ .Values.alibidetect.image }}"
             {{- if .Values.github.user }}
             - name: "GIT_USER"
               valueFrom:
@@ -80,22 +78,10 @@ spec:
             - name: "EXTERNAL_PROTOCOL"
               value: "{{ .Values.external.protocol }}"
             {{- end }}
-            {{- if .Values.external.host }}
-            - name: "EXTERNAL_HOST"
-              value: "{{ .Values.external.host }}"
-            {{- end }}
-            {{- if .Values.kfserving.protocol }}
-            - name: "KFSERVING_PROTOCOL"
-              value: "{{ .Values.kfserving.protocol }}"
-            {{- end }}
             - name: "INFERENCESERVICES"
               value: "{{ .Values.kfserving.enabled }}"
             - name: "SELDONDEPLOYMENTS"
               value: "{{ .Values.seldon.enabled }}"
-            {{- if .Values.lite }}
-            - name: "LITE"
-              value: "{{ .Values.lite }}"
-            {{- end }}
             {{- if .Values.virtualService.create }}
             - name: "EXTERNAL_PREFIX"
               value: "{{ .Values.virtualService.prefix }}"
@@ -107,25 +93,32 @@ spec:
                   name: {{ .Values.elasticsearch.jwtSecretName }}
                   key: {{ .Values.elasticsearch.jwtSecretKey }}
             {{- end }}
+            {{- if .Values.prometheus.seldon.jwtSecretName }}
+            - name: "PROMETHEUS_SELDON_TOKEN"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.prometheus.seldon.jwtSecretName }}
+                  key: {{ .Values.prometheus.seldon.jwtSecretKey }}
+            {{- end }}
           {{- if .Values.lite }}
           livenessProbe:
             httpGet:
-              path: /seldon-deploy/
+              path: /seldon-deploy/api/status
               port: http
             initialDelaySeconds: 30
           readinessProbe:
             httpGet:
-              path: /seldon-deploy/
+              path: /seldon-deploy/api/status
               port: http
             initialDelaySeconds: 30
           {{- else }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/status
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/status
               port: http
           {{- end }}
           resources:

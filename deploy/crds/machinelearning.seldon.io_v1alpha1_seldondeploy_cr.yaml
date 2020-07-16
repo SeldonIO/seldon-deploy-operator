@@ -3,77 +3,138 @@ kind: SeldonDeploy
 metadata:
   name: example-seldondeploy
 spec:
-  # Default values copied from <project_dir>/helm-charts/seldon-deploy/values.yaml
-  
-  affinity: {}
-  argocd:
-    url: https://argocd-server.argocd.svc.cluster.local
   docker:
     user: unkown
-  elasticsearch:
-    url: http://elasticsearch-master.logs.svc.cluster.local:9200
-  enableAppAnalytics: true
+  nodeSelector: {}
+  serviceAccountName: seldon-deploy
+  imagePullSecrets:
+    - name: regcred
+  github:
+    email: ''
+    token: ''
+    user: ''
+  resources: {}
   enableAppAuth: false
+  fullnameOverride: ''
+  affinity: {}
+  enableAppAnalytics: false
+  kfserving:
+    protocol: "http"
+    enabled: false
+    #Change ip to hostname on AWS. Or put real cluster IP after install.
+    curlForm: |
+      MODEL_NAME={{ .ModelName }}<br>
+      CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+      SERVICE_HOSTNAME=$(kubectl get inferenceservice {{ .ModelName }} -o jsonpath='{.status.url}' | cut -d "/" -f 3)<br>
+      curl -v -H "Host: ${SERVICE_HOSTNAME}" http://$CLUSTER_IP/v1/models/$MODEL_NAME:predict -d '{{ .Payload }}'
+    #Form for cluster-internal calls.
+    requestForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
+    explainForm: "http://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:explain"
+
+  seldon:
+    enabled: true
+    #Below are templates that can be changed to adjust how requests are made and what curl option is shown to user.
+    #Change ip to hostname on AWS. Or put real cluster IP after install. Shown to user for calls outside cluster.
+    curlForm: |
+      CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+      curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions -d '{{ .Payload }}'
+    tensorFlowCurlForm: |
+      CLUSTER_IP=$(kubectl -n {{ .IngressNamespace }} get service {{ .IngressServiceName }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')<br>
+      curl -k -H "X-Auth-Token: {{ .Token }} " -H "Content-Type: application/json" http://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'
+    #Forms for cluster-internal calls.
+    #e.g. could be changed to skip ingress by setting to "http://{{ .ModelName }}-{{ .ModelName }}-{{ .Predictor }}.{{ .Namespace }}:8000/api/v0.1/predictions"
+    seldonRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions"
+    tensorflowRequestForm: "http://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
+    #explainer call for seldon can go straight to predictor rather than ingress as not worried about loadbalancing a canary
+    explainForm: "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain"
+  prometheus:
+    knative:
+      url: 'https://prometheus-k8s.openshift-monitoring:9091/api/v1/'
+    seldon:
+      jwtSecretKey: jwt-elastic.txt
+      jwtSecretName: jwt-elastic
+      namespaceMetricName: namespace
+      resourceMetricsUrl: 'https://prometheus-k8s.openshift-monitoring:9091/api/v1/'
+      serviceMetricName: exported_service
+      url: "https://prometheus-user-workload.openshift-user-workload-monitoring:9091/api/v1/"
+  ingressGateway:
+    seldonIngressService: "istio-ingressgateway"
+    kfServingIngressService: "kfserving-ingressgateway"
+    ingressNamespace: "istio-system"
+  virtualService:
+    create: true
+    gateways:
+      - seldon-gateway.istio-system.svc.cluster.local
+    prefix: /seldon-deploy/
+  external:
+    host: ''
+    protocol: http
   env:
     GITOPS_FORMAT: json
     USERID_CLAIM_KEY: name
-  external:
-    host: ""
-    protocol: http
-  fullnameOverride: ""
-  github:
-    email: ""
-    token: ""
-    user: ""
-  image:
-    pullPolicy: Always
-    repository: seldonio/seldon-deploy
-    tag: 0.6.0
-  imagePullSecrets:
-  - name: regcred
+  rbac:
+    clusterWide: false
+    create: true
+  skipVerifyHttpCalls: true
   ingress:
     annotations: {}
     enabled: false
     hosts:
-    - host: chart-example.local
-      paths: []
+      - host: chart-example.local
+        paths: []
     tls: []
-  kfserving:
-    enabled: true
-    protocol: http
-  lite: false
-  loadtest:
-    image:
-      repository: seldonio/hey-loadtester
-      tag: 0.1
-  nameOverride: ""
-  nodeSelector: {}
-  prometheus:
-    knative:
-      url: http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/
-    seldon:
-      namespaceMetricName: kubernetes_namespace
-      serviceMetricName: service
-      url: http://seldon-core-analytics-prometheus-seldon.seldon-system/api/v1/
-  rbac:
-    clusterWide: false
-    create: true
-  replicaCount: 1
-  resources: {}
-  seldon:
-    enabled: true
   service:
     port: 80
     type: ClusterIP
+  replicaCount: 1
+  nameOverride: ''
   serviceAccount:
     create: true
-  serviceAccountName: seldon-deploy
+  loadtest:
+    image: seldonio/hey-loadtester:0.1
+  alibidetect:
+    image: seldonio/alibi-detect-server:0.0.1
   skipVerifyGit: true
-  skipVerifyHttpCalls: true
+  argocd:
+    url: 'https://argocd-server.argocd.svc.cluster.local'
+  image:
+    pullPolicy: Always
+    image: ryandawsonuk/seldon-deploy:0.7.0-dev
   tolerations: []
-  virtualService:
-    create: false
-    gateways:
-    - kubeflow-gateway.kubeflow.svc.cluster.local
-    prefix: /seldon-deploy/
-  
+  elasticsearch:
+    jwtSecretKey: jwt-elastic.txt
+    jwtSecretName: jwt-elastic
+    url: 'https://elasticsearch.openshift-logging:9200'
+  requestLogger:
+    create: true
+    image: docker.io/seldonio/seldon-request-logger:0.3.1
+    imagePullPolicy: IfNotPresent
+    elasticsearch:
+      host: "elasticsearch.openshift-logging"
+      port: "9200"
+      protocol: "https"
+      jwtSecretName: "jwt-elastic"
+      jwtSecretKey: "jwt-elastic.txt"
+    namespace:
+      create: false
+      name: seldon-logs
+    trigger:
+      apiVersion: "eventing.knative.dev/v1alpha1"
+  openshiftMarketplace:
+    cleanupClusterServiceVersions: true
+    kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
+    seldonCore:
+      subscription:
+        create: true
+        apiVersion: "operators.coreos.com/v1alpha1"
+        channel: "alpha"
+        metricsPath: "/metrics"
+        istioEnabled: true
+        requestLoggerEndpoint: "http://default-broker.seldon-logs"
+      istioGateway:
+        create: true
+        name: "seldon-gateway"
+        namespace: "istio-system"
+    prometheus:
+      monitorSpecs:
+        create: true

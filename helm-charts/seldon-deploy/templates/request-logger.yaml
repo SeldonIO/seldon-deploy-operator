@@ -1,0 +1,92 @@
+{{- if .Values.requestLogger.create -}}
+{{- if .Values.requestLogger.namespace.create -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    knative-eventing-injection: enabled
+    app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+    helm.sh/chart: {{ include "seldon-deploy.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ .Values.requestLogger.namespace.name }}
+spec:
+  finalizers:
+    - kubernetes
+---
+{{- end -}}
+apiVersion: {{ .Values.requestLogger.trigger.apiVersion }}
+kind: Trigger
+metadata:
+  name: seldon-request-logger-trigger
+  namespace: {{ .Values.requestLogger.namespace.name }}
+  labels:
+    app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+    helm.sh/chart: {{ include "seldon-deploy.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: seldon-request-logger
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seldon-request-logger
+  namespace: {{ .Values.requestLogger.namespace.name }}
+  labels:
+    app: seldon-request-logger
+    app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+    helm.sh/chart: {{ include "seldon-deploy.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seldon-request-logger
+  template:
+    metadata:
+      labels:
+        app: seldon-request-logger
+    spec:
+      containers:
+        - name: user-container
+          image: "{{ .Values.requestLogger.image }}"
+          imagePullPolicy: {{ .Values.requestLogger.imagePullPolicy }}
+          env:
+            - name: ELASTICSEARCH_HOST
+              value: {{ .Values.requestLogger.elasticsearch.host | quote }}
+            - name: ELASTICSEARCH_PORT
+              value: {{ .Values.requestLogger.elasticsearch.port | quote }}
+            - name: ELASTICSEARCH_PROTOCOL
+              value: {{ .Values.requestLogger.elasticsearch.protocol | quote }}
+{{- if .Values.requestLogger.elasticsearch.jwtSecretName }}
+            - name: ELASTICSEARCH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.requestLogger.elasticsearch.jwtSecretName }}
+                  key: {{ .Values.requestLogger.elasticsearch.jwtSecretKey }}
+{{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seldon-request-logger
+  namespace: {{ .Values.requestLogger.namespace.name }}
+  labels:
+    app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
+    helm.sh/chart: {{ include "seldon-deploy.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  selector:
+    app: seldon-request-logger
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+{{- end -}}

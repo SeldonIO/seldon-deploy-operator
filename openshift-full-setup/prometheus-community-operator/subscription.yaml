@@ -1,0 +1,18 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  creationTimestamp: '2020-05-15T09:51:48Z'
+  generation: 1
+  name: prometheus
+  namespace: seldon
+  resourceVersion: '10944253'
+  selfLink: >-
+    /apis/operators.coreos.com/v1alpha1/namespaces/seldon/subscriptions/prometheus
+  uid: f743f15c-88fa-49cf-8843-398a494f70b3
+spec:
+  channel: beta
+  installPlanApproval: Automatic
+  name: prometheus
+  source: community-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: prometheusoperator.0.32.0

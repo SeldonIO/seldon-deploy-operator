@@ -9,7 +9,7 @@ rules:
   resources:
   - namespaces
   verbs:
-  - get
+  - '*'
 - apiGroups:
   - ""
   resources:
@@ -55,6 +55,7 @@ rules:
   - monitoring.coreos.com
   resources:
   - servicemonitors
+  - podmonitors
   verbs:
   - get
   - create
@@ -72,6 +73,8 @@ rules:
   - pods
   verbs:
   - get
+  - update
+  - patch
 - apiGroups:
   - apps
   resources:
@@ -95,5 +98,50 @@ rules:
   - networking.istio.io
   resources:
   - virtualservices
+  - gateways
+  verbs:
+  - '*'
+- apiGroups:
+  - operators.coreos.com
+  resources:
+  - subscriptions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - maistra.io
+  resources:
+  - servicemeshcontrolplanes
+  - servicemeshmemberrolls
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - eventing.knative.dev
+  resources:
+  - triggers
+  verbs:
+  - '*'
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - '*'
+- apiGroups:
+  - operator.knative.dev
+  - knativeservings
+  resources:
+  - knativeeventings
   verbs:
   - '*'
