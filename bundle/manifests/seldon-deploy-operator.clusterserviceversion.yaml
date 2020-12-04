@@ -1,0 +1,44 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+    operators.operatorframework.io/builder: operator-sdk-v1.2.0
+    operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
+  name: seldon-deploy-operator.v1.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions: {}
+  description: management, monitoring and updating of machine learning models
+  displayName: seldon-deploy-operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: []
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - machine learning
+  - deployment
+  links:
+  - name: Seldon Deploy Operator
+    url: https://seldon-deploy-operator.domain
+  maintainers:
+  - email: rd@seldon.io
+    name: Ryan Dawson
+  maturity: alpha
+  provider:
+    name: seldon
+  version: 1.0.0

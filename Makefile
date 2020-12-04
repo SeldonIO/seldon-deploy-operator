@@ -1,7 +1,7 @@
 # Current Operator version
 VERSION ?= $(shell cat version.txt)
 # Default bundle image tag
-BUNDLE_IMG ?= controller-bundle:$(VERSION)
+BUNDLE_IMG ?= seldonio/seldon-deploy-operator-bundle:$(VERSION)
 # Options for 'bundle-build'
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
@@ -90,6 +90,15 @@ bundle: kustomize
 .PHONY: bundle-build
 bundle-build:
 	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+
+# Push the bundle image.
+.PHONY: bundle-build
+bundle-push:
+	docker push $(BUNDLE_IMG)
+
+.PHONY: bundle-build
+bundle-validate:
+	operator-sdk bundle validate $(BUNDLE_IMG)
 
 scorecard:
 	operator-sdk scorecard --kubeconfig ~/.kube/config $(BUNDLE_IMG)

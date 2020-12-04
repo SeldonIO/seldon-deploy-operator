@@ -1,0 +1,51 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+    operators.operatorframework.io/builder: operator-sdk-v1.2.0
+    operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
+  name: seldon-deploy-operator.v1.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions: {}
+  description: The Seldon deploy operator allows the creation of Seldon Deploy applications
+    to provide management, monitoring and updating of machine learning models from
+    a range of technologies. It includes the ability to run explanations as well
+    as outlier, drift and adversarial detection against running models. There is
+    a full metrics and logging integration via Prometheus and ELK stacks as well
+    as full GitOps operations to allow full auditing and recovery of updated models.
+  displayName: Seldon Deploy Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - machine learning
+  - deployment
+  links:
+    - name: Website
+      url: https://www.seldon.io/
+    - name: Documentation
+      url: https://deploy.seldon.io
+  maintainers:
+    - email: hello@seldon.io
+      name: Seldon Technologies
+  maturity: alpha
+  provider:
+    name: seldon
+  version: 1.0.0
