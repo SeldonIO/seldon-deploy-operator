@@ -1,129 +1,99 @@
-SHEL=/bin/bash
+# Current Operator version
 VERSION ?= $(shell cat version.txt)
-PREV_VERSION=0.6.0
-IMG=seldonio/seldon-deploy-operator:${VERSION}
-QUAY_USER=seldon
+# Default bundle image tag
+BUNDLE_IMG ?= controller-bundle:$(VERSION)
+# Options for 'bundle-build'
+ifneq ($(origin CHANNELS), undefined)
+BUNDLE_CHANNELS := --channels=$(CHANNELS)
+endif
+ifneq ($(origin DEFAULT_CHANNEL), undefined)
+BUNDLE_DEFAULT_CHANNEL := --default-channel=$(DEFAULT_CHANNEL)
+endif
+BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
-#build image when changing helm chart templates
-.PHONY: docker-build
+# Image URL to use all building/pushing image targets
+IMG ?= seldonio/seldon-deploy-operator:${VERSION}
+
+all: docker-build
+
+# Run against the configured Kubernetes cluster in ~/.kube/config
+run: helm-operator
+	$(HELM_OPERATOR) run
+
+# Install CRDs into a cluster
+install: kustomize
+	$(KUSTOMIZE) build config/crd | kubectl apply -f -
+
+# Uninstall CRDs from a cluster
+uninstall: kustomize
+	$(KUSTOMIZE) build config/crd | kubectl delete -f -
+
+# Deploy controller in the configured Kubernetes cluster in ~/.kube/config
+deploy: kustomize
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
+	$(KUSTOMIZE) build config/default | kubectl apply -f -
+
+# Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
+undeploy: kustomize
+	$(KUSTOMIZE) build config/default | kubectl delete -f -
+
+# Build the docker image
 docker-build:
-	operator-sdk build ${IMG}
+	docker build . -t ${IMG}
 
+# Push the docker image
 docker-push:
 	docker push ${IMG}
 
-#password can be found at https://connect.redhat.com/project/4805411/view
-redhat-image-scan: docker-build docker-push
-	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
-		echo $${rh_password_seldondeploy_operator} | docker login -u unused scan.connect.redhat.com --password-stdin
-	docker build . --file=./Dockerfile.certified --build-arg VERSION=${VERSION} --tag=seldonio/seldon-deploy-operator-certified:${VERSION}
-	docker tag seldonio/seldon-deploy-operator-certified:${VERSION} scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
-	docker push scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
+PATH  := $(PATH):$(PWD)/bin
+SHELL := env PATH=$(PATH) /bin/sh
+OS    = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+ARCH  = $(shell uname -m | sed 's/x86_64/amd64/')
+OSOPER   = $(shell uname -s | tr '[:upper:]' '[:lower:]' | sed 's/darwin/apple-darwin/' | sed 's/linux/linux-gnu/')
+ARCHOPER = $(shell uname -m )
 
+kustomize:
+ifeq (, $(shell which kustomize 2>/dev/null))
+	@{ \
+	set -e ;\
+	mkdir -p bin ;\
+	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.5.4/kustomize_v3.5.4_$(OS)_$(ARCH).tar.gz | tar xzf - -C bin/ ;\
+	}
+KUSTOMIZE=$(realpath ./bin/kustomize)
+else
+KUSTOMIZE=$(shell which kustomize)
+endif
 
-kind-image-install: docker-build
-	kind load -v 3 docker-image ${IMG}
+helm-operator:
+ifeq (, $(shell which helm-operator 2>/dev/null))
+	@{ \
+	set -e ;\
+	mkdir -p bin ;\
+	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.2.0/helm-operator-v1.2.0-$(ARCHOPER)-$(OSOPER) ;\
+	mv helm-operator-v1.2.0-$(ARCHOPER)-$(OSOPER) ./bin/helm-operator ;\
+	chmod +x ./bin/helm-operator ;\
+	}
+HELM_OPERATOR=$(realpath ./bin/helm-operator)
+else
+HELM_OPERATOR=$(shell which helm-operator)
+endif
 
-update-yaml: docker-build
-	sed -i 's|image: .*|image: ${IMG}|g' deploy/operator.yaml
+# Generate bundle manifests and metadata, then validate generated files.
+.PHONY: bundle
+bundle: kustomize
+	operator-sdk generate kustomize manifests -q
+	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
+	$(KUSTOMIZE) build config/manifests | operator-sdk generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
+	operator-sdk bundle validate ./bundle
 
-local-run-operator:
-	operator-sdk run --local
-
-#
-# Install operator via yaml
-#
-
-yaml-install-crd:
-	kubectl apply -f deploy/crds/machinelearning.seldon.io_seldondeploys_crd.yaml
-
-yaml-install-operator:
-	kubectl create ns seldon-system || echo "Namespace seldon-system already exists"
-	kubectl apply -f deploy/service_account.yaml -n seldon-system
-	kubectl apply -f deploy/role.yaml -n seldon-system
-	kubectl apply -f deploy/role_binding.yaml -n seldon-system
-	kubectl apply -f deploy/operator.yaml -n seldon-system
-
-yaml-uninstall-operator:
-	kubectl delete -f deploy/service_account.yaml -n seldon-system
-	kubectl delete -f deploy/role.yaml -n seldon-system
-	kubectl delete -f deploy/role_binding.yaml -n seldon-system
-	kubectl delete -f deploy/operator.yaml -n seldon-system
-	kubectl delete ns seldon-system
-
-yaml-run-seldon-deploy:
-	kubectl apply -f deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml -n seldon-system
-
-yaml-delete-seldon-deploy:
-	kubectl delete -f deploy/crds/machinelearning.seldon.io_v1alpha1_seldondeploy_cr.yaml -n seldon-system
-
-build-kubectl-image:
-	docker build . --file=./Dockerfile.kubectl \
-			--tag=seldonio/kubectl:1.14.3
-push-kubectl-image:
-	docker push seldonio/kubectl:1.14.3
-
-#password can be found at https://connect.redhat.com/project/4903751/view
-redhat-kubectl-image-scan: build-kubectl-image push-kubectl-image
-	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
-		echo $${rh_password_kubectl} | docker login -u unused scan.connect.redhat.com --password-stdin
-	docker tag seldonio/kubectl:1.14.3 scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
-	docker push scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
-
-refresh-operator-catalog:
-	kubectl scale deployment seldon-operators --replicas=0 -n openshift-marketplace
-	kubectl scale deployment seldon-operators --replicas=1 -n openshift-marketplace
-#
-# Bundle and CSV
-# Still using package manifests: see https://github.com/operator-framework/operator-sdk/issues/3079
-#
-
-generate-csv:
-	operator-sdk generate csv --csv-version ${VERSION} --make-manifests=false --verbose
-
-#bundle is future way, currently just using csv
-generate-bundle:
-	operator-sdk bundle create --generate-only --directory ./deploy/olm-catalog/seldon-deploy-operator/0.6.0/
-
-validate-bundle:
-	operator-courier verify --ui_validate_io deploy/olm-catalog/seldon-deploy-operator/
+# Build the bundle image.
+.PHONY: bundle-build
+bundle-build:
+	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
 
 scorecard:
-	kubectl create ns seldon-system || true
-	operator-sdk scorecard -o text --bundle deploy/olm-catalog/seldon-deploy-operator --kubeconfig ~/.kube/config --verbose
+	operator-sdk scorecard --kubeconfig ~/.kube/config $(BUNDLE_IMG)
 
-
-# See https://github.com/operator-framework/community-operators/blob/master/docs/testing-operators.md
-# Used to push bundle to quay.io for testing
-quay-push:
-	operator-courier push deploy/olm-catalog/seldon-deploy-operator ${QUAY_USER} seldon-deploy-operator ${VERSION} "$$QUAY_TOKEN"
-
-get-helm-chart:
-	./get-helm-chart.sh
-
-helm-install:
-	./sd-install-openshift
-
-helm-delete:
-	helm delete seldon-deploy -n seldon
-
-#
-# install operator for OLM
-#
-
-olm-install:
-	operator-sdk olm install
-
-olm-verify:
-	operator-sdk olm status
-
-olm-install-operator:
-	operator-sdk run --olm --operator-version ${VERSION}
-
-olm-cleanup-operator:
-	operator-sdk cleanup --olm --operator-version ${VERSION}
-
-
-open_cluster_with_istio:
-	ISTIO_INGRESS=$$(oc get route -n istio-system istio-ingressgateway -o jsonpath='{.spec.host}'); \
-	xdg-open http://$$ISTIO_INGRESS/seldon-deploy/
+open_kind:
+	xdg-open http://localhost:8080/seldon-deploy/; \
+	kubectl port-forward -n istio-system svc/istio-ingressgateway 8080:80

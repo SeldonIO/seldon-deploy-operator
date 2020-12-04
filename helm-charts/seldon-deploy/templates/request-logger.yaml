@@ -26,6 +26,9 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+{{- if .Values.requestLogger.trigger.broker }}
+  broker: {{ .Values.requestLogger.trigger.broker }}
+{{- end }}
   subscriber:
     ref:
       apiVersion: v1
@@ -44,7 +47,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.requestLogger.replicas }}
   selector:
     matchLabels:
       app: seldon-request-logger
@@ -71,6 +74,8 @@ spec:
                   name: {{ .Values.requestLogger.elasticsearch.jwtSecretName }}
                   key: {{ .Values.requestLogger.elasticsearch.jwtSecretKey }}
 {{- end }}
+          resources:
+{{ toYaml .Values.requestLogger.resources | indent 12 }}
 ---
 apiVersion: v1
 kind: Service

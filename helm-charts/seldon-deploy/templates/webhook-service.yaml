@@ -1,3 +1,4 @@
+{{- if .Values.gitops.git.webhook.service.create -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,6 +9,10 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  {{- if .Values.gitops.git.webhook.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{ toYaml .Values.gitops.git.webhook.service.loadBalancerSourceRanges | indent 4 }}
+  {{- end }}
   type: LoadBalancer
   ports:
     - port: 80
@@ -17,3 +22,4 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "seldon-deploy.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}

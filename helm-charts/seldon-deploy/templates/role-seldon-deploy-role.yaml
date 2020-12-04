@@ -137,6 +137,8 @@ rules:
     resources:
       - configmaps
     verbs:
+      - create
+      - update
       - get
       - list
       - watch

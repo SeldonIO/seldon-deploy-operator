@@ -1,0 +1,8 @@
+domain: io
+layout: helm.sdk.operatorframework.io/v1
+projectName: seldon-deploy-operator
+resources:
+- group: machinelearning.seldon
+  kind: SeldonDeploy
+  version: v1alpha1
+version: 3-alpha

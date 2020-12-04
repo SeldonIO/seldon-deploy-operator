@@ -1,11 +1,14 @@
----
-- version: v1alpha1
-  group: machinelearning.seldon.io
+# Use the 'create api' subcommand to add watches to this file.
+- group: machinelearning.seldon.io
+  version: v1alpha1
   kind: SeldonDeploy
   chart: helm-charts/seldon-deploy
+# +kubebuilder:scaffold:watch
   overrideValues:
     image.image: $RELATED_IMAGE_DEPLOYMENT
     loadtest.image: $RELATED_IMAGE_LOADTEST
     alibidetect.image: $RELATED_IMAGE_ALIBIDETECT
     requestLogger.image: $RELATED_IMAGE_REQUESTLOGGER
     openshiftMarketplace.kubectlCleanupImage: $RELATED_IMAGE_KUBECTL
+    batchjobs.processor.image: $RELATED_IMAGE_BATCH_PROCESSOR
+    batchjobs.mc.image: $RELATED_IMAGE_MINIO_CLIENT

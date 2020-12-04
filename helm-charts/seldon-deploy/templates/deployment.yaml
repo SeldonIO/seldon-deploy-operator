@@ -49,30 +49,71 @@ spec:
             - name: "ENABLE_APP_ANALYTICS"
               value: "{{ .Values.enableAppAnalytics }}"
             {{- end}}
-            {{- if .Values.docker.user }}
-            - name: "DOCKER_USER"
-              value: "{{ .Values.docker.user }}"
-            {{- end}}
             - name: "LOADTEST_IMAGE"
               value: "{{ .Values.loadtest.image }}"
             - name: "ALIBI_DETECT_SERVER_IMAGE"
               value: "{{ .Values.alibidetect.image }}"
-            {{- if .Values.github.user }}
+            - name: "BATCHJOBS_PROCESSOR_IMAGE"
+              value: "{{ .Values.batchjobs.processor.image }}"
+            - name: "BATCHJOBS_MC_IMAGE"
+              value: "{{ .Values.batchjobs.mc.image }}"
+            - name: "BATCHJOBS_PVC_DEFAULT_SIZE"
+              value: "{{ .Values.batchjobs.pvc.defaultSize }}"
+            {{- if .Values.gitops.fileFormat }}
+            - name: "GITOPS_FORMAT"
+              value: "{{ .Values.gitops.fileFormat }}"
+            {{- end}}
+            {{- if .Values.requestLogger.namespace.name }}
+            - name: "REQUEST_LOGGER_NAMESPACE"
+              value: "{{ .Values.requestLogger.namespace.name }}"
+            {{- end}}
+            {{- if and .Values.gitops.git.secret .Values.gitops.argocd.enabled }}
             - name: "GIT_USER"
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "seldon-deploy.fullname" . }}
+                  name: {{ .Values.gitops.git.secret }}
                   key: username
             - name: "GIT_TOKEN"
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "seldon-deploy.fullname" . }}
+                  name: {{ .Values.gitops.git.secret }}
+                  key: token
+                  optional: true
+            - name: "GIT_EMAIL"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.gitops.git.secret }}
+                  key: email
+            - name: "GIT_SSHKEY"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.gitops.git.secret }}
+                  key: id_rsa
+                  optional: true
+            - name: "GIT_SSHKEY_PASSPHRASE"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.gitops.git.secret }}
+                  key: passphrase
+                  optional: true
+            {{- else }}
+            {{- if and .Values.gitops.git.user .Values.gitops.argocd.enabled }}
+            - name: "GIT_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: git-{{ include "seldon-deploy.fullname" . }}
+                  key: username
+            - name: "GIT_TOKEN"
+              valueFrom:
+                secretKeyRef:
+                  name: git-{{ include "seldon-deploy.fullname" . }}
                   key: token
             - name: "GIT_EMAIL"
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "seldon-deploy.fullname" . }}
+                  name: git-{{ include "seldon-deploy.fullname" . }}
                   key: email
+            {{- end }}
             {{- end }}
             {{- if .Values.external.protocol }}
             - name: "EXTERNAL_PROTOCOL"
@@ -100,29 +141,39 @@ spec:
                   name: {{ .Values.prometheus.seldon.jwtSecretName }}
                   key: {{ .Values.prometheus.seldon.jwtSecretKey }}
             {{- end }}
-          {{- if .Values.lite }}
+            - name: "BATCH_SERVICE_ACCOUNT"
+              value: {{ .Values.batchjobs.serviceAccount }}
           livenessProbe:
             httpGet:
               path: /seldon-deploy/api/status
               port: http
-            initialDelaySeconds: 30
           readinessProbe:
             httpGet:
               path: /seldon-deploy/api/status
               port: http
-            initialDelaySeconds: 30
-          {{- else }}
-          livenessProbe:
-            httpGet:
-              path: /api/status
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /api/status
-              port: http
-          {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+            - name: custom-theme
+              mountPath: "/seldon-deploy/custom-theme"
+{{- if and .Values.gitops.git.secret .Values.gitops.argocd.enabled }}
+            - name: ssh-known-hosts
+              mountPath: "/etc/ssh"
+{{- end }}
+      volumes:
+        - name: custom-theme
+          secret:
+            secretName: seldon-deploy-custom-theme
+            optional: true
+{{- if and .Values.gitops.git.secret .Values.gitops.argocd.enabled }}
+        - name: ssh-known-hosts
+          secret:
+            secretName: {{ .Values.gitops.git.secret }}
+            optional: true
+            items:
+              - key: known_hosts
+                path: ssh_known_hosts
+{{- end }}
       serviceAccount: {{ include "seldon-deploy.serviceAccountName" . }}
       serviceAccountName: {{ include "seldon-deploy.serviceAccountName" . }}
       {{- with .Values.nodeSelector }}
@@ -137,5 +188,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      imagePullSecrets:
-        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+
