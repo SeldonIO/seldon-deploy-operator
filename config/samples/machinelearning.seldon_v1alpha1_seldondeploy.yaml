@@ -146,7 +146,8 @@ spec:
 
   rbac:
     create: true
-    clusterWide: false
+    clusterWide: true
+    readNamespaces: true
 
   nodeSelector: {}
 

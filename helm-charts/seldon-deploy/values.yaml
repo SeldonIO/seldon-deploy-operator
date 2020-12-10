@@ -77,6 +77,7 @@ gitops:
   fileFormat: "json"
   argocd:
     enabled: true
+    namespace: argocd
 
 batchjobs:
   serviceAccount: "workflow"
@@ -137,7 +138,11 @@ virtualService:
 
 rbac:
   create: true
-  clusterWide: false
+  #clusterWide rbac is needed for deploy to see and create resources in different namespaces
+  clusterWide: true
+  #reading namespaces is needed for single deploy to be used across namespaces, even if rbac gets added for each specific namespace
+  #for single namespace mode with just namespaced roles, turn off cluserWide and turn off readNamespaces
+  readNamespaces: true
 
 nodeSelector: {}
 

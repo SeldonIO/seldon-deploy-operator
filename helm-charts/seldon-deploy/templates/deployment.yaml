@@ -49,6 +49,8 @@ spec:
             - name: "ENABLE_APP_ANALYTICS"
               value: "{{ .Values.enableAppAnalytics }}"
             {{- end}}
+            - name: "ENABLE_READ_NAMESPACES"
+              value: "{{ .Values.rbac.readNamespaces }}"
             - name: "LOADTEST_IMAGE"
               value: "{{ .Values.loadtest.image }}"
             - name: "ALIBI_DETECT_SERVER_IMAGE"
@@ -62,6 +64,10 @@ spec:
             {{- if .Values.gitops.fileFormat }}
             - name: "GITOPS_FORMAT"
               value: "{{ .Values.gitops.fileFormat }}"
+            {{- end}}
+            {{- if .Values.gitops.argocd.enabled }}
+            - name: "ARGOCD_NAMESPACE"
+              value: "{{ .Values.gitops.argocd.namespace }}"
             {{- end}}
             {{- if .Values.requestLogger.namespace.name }}
             - name: "REQUEST_LOGGER_NAMESPACE"

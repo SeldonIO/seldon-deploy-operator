@@ -10,7 +10,7 @@ loadtest:
   image: seldonio/hey-loadtester-ubi:0.1
 
 alibidetect:
-  image: seldonio/alibi-detect-server:1.4.0
+  image: seldonio/alibi-detect-server:1.5.0
 
 nameOverride: ""
 fullnameOverride: ""
@@ -38,7 +38,7 @@ env:
   # APP_ANALYTICS_TOKEN: ""
 
 docker:
-  user: "unkown"
+  user: "unknown"
 
 ingress:
   enabled: false
@@ -54,17 +54,13 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-# resources, such as Minikube. If you do want to specify resources, uncomment the following
-# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-# limits:
-#   cpu: 100m
-#   memory: 128Mi
-# requests:
-#   cpu: 100m
-#   memory: 128Mi
+resources:
+  limits:
+    cpu: 500m
+    memory: 350Mi
+  requests:
+    cpu: 100m
+    memory: 200Mi
 
 serviceAccount:
   create: true
@@ -84,6 +80,15 @@ gitops:
   fileFormat: "json"
   argocd:
     enabled: true
+
+batchjobs:
+  serviceAccount: "workflow"
+  processor:
+    image: seldonio/seldon-core-s2i-python37:1.5.0
+  mc:
+    image: minio/mc:latest
+  pvc:
+    defaultSize: 1Gi
 
 kfserving:
   protocol: "http"
@@ -124,7 +129,7 @@ serviceAccountName: seldon-deploy
 
 ingressGateway:
   seldonIngressService: "istio-ingressgateway"
-  kfServingIngressService: "kfserving-ingressgateway"
+  kfServingIngressService: "istio-ingressgateway"
   ingressNamespace: "istio-system"
 
 virtualService:
@@ -135,7 +140,11 @@ virtualService:
 
 rbac:
   create: true
+  #clusterWide rbac is needed for deploy to see and create resources in different namespaces
   clusterWide: false
+  #reading namespaces is needed for single deploy to be used across namespaces, even if rbac gets added for each specific namespace
+  #for single namespace mode with just roles, turn off cluserWide and turn off readNamespaces
+  readNamespaces: true
 
 nodeSelector: {}
 
@@ -174,7 +183,7 @@ elasticsearch:
 #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
 requestLogger:
   create: true
-  image: docker.io/seldonio/seldon-request-logger:0.3.1
+  image: docker.io/seldonio/seldon-request-logger:1.5.0
   #increase logger replicas if there are high traffic volumes
   replicas: 1
   imagePullPolicy: IfNotPresent
@@ -188,7 +197,15 @@ requestLogger:
     create: false
     name: seldon-logs
   trigger:
-    apiVersion: "eventing.knative.dev/v1alpha1"
+    apiVersion: "eventing.knative.dev/v1"
+    broker: "default"
+  resources:
+    limits:
+      cpu: 600m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 200Mi
 
 openshiftMarketplace:
   cleanupClusterServiceVersions: false

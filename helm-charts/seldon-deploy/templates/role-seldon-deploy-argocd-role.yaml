@@ -1,0 +1,17 @@
+{{- if and .Values.gitops.argocd.enabled .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  creationTimestamp: null
+  name: seldon-deploy-argocd
+  namespace: '{{ .Values.gitops.argocd.namespace }}'
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - applications
+    verbs:
+      - get
+      - list
+      - watch
+{{- end }}
