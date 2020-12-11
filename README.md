@@ -28,23 +28,43 @@ TODO: update chart and turn off argocd flag when https://github.com/SeldonIO/sel
 
 ### OLM Deployment
 
+First need a cluster e.g. `kind create cluster`.
+
 For KIND or other clusters without OLM, we [first install OLM](https://sdk.operatorframework.io/docs/olm-integration/quickstart-bundle/)
 
-* Install OLM - `operator-sdk olm install`  #TODO: core does differently
+* Install OLM - `operator-sdk olm install` (tested with 0.17)
 
-* Install marketplace TODO:
+* Install marketplace - `make operator-marketplace`
+
+Now [create](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-metadata-bundle) and [validate bundle](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-csv)
+
+* All done in `make update_openshift`
+
+Create a catalog_source
+
 ```bash
-git clone git@github.com:operator-framework/operator-marketplace.git
-kubectl create -f operator-marketplace/deploy/upstream/
+kubectl create -f tests/catalog-source.yaml
 ```
-[Create](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-metadata-bundle) and [validate bundle](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-csv)
 
-* `make bundle`
-* `make bundle-build`
-* `make bundle-push`
-* `make bundle-validate`
+Check
 
-TODO: further steps [like core](https://github.com/SeldonIO/seldon-core/tree/master/operator/openshift/tests)
+```
+kubectl get catalogsource seldon-deploy-catalog -n marketplace -o yaml
+```
+
+Create operator group
+
+```bash
+kubectl create -f tests/operator-group.yaml
+```
+
+Create Subscription
+
+```bash
+kubectl create -f tests/operator-subscription.yaml
+```
+
+* `kubectl apply -n seldon-system -f ./examples-testing/kind-minimal-setup.yaml` (or full if stack is present, see above)
 
 ### Testing on OpenShift
 

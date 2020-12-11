@@ -21,7 +21,13 @@ opm_push:
 	docker push quay.io/seldon/test-deploy-catalog:latest
 
 .PHONY: update_openshift
-update_openshift: bundle bundle-build bundle-validate opm_index opm_push
+update_openshift: bundle bundle-build bundle-push bundle-validate opm_index opm_push
+
+.PHONY: operator-marketplace
+operator-marketplace:
+	mkdir -p tempresources
+	if [ ! -d "tempresources/operator-marketplace" ]; then git clone git@github.com:operator-framework/operator-marketplace.git tempresources/operator-marketplace; fi
+	kubectl apply -f tempresources/operator-marketplace/deploy/upstream/
 
 all: docker-build
 

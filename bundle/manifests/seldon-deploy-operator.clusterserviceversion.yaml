@@ -210,7 +210,7 @@ metadata:
       ]
     capabilities: Seamless Upgrades
     categories: AI/Machine Learning
-    certified: "false"
+    certified: 'false'
     containerImage: seldonio/seldon-deploy-operator:1.0.0
     operators.operatorframework.io/builder: operator-sdk-v1.2.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
@@ -235,19 +235,19 @@ spec:
       clusterPermissions:
       - rules:
         - apiGroups:
-          - ""
+          - ''
           resources:
           - namespaces
           verbs:
           - get
         - apiGroups:
-          - ""
+          - ''
           resources:
           - secrets
           verbs:
           - '*'
         - apiGroups:
-          - ""
+          - ''
           resources:
           - events
           verbs:
@@ -274,7 +274,7 @@ spec:
           verbs:
           - '*'
         - apiGroups:
-          - ""
+          - ''
           resources:
           - configmaps
           - serviceaccounts
@@ -387,7 +387,7 @@ spec:
       permissions:
       - rules:
         - apiGroups:
-          - ""
+          - ''
           resources:
           - configmaps
           verbs:
@@ -399,7 +399,7 @@ spec:
           - patch
           - delete
         - apiGroups:
-          - ""
+          - ''
           resources:
           - events
           verbs:
