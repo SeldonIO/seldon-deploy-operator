@@ -8,7 +8,7 @@ spec:
   replicaCount: 1
 
   image:
-    image: docker.io/seldonio/seldon-deploy-server-ubi:1.0.0
+    image: docker.io/seldonio/seldon-deploy-server-ubi:1.0.1-dev
     pullPolicy: Always
 
   loadtest:

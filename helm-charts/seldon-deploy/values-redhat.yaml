@@ -3,7 +3,7 @@ replicaCount: 1
 
 #in RH marketplace images will come from RH hosting through an override in CSV - default to dockerhub ubi images
 image:
-  image: docker.io/seldonio/seldon-deploy-ubi:0.7.0-dev
+  image: docker.io/seldonio/seldon-deploy-server-ubi:1.0.1-dev
   pullPolicy: Always
 
 loadtest:
