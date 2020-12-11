@@ -63,9 +63,10 @@ Create Subscription
 ```bash
 kubectl create -f tests/operator-subscription.yaml
 ```
-Check the Subscription:
+Check the Subscription and CSV:
 ```bash
 kubectl get subscriptions.operators.coreos.com -n marketplace seldon-deploy-operator-subsription -o yaml
+kubectl get ClusterServiceVersion -n marketplace
 ```
 
 * `kubectl apply -n seldon-system -f ./examples-testing/kind-minimal-setup.yaml` (or full if stack is present, see above)
