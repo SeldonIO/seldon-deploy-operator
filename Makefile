@@ -1,7 +1,7 @@
 # Current Operator version
 VERSION ?= $(shell cat version.txt)
 # Default bundle image tag
-BUNDLE_IMG ?= seldonio/seldon-deploy-operator-bundle:$(VERSION)
+BUNDLE_IMG ?= quay.io/seldon/seldon-deploy-operator-bundle:$(VERSION)
 # Options for 'bundle-build'
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
@@ -12,7 +12,7 @@ endif
 BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 # Image URL to use all building/pushing image targets
-IMG ?= seldonio/seldon-deploy-operator:${VERSION}
+IMG ?= quay.io/seldon/seldon-deploy-operator:${VERSION}
 
 opm_index:
 	opm index add -c docker --bundles ${BUNDLE_IMG} --tag quay.io/seldon/test-deploy-catalog:latest

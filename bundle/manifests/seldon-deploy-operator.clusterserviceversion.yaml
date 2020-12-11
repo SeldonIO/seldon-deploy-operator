@@ -212,6 +212,7 @@ metadata:
     categories: AI/Machine Learning
     certified: 'false'
     containerImage: seldonio/seldon-deploy-operator:1.0.0
+    createdAt: '2019-05-21 15:00:00'
     operators.operatorframework.io/builder: operator-sdk-v1.2.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/SeldonIO/seldon-deploy-operator
