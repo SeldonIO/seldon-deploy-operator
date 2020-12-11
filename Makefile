@@ -14,6 +14,15 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # Image URL to use all building/pushing image targets
 IMG ?= seldonio/seldon-deploy-operator:${VERSION}
 
+opm_index:
+	opm index add -c docker --bundles quay.io/seldon/seldon-deploy-operator:v${VERSION} --tag quay.io/seldon/test-deploy-catalog:latest
+
+opm_push:
+	docker push quay.io/seldon/test-deploy-catalog:latest
+
+.PHONY: update_openshift
+update_openshift: bundle bundle-build bundle-validate opm_index opm_push
+
 all: docker-build
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
@@ -81,9 +90,11 @@ endif
 # Generate bundle manifests and metadata, then validate generated files.
 .PHONY: bundle
 bundle: kustomize
+	rm -r bundle
 	operator-sdk generate kustomize manifests -q
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
 	$(KUSTOMIZE) build config/manifests | operator-sdk generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
+	python hack/csv_hack.py --path bundle/manifests/seldon-deploy-operator.clusterserviceversion.yaml --version ${VERSION}
 	operator-sdk bundle validate ./bundle
 
 # Build the bundle image.

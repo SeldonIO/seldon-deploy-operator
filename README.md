@@ -30,17 +30,21 @@ TODO: update chart and turn off argocd flag when https://github.com/SeldonIO/sel
 
 For KIND or other clusters without OLM, we [first install OLM](https://sdk.operatorframework.io/docs/olm-integration/quickstart-bundle/)
 
-* Install OLM - `operator-sdk olm install`
-* `make bundle` TODO: put params in makefile?
+* Install OLM - `operator-sdk olm install`  #TODO: core does differently
+
+* Install marketplace TODO:
+```bash
+git clone git@github.com:operator-framework/operator-marketplace.git
+kubectl create -f operator-marketplace/deploy/upstream/
+```
+[Create](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-metadata-bundle) and [validate bundle](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-csv)
+
+* `make bundle`
 * `make bundle-build`
 * `make bundle-push`
 * `make bundle-validate`
 
-Note: `make bundle` asking for params for title, description, maintainers would be a mess. Probably don't want to be doing that every time. Do we even need to?
-
-See what core does RE: seldon-deploy-operator.clusterserviceversion.yaml and the versions there. Seems [a lot](https://github.com/SeldonIO/seldon-core/blob/master/operator/Makefile#L299)
-
-TODO:
+TODO: further steps [like core](https://github.com/SeldonIO/seldon-core/tree/master/operator/openshift/tests)
 
 ### Testing on OpenShift
 
