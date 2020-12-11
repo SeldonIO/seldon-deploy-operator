@@ -15,7 +15,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 IMG ?= seldonio/seldon-deploy-operator:${VERSION}
 
 opm_index:
-	opm index add -c docker --bundles quay.io/seldon/seldon-deploy-operator:v${VERSION} --tag quay.io/seldon/test-deploy-catalog:latest
+	opm index add -c docker --bundles ${BUNDLE_IMG} --tag quay.io/seldon/test-deploy-catalog:latest
 
 opm_push:
 	docker push quay.io/seldon/test-deploy-catalog:latest
