@@ -12,7 +12,7 @@ endif
 BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 # Image URL to use all building/pushing image targets
-IMG ?= quay.io/seldon/seldon-deploy-operator:${VERSION}
+IMG ?= quay.io/seldon/seldon-deploy-server-operator:${VERSION}
 
 opm_index:
 	opm index add -c docker --bundles ${BUNDLE_IMG} --tag quay.io/seldon/test-deploy-catalog:latest
@@ -119,6 +119,10 @@ bundle-validate:
 
 scorecard:
 	operator-sdk scorecard --kubeconfig ~/.kube/config $(BUNDLE_IMG)
+
+apply_license:
+	cd ~ && kubectl create configmap -n marketplace seldon-deploy-license --from-file=./.config/seldon/seldon-deploy/license -o yaml --dry-run=client | kubectl apply -f -
+	kubectl delete pod -n marketplace -l app.kubernetes.io/name=seldon-deploy || true
 
 open_kind:
 	xdg-open http://localhost:8080/seldon-deploy/; \

@@ -82,7 +82,7 @@ spec:
           loadBalancerSourceRanges: {}
     fileFormat: "json"
     argocd:
-      enabled: true
+      enabled: false
 
   batchjobs:
     serviceAccount: "workflow"

@@ -2,6 +2,18 @@
 
 This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk.
 
+## Building
+
+To build and push the operator:
+```bash
+make docker-build
+make docker-push
+```
+To build and push the bundle:
+```bash
+make update_openshift
+```
+
 ## Testing
 
 ### KIND Full Deploy Stack
@@ -66,10 +78,13 @@ Check the Subscription and CSV:
 kubectl get subscriptions.operators.coreos.com -n marketplace seldon-deploy-operator-subsription -o yaml
 kubectl get ClusterServiceVersion -n marketplace
 ```
+Note here the operator will be namespace only ((OwnNamespace mode)[https://catalog.redhat.com/software/operators/detail/5f0f35842991b4207fcdb202/deploy]) so will only manage SeldonDeploy instances in marketplace namespace.
+
+Now we create a deploy instance.
 
 * `kubectl apply -n marketplace -f ./examples-testing/kind-minimal-setup.yaml` (or full if stack is present, see above)
 
-Note here the operator will be namespace only ((OwnNamespace mode)[https://catalog.redhat.com/software/operators/detail/5f0f35842991b4207fcdb202/deploy]) so will only manage SeldonDeploy instances in marketplace namespace.
+If using the full stack then we can run demos. We'll need to apply a license, either in the UI or using `make apply_license`. Open with `make open_kind`
 
 ### Testing on OpenShift
 

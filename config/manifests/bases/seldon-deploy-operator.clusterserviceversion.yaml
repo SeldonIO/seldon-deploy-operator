@@ -6,7 +6,7 @@ metadata:
     capabilities: Seamless Upgrades
     categories: AI/Machine Learning
     certified: "false"
-    containerImage: seldonio/seldon-deploy-operator:1.0.0
+    containerImage: quay.io/seldon/seldon-deploy-server-operator:1.0.0
     createdAt: "2020-12-11 15:00:00"
     operators.operatorframework.io/builder: operator-sdk-v1.2.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1

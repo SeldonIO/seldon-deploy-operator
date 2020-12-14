@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         #registry.connect.redhat.com/seldonio/seldon-deploy-operator:1.0.0
-      - image: seldonio/seldon-deploy-operator:1.0.0
+      - image: quay.io/seldon/seldon-deploy-server-operator:1.0.0
         imagePullPolicy: Always
         args:
         - "--enable-leader-election"

@@ -46,7 +46,7 @@ metadata:
             "fullnameOverride": "",
             "gitops": {
               "argocd": {
-                "enabled": true
+                "enabled": false
               },
               "fileFormat": "json",
               "git": {
@@ -374,7 +374,7 @@ spec:
                   value: seldonio/seldon-core-s2i-python37:1.5.0
                 - name: RELATED_IMAGE_MINIO_CLIENT
                   value: minio/mc:latest
-                image: seldonio/seldon-deploy-operator:1.0.0
+                image: quay.io/seldon/seldon-deploy-server-operator:1.0.0
                 imagePullPolicy: Always
                 name: manager
                 resources:
