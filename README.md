@@ -24,8 +24,6 @@ This is a minimal setup just for checking installation. No Deploy features work.
 * `kubectl apply -n seldon-system -f ./examples-testing/kind-minimal-setup.yaml`
 *  Port-forward to deploy to see UI, though you can't deploy anything in this setup.
 
-TODO: update chart and turn off argocd flag when https://github.com/SeldonIO/seldon-deploy/issues/1741 is done
-
 ### OLM Deployment
 
 First need a cluster e.g. `kind create cluster`.
@@ -69,7 +67,9 @@ kubectl get subscriptions.operators.coreos.com -n marketplace seldon-deploy-oper
 kubectl get ClusterServiceVersion -n marketplace
 ```
 
-* `kubectl apply -n seldon-system -f ./examples-testing/kind-minimal-setup.yaml` (or full if stack is present, see above)
+* `kubectl apply -n marketplace -f ./examples-testing/kind-minimal-setup.yaml` (or full if stack is present, see above)
+
+Note here the operator will be namespace only ((OwnNamespace mode)[https://catalog.redhat.com/software/operators/detail/5f0f35842991b4207fcdb202/deploy]) so will only manage SeldonDeploy instances in marketplace namespace.
 
 ### Testing on OpenShift
 
