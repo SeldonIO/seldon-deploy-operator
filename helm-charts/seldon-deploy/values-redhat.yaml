@@ -80,6 +80,7 @@ gitops:
   fileFormat: "json"
   argocd:
     enabled: true
+    namespace: argocd
 
 batchjobs:
   serviceAccount: "workflow"

@@ -46,7 +46,7 @@ For KIND or other clusters without OLM, we [first install OLM](https://sdk.opera
 
 * Install marketplace - `make operator-marketplace`
 
-Now [create](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-metadata-bundle) and [validate bundle](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-csv)
+Now [create](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-metadata-bundle), push and [validate the bundle](https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/creating-the-csv)
 
 * All done in `make update_openshift`
 

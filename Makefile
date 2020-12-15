@@ -1,5 +1,7 @@
 # Current Operator version
 VERSION ?= $(shell cat version.txt)
+#which replaces
+REPLACES ?= $(shell cat replaces.txt)
 # Default bundle image tag
 BUNDLE_IMG ?= quay.io/seldon/seldon-deploy-operator-bundle:$(VERSION)
 # Options for 'bundle-build'
@@ -15,7 +17,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 IMG ?= quay.io/seldon/seldon-deploy-server-operator:${VERSION}
 
 opm_index:
-	opm index add -c docker --bundles ${BUNDLE_IMG} --tag quay.io/seldon/test-deploy-catalog:latest
+	opm index add -c docker --bundles ${BUNDLE_IMG},quay.io/seldon/seldon-deploy-operator-bundle:v0.7.0 --tag quay.io/seldon/test-deploy-catalog:latest
 
 opm_push:
 	docker push quay.io/seldon/test-deploy-catalog:latest
@@ -23,11 +25,20 @@ opm_push:
 .PHONY: update_openshift
 update_openshift: bundle bundle-build bundle-push bundle-validate opm_index opm_push
 
-.PHONY: operator-marketplace
-operator-marketplace:
-	mkdir -p tempresources
-	if [ ! -d "tempresources/operator-marketplace" ]; then git clone git@github.com:operator-framework/operator-marketplace.git tempresources/operator-marketplace; fi
-	kubectl apply -f tempresources/operator-marketplace/deploy/upstream/
+.PHONY: create_bundle_image
+create_bundle_image_%:
+	docker build . -f bundle-version.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle:v$*
+
+.PHONY: push_bundle_image
+push_bundle_image_%:
+	docker push quay.io/seldon/seldon-deploy-operator-bundle:v$*
+
+
+create_bundles: create_bundle_image_1.0.0 create_bundle_image_0.7.0
+
+push_bundles: push_bundle_image_1.0.0 push_bundle_image_0.7.0
+
+build_push: create_bundles push_bundles
 
 all: docker-build
 
@@ -100,7 +111,13 @@ bundle: kustomize
 	operator-sdk generate kustomize manifests -q
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
 	$(KUSTOMIZE) build config/manifests | operator-sdk generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
-	python hack/csv_hack.py --path bundle/manifests/seldon-deploy-operator.clusterserviceversion.yaml --version ${VERSION}
+	python hack/csv_hack.py --path bundle/manifests/seldon-deploy-operator.clusterserviceversion.yaml --version ${VERSION} --replaces ${REPLACES}
+	mkdir -p packagemanifests/${VERSION}
+	mkdir -p packagemanifests/temp
+	cp bundle/manifests/* packagemanifests/temp
+	mv packagemanifests/temp/seldon-deploy-operator.clusterserviceversion.yaml packagemanifests/${VERSION}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+	mv packagemanifests/temp/* packagemanifests/${VERSION}
+	rm -r packagemanifests/temp
 	operator-sdk bundle validate ./bundle
 
 # Build the bundle image.
@@ -119,6 +136,9 @@ bundle-validate:
 
 scorecard:
 	operator-sdk scorecard --kubeconfig ~/.kube/config $(BUNDLE_IMG)
+
+get-helm-chart:
+	./get-helm-chart.sh
 
 apply_license:
 	cd ~ && kubectl create configmap -n marketplace seldon-deploy-license --from-file=./.config/seldon/seldon-deploy/license -o yaml --dry-run=client | kubectl apply -f -
