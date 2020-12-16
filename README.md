@@ -88,7 +88,23 @@ If using the full stack then we can run demos. We'll need to apply a license, ei
 
 ### Testing on OpenShift
 
-TODO:
+Create catalog source
+```bash
+kubectl create -f tests/catalog-source-openshift.yaml
+```
+Check
+```bash
+kubectl get catalogsource seldon-deploy-catalog -n openshift-marketplace -o yaml
+```
+Choose the operator in the UI. Be sure to get the right version.
+
+If clusterwide then check with:
+```bash
+kubectl get subscriptions.operators.coreos.com -n openshift-operators seldon-deploy-operator -o yaml
+```
+Adjust namespace if not clusterwide.
+
+Use [installation google doc](https://docs.google.com/document/d/1Z1mYh0ZlNWHypgqVD64y6rAq0Bz6WW_LFXc0D0Big74/edit?usp=sharing) for setting up dependencies or running minimal version.
 
 ### Scorecard
 
