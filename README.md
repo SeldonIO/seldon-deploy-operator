@@ -106,6 +106,21 @@ Adjust namespace if not clusterwide.
 
 Use [installation google doc](https://docs.google.com/document/d/1Z1mYh0ZlNWHypgqVD64y6rAq0Bz6WW_LFXc0D0Big74/edit?usp=sharing) for setting up dependencies or running minimal version.
 
+FAILURE:
+```
+"release":"seldondeploy-sample","error":"failed to install release: rendered manifests contain a resource that already exists. Unable to continue with install: could not get information about the resource: gateways.networking.istio.io \"seldon-gateway\" is forbidden: User \"system:serviceaccount:openshift-operators:default\" cannot get resource \"gateways\" in API group \"networking.istio.io\" in the namespace \"istio-system\""
+```
+
+NEED THE clusterpermissions section in the CSV TO HAVE GATEWAYS... CURRENTLY MISSING IN PUSHED VERSION.
+NEED TO PUSH A NEW VERSION NOW
+
+TEST END TO END
+INCLUDING KNATIVE SERVING
+UBI VERSIONS OF NEW IMAGES
+SCRIPTS LIKE OLD openshift-full-setup
+NAMESPACED? SWITCH OFF THAT SETTING?
+AUTOMATE CREATION OF CERTIFIED
+
 ### Scorecard
 
 First have a bundle built. Then `make scorecard`

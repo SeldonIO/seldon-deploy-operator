@@ -183,9 +183,6 @@ metadata:
       as outlier, drift and adversarial detection against running models. There is
       a full metrics and logging integration via Prometheus and ELK stacks as well
       as full GitOps operations to allow full auditing and recovery of updated models.
-      There are dependencies to be installed before installing this operator.
-      Installation instructions at
-      [https://marketplace.redhat.com/en-us/products/seldon-deploy/documentation](https://marketplace.redhat.com/en-us/products/seldon-deploy/documentation)
     repository: https://github.com/SeldonIO/seldon-core
     support: Seldon Dev
   name: seldon-deploy-operator.v0.7.0

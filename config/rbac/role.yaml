@@ -85,5 +85,29 @@ rules:
   - "networking.istio.io"
   resources:
   - "virtualservices"
-
+  - "gateways"
+- verbs:
+    - "*"
+  apiGroups:
+    - "machinelearning.seldon.io"
+  resources:
+    - "*"
+- verbs:
+    - "*"
+  apiGroups:
+    - "operators.coreos.com"
+  resources:
+    - "subscriptions"
+- verbs:
+    - "*"
+  apiGroups:
+    - "eventing.knative.dev"
+  resources:
+    - "triggers"
+- verbs:
+    - "*"
+  apiGroups:
+    - "batch"
+  resources:
+    - "jobs"
 # +kubebuilder:scaffold:rules
