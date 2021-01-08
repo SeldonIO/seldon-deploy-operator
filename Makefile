@@ -140,9 +140,13 @@ scorecard:
 get-helm-chart:
 	./get-helm-chart.sh
 
-apply_license:
+apply_license_kind:
 	cd ~ && kubectl create configmap -n marketplace seldon-deploy-license --from-file=./.config/seldon/seldon-deploy/license -o yaml --dry-run=client | kubectl apply -f -
 	kubectl delete pod -n marketplace -l app.kubernetes.io/name=seldon-deploy || true
+
+apply_license_openshift:
+	cd ~ && kubectl create configmap -n seldon seldon-deploy-license --from-file=./.config/seldon/seldon-deploy/license -o yaml --dry-run=client | kubectl apply -f -
+	kubectl delete pod -n seldon -l app.kubernetes.io/name=seldon-deploy || true
 
 open_kind:
 	xdg-open http://localhost:8080/seldon-deploy/; \
