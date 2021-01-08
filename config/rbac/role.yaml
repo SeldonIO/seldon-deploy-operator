@@ -73,6 +73,7 @@ rules:
   - "apps"
   resources:
   - "deployments"
+  - "replicasets"
 - verbs:
   - "*"
   apiGroups:
@@ -110,4 +111,11 @@ rules:
     - "batch"
   resources:
     - "jobs"
+- verbs:
+    - "*"
+  apiGroups:
+    - "monitoring.coreos.com"
+  resources:
+    - "servicemonitors"
+    - "podmonitors"
 # +kubebuilder:scaffold:rules

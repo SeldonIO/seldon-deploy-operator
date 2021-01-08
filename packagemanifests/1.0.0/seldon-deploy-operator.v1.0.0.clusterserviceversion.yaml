@@ -293,6 +293,7 @@ spec:
           - apps
           resources:
           - deployments
+          - replicasets
           verbs:
           - '*'
         - apiGroups:
@@ -330,6 +331,13 @@ spec:
           - batch
           resources:
           - jobs
+          verbs:
+          - '*'
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          - podmonitors
           verbs:
           - '*'
         - apiGroups:

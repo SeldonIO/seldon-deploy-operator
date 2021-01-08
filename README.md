@@ -88,6 +88,8 @@ If using the full stack then we can run demos. We'll need to apply a license, ei
 
 ### Testing on OpenShift
 
+Before testing a new version make sure `make update_openshift` has been run.
+
 Create catalog source
 ```bash
 kubectl create -f tests/catalog-source-openshift.yaml
