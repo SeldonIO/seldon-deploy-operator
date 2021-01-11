@@ -151,3 +151,7 @@ apply_license_openshift:
 open_kind:
 	xdg-open http://localhost:8080/seldon-deploy/; \
 	kubectl port-forward -n istio-system svc/istio-ingressgateway 8080:80
+
+open_cluster_with_istio:
+	ISTIO_INGRESS=$$(oc get route -n istio-system istio-ingressgateway -o jsonpath='{.spec.host}'); \
+	xdg-open http://$$ISTIO_INGRESS/seldon-deploy/
