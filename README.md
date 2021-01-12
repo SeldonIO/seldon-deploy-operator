@@ -120,6 +120,7 @@ AuthorizationException(403, 'security_exception', 'no permissions for [indices:d
 AuthorizationException(403, 'security_exception', 'no permissions for [indices:data/write/update] and User [name=system:serviceaccount:openshift-logging:elasticseldon, roles=[admin_reader], requestedTenant=null]')
 ```
 SEEMS SOMETHING HAS CHANGED AND CLUSTER-ADMIN DOESN'T DO THE JOB ON ITS OWN ANYMORE
+https://github.com/openshift/elasticsearch-operator/issues/338
 
 THEN TEST WITH KNATIVE SERVING
 UBI VERSIONS OF NEW IMAGES
