@@ -46,7 +46,7 @@ spec:
       subscription:
         create: false
         apiVersion: "operators.coreos.com/v1alpha1"
-        channel: "alpha"
+        channel: "stable"
         metricsPath: "/metrics"
         istioEnabled: true
         requestLoggerEndpoint: "http://broker-ingress.knative-eventing.svc.cluster.local/seldon-logs/default"

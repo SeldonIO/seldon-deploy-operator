@@ -5,6 +5,8 @@ REPLACES ?= $(shell cat replaces.txt)
 # Default bundle image tag
 BUNDLE_IMG ?= quay.io/seldon/seldon-deploy-operator-bundle:$(VERSION)
 # Options for 'bundle-build'
+DEFAULT_CHANNEL=stable
+CHANNELS=stable,alpha
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
 endif
@@ -13,7 +15,7 @@ BUNDLE_DEFAULT_CHANNEL := --default-channel=$(DEFAULT_CHANNEL)
 endif
 BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
-# Image URL to use all building/pushing image targets
+# Image URL to use all building/pushing image targets for operator (not bundle)
 IMG ?= quay.io/seldon/seldon-deploy-server-operator:${VERSION}
 
 opm_index:
@@ -23,18 +25,18 @@ opm_push:
 	docker push quay.io/seldon/test-deploy-catalog:latest
 
 .PHONY: update_openshift
-update_openshift: bundle bundle-build bundle-push bundle-validate opm_index opm_push
+update_openshift: bundle bundle-build bundle-push docker-build docker-push bundle-validate opm_index opm_push
 
 .PHONY: create_bundle_image
 create_bundle_image_%:
-	docker build . -f bundle-version.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle:v$*
+	docker build . -f bundle-version.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle:v$* --no-cache
 
 .PHONY: push_bundle_image
 push_bundle_image_%:
 	docker push quay.io/seldon/seldon-deploy-operator-bundle:v$*
 
 
-create_bundles: create_bundle_image_1.0.0 create_bundle_image_0.7.0
+create_bundles: docker-build docker-push create_bundle_image_1.0.0 create_bundle_image_0.7.0
 
 push_bundles: push_bundle_image_1.0.0 push_bundle_image_0.7.0
 
@@ -65,7 +67,7 @@ undeploy: kustomize
 
 # Build the docker image
 docker-build:
-	docker build . -t ${IMG}
+	docker build . -t ${IMG} --no-cache
 
 # Push the docker image
 docker-push:
@@ -123,7 +125,7 @@ bundle: kustomize
 # Build the bundle image.
 .PHONY: bundle-build
 bundle-build:
-	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) . --no-cache
 
 # Push the bundle image.
 .PHONY: bundle-build

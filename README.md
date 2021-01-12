@@ -4,12 +4,12 @@ This operator can be used for installing instances of Seldon Deploy. Built with 
 
 ## Building
 
-To build and push the operator:
+To build and push just the operator:
 ```bash
 make docker-build
 make docker-push
 ```
-To build and push the bundle:
+To also build and push the bundle:
 ```bash
 make update_openshift
 ```
@@ -111,10 +111,9 @@ Use [installation google doc](https://docs.google.com/document/d/1Z1mYh0ZlNWHypg
 
 TEST END TO END
 
-REQ LOGGER WAS POINTING AT 0.5.0 AND NOT PULLING, SWITCHED TO 1.5.0, AS FOR OTHER IMAGES
-MAY ACTUALLY WANT 1.5.1
-NEED TO REDO UPDATE FROM SELDON CORE FROM 1.2.2 TO 1.5.0 AS HASN'T GONE THROUGH PROPERLY
-
+HAVE REPOINTED TO CORE 1.5.0
+ISTIO_ENABLED FLAG NOT GETTING USED...
+NEED TO FIX THAT THEN CHECK ELASTIC (PROM WAS WORKING ALREADY)
 
 THEN TEST WITH KNATIVE SERVING
 UBI VERSIONS OF NEW IMAGES

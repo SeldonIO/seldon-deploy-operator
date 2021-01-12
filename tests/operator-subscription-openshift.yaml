@@ -4,7 +4,7 @@ metadata:
   name: seldon-deploy-operator-subsription
   namespace: openshift-marketplace
 spec:
-  channel: alpha
+  channel: stable
   name: seldon-deploy-operator
   source: seldon-deploy-catalog
   sourceNamespace: openshift-marketplace

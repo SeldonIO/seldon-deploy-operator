@@ -50,7 +50,7 @@ spec:
   maintainers:
   - email: hello@seldon.io
     name: Seldon Technologies
-  maturity: alpha
+  maturity: stable
   provider:
     name: seldon
   replaces: seldon-deploy-operator.v0.7.0

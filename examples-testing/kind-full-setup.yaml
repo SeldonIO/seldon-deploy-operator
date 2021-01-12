@@ -60,7 +60,7 @@ spec:
   #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
   requestLogger:
     create: true
-    image: docker.io/seldonio/seldon-request-logger:1.5.0
+    image: docker.io/seldonio/seldon-request-logger:1.5.1
     #increase logger replicas if there are high traffic volumes
     replicas: 1
     imagePullPolicy: IfNotPresent
@@ -91,7 +91,7 @@ spec:
       subscription:
         create: false
         apiVersion: "operators.coreos.com/v1alpha1"
-        channel: "alpha"
+        channel: "stable"
         metricsPath: "/metrics"
         istioEnabled: true
         requestLoggerEndpoint: "http://broker-ingress.knative-eventing.svc.cluster.local/seldon-logs/default"

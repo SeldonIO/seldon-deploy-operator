@@ -16,7 +16,7 @@ spec:
     image: seldonio/hey-loadtester-ubi:0.1
 
   alibidetect:
-    image: seldonio/alibi-detect-server:1.5.0
+    image: seldonio/alibi-detect-server:1.5.1
 
   nameOverride: ""
   fullnameOverride: ""
@@ -90,7 +90,7 @@ spec:
   batchjobs:
     serviceAccount: "workflow"
     processor:
-      image: seldonio/seldon-core-s2i-python37:1.5.0
+      image: seldonio/seldon-core-s2i-python37:1.5.1
     mc:
       image: minio/mc:latest
     pvc:
@@ -186,7 +186,7 @@ spec:
   #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
   requestLogger:
     create: true
-    image: docker.io/seldonio/seldon-request-logger:1.5.0
+    image: docker.io/seldonio/seldon-request-logger:1.5.1
     #increase logger replicas if there are high traffic volumes
     replicas: 1
     imagePullPolicy: IfNotPresent
@@ -217,7 +217,7 @@ spec:
       subscription:
         create: true
         apiVersion: "operators.coreos.com/v1alpha1"
-        channel: "alpha"
+        channel: "stable"
         metricsPath: "/metrics"
         istioEnabled: true
         requestLoggerEndpoint: "http://default-broker.seldon-logs"
