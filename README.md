@@ -111,9 +111,15 @@ Use [installation google doc](https://docs.google.com/document/d/1Z1mYh0ZlNWHypg
 
 TEST END TO END
 
-HAVE REPOINTED TO CORE 1.5.0
-ISTIO_ENABLED FLAG NOT GETTING USED...
-NEED TO FIX THAT THEN CHECK ELASTIC (PROM WAS WORKING ALREADY)
+CORE 1.5.0 LINKUP WORKING NOW
+GETTING TO REQ LOGGER BUT IT ERRORS WITH
+```
+/opt/app-root/lib/python3.6/site-packages/urllib3/connectionpool.py:1020: InsecureRequestWarning: Unverified HTTPS request is being made to host 'elasticsearch.openshift-logging'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+  InsecureRequestWarning,
+AuthorizationException(403, 'security_exception', 'no permissions for [indices:data/write/update] and User [name=system:serviceaccount:openshift-logging:elasticseldon, roles=[admin_reader], requestedTenant=null]')
+AuthorizationException(403, 'security_exception', 'no permissions for [indices:data/write/update] and User [name=system:serviceaccount:openshift-logging:elasticseldon, roles=[admin_reader], requestedTenant=null]')
+```
+SEEMS SOMETHING HAS CHANGED AND CLUSTER-ADMIN DOESN'T DO THE JOB ON ITS OWN ANYMORE
 
 THEN TEST WITH KNATIVE SERVING
 UBI VERSIONS OF NEW IMAGES

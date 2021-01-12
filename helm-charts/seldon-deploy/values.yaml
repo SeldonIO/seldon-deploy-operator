@@ -218,7 +218,7 @@ openshiftMarketplace:
       channel: "stable"
       metricsPath: "/metrics"
       istioEnabled: true
-      requestLoggerEndpoint: "http://default-broker.seldon-logs"
+      requestLoggerEndpoint: "http://broker-ingress.knative-eventing.svc.cluster.local/seldon-logs/default"
     istioGateway:
       create: true
       name: "seldon-gateway"

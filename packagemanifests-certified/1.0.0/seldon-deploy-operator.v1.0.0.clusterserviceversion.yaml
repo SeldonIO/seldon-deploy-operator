@@ -115,7 +115,7 @@ metadata:
                   "create": true,
                   "istioEnabled": true,
                   "metricsPath": "/metrics",
-                  "requestLoggerEndpoint": "http://default-broker.seldon-logs"
+                  "requestLoggerEndpoint": "http://broker-ingress.knative-eventing.svc.cluster.local/seldon-logs/default"
                 }
               }
             },
