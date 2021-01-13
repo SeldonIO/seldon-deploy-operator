@@ -67,6 +67,18 @@ spec:
               value: {{ .Values.requestLogger.elasticsearch.port | quote }}
             - name: ELASTICSEARCH_PROTOCOL
               value: {{ .Values.requestLogger.elasticsearch.protocol | quote }}
+{{- if .Values.elasticsearch.basicAuth }}
+            - name: "ELASTICSEARCH_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearch.secret.name }}
+                  key: {{ .Values.elasticsearch.secret.userKey }}
+            - name: "ELASTICSEARCH_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearch.secret.name }}
+                  key: {{ .Values.elasticsearch.secret.passwordKey }}
+{{- end }}
 {{- if .Values.requestLogger.elasticsearch.jwtSecretName }}
             - name: ELASTICSEARCH_TOKEN
               valueFrom:

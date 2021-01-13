@@ -140,6 +140,18 @@ spec:
                   name: {{ .Values.elasticsearch.jwtSecretName }}
                   key: {{ .Values.elasticsearch.jwtSecretKey }}
             {{- end }}
+            {{- if .Values.elasticsearch.basicAuth }}
+            - name: "ELASTICSEARCH_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearch.secret.name }}
+                  key: {{ .Values.elasticsearch.secret.userKey }}
+            - name: "ELASTICSEARCH_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearch.secret.name }}
+                  key: {{ .Values.elasticsearch.secret.passwordKey }}
+            {{- end }}
             {{- if .Values.prometheus.seldon.jwtSecretName }}
             - name: "PROMETHEUS_SELDON_TOKEN"
               valueFrom:

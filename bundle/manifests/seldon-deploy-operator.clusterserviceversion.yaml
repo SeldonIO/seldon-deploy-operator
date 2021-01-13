@@ -31,9 +31,13 @@ metadata:
               "user": "unknown"
             },
             "elasticsearch": {
-              "jwtSecretKey": "jwt-elastic.txt",
-              "jwtSecretName": "jwt-elastic",
-              "url": "https://elasticsearch.openshift-logging:9200"
+              "basicAuth": true,
+              "secret": {
+                "name": "elastic-credentials",
+                "passwordKey": "password",
+                "userKey": "username"
+              },
+              "url": "https://elasticsearch-seldon-es-http.seldon-logs:9200"
             },
             "enableAppAnalytics": false,
             "enableAppAuth": false,
@@ -141,9 +145,7 @@ metadata:
             "requestLogger": {
               "create": true,
               "elasticsearch": {
-                "host": "elasticsearch.openshift-logging",
-                "jwtSecretKey": "jwt-elastic.txt",
-                "jwtSecretName": "jwt-elastic",
+                "host": "elasticsearch-seldon-es-http.seldon-logs",
                 "port": "9200",
                 "protocol": "https"
               },
@@ -394,7 +396,7 @@ spec:
                 - name: OPERATOR_NAME
                   value: seldon-deploy-operator
                 - name: RELATED_IMAGE_DEPLOYMENT
-                  value: docker.io/seldonio/seldon-deploy-server-ubi:1.0.0
+                  value: docker.io/seldonio/seldon-deploy-server-ubi:1.0.1-dev
                 - name: RELATED_IMAGE_LOADTEST
                   value: docker.io/seldonio/hey-loadtester-ubi:0.1
                 - name: RELATED_IMAGE_ALIBIDETECT

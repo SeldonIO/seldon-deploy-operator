@@ -43,7 +43,7 @@ spec:
             value: "seldon-deploy-operator"
           #registry.connect.redhat.com/seldonio/seldon-deploy:0.7
           - name: RELATED_IMAGE_DEPLOYMENT
-            value: docker.io/seldonio/seldon-deploy-server-ubi:1.0.0
+            value: docker.io/seldonio/seldon-deploy-server-ubi:1.0.1-dev
           #registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
           - name: RELATED_IMAGE_LOADTEST
             value: docker.io/seldonio/hey-loadtester-ubi:0.1
