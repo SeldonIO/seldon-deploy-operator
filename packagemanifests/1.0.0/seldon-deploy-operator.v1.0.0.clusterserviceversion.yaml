@@ -128,8 +128,8 @@ metadata:
                 "url": "http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/"
               },
               "seldon": {
-                "jwtSecretKey": "jwt-elastic.txt",
-                "jwtSecretName": "jwt-elastic",
+                "jwtSecretKey": "jwt-seldon.txt",
+                "jwtSecretName": "jwt-seldon",
                 "namespaceMetricName": "namespace",
                 "resourceMetricsUrl": "https://prometheus-k8s.openshift-monitoring:9091/api/v1/",
                 "serviceMetricName": "exported_service",

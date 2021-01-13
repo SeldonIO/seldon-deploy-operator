@@ -167,8 +167,8 @@ prometheus:
     serviceMetricName: "exported_service"
     #leave below empty/commented for prom without token-based auth
     #basic auth can be handled by putting user:pass in url.
-    jwtSecretName: "jwt-elastic"
-    jwtSecretKey: "jwt-elastic.txt"
+    jwtSecretName: "jwt-seldon"
+    jwtSecretKey: "jwt-seldon.txt"
   knative:
     url: "http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/"
 
@@ -182,8 +182,8 @@ elasticsearch:
     userKey: "username"
     passwordKey: "password"
   #or instead below for token-based auth
-  #jwtSecretName: "jwt-elastic"
-  #jwtSecretKey: "jwt-elastic.txt"
+  #jwtSecretName: "jwt-seldon"
+  #jwtSecretKey: "jwt-seldon.txt"
 
 #only create request logger if you've not already installed it outside of helm (or first delete existing install)
 #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
@@ -197,8 +197,8 @@ requestLogger:
     host: "elasticsearch-seldon-es-http.seldon-logs"
     port: "9200"
     protocol: "https"
-  #    jwtSecretName: "jwt-elastic"
-  #    jwtSecretKey: "jwt-elastic.txt"
+  #    jwtSecretName: "jwt-seldon"
+  #    jwtSecretKey: "jwt-seldon.txt"
   namespace:
     create: false
     name: seldon-logs
