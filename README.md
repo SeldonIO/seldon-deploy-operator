@@ -115,6 +115,18 @@ CORE 1.5.0 LINKUP, SERVERLESS AND ECK ELASTIC WORKING NOW
 WITH OPENSHIFT ELASTIC REQ LOGGER HIT https://github.com/openshift/elasticsearch-operator/issues/338
 CHECK ARGO AND MINIO?
 
+A NEWLY-STARTED BATCH JOB FAILS WITH pods "iris-rzh8l-2284698505" is forbidden: unable to validate against any security context constraint: [spec.volumes[1]: Invalid value: "hostPath": hostPath volumes are not allowed to be used]
+MAYBE WE CAN GRANT TO THE SERVICE ACCOUNT? https://github.com/openshift/origin/issues/11153#issuecomment-302076227
+THIS WORKS:
+
+oc adm policy add-scc-to-user hostaccess system:serviceaccount:seldon:workflow
+
+BUT THEN THE POD FOR THE WORKFLOW FAILS WITH
+MountVolume.SetUp failed for volume "docker-sock" : hostPath type check failed: /var/run/docker.sock is not a socket file
+SEE
+https://github.com/argoproj/argo/issues/1788
+https://github.com/argoproj/argo/issues/3500
+
 UBI VERSIONS OF NEW IMAGES
 SCRIPTS LIKE OLD openshift-full-setup ? IS IT WORTH IT AS THEY CHANGE ANYWAY?
 NAMESPACED? SWITCH OFF THAT SETTING? OPERATOR ITSELF SHOULD WORK IN SINGLE NAMESPACE
