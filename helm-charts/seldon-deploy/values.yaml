@@ -19,6 +19,12 @@ service:
   type: ClusterIP
   port: 80
 
+# Default user id to add to all Pod Security Context as the default
+# Use this to ensure all container run as non-root by default
+# For openshift leave blank as usually this will be injected automatically on an openshift cluster
+# to all pods.
+defaultUserID: ""
+
 # boolean to enable app-level auth (defaults to "false")
 enableAppAuth: false
 

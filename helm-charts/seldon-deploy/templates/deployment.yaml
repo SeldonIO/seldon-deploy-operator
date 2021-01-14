@@ -161,6 +161,10 @@ spec:
             {{- end }}
             - name: "BATCH_SERVICE_ACCOUNT"
               value: {{ .Values.batchjobs.serviceAccount }}
+            {{- if .Values.defaultUserID }}
+            - name: DEFAULT_USER_ID
+              value: '{{ .Values.defaultUserID }}'
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /seldon-deploy/api/status
