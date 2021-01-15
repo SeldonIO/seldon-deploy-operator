@@ -157,3 +157,6 @@ open_kind:
 open_cluster_with_istio:
 	ISTIO_INGRESS=$$(oc get route -n istio-system istio-ingressgateway -o jsonpath='{.spec.host}'); \
 	xdg-open http://$$ISTIO_INGRESS/seldon-deploy/
+
+operator-marketplace:
+	./operator-marketplace.sh

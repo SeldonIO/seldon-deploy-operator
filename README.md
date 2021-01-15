@@ -82,9 +82,12 @@ Note here the operator will be namespace only ((OwnNamespace mode)[https://catal
 
 Now we create a deploy instance.
 
-* `kubectl apply -n marketplace -f ./examples-testing/kind-minimal-setup.yaml` (or full if stack is present, see above)
+* `kubectl create ns seldon-logs || true`
+* `kubectl apply -n marketplace -f ./examples-testing/kind-minimal-setup.yaml` (or full if stack is present, see above for `kind-full-setup.yaml`)
 
-If using the full stack then we can run demos. We'll need to apply a license, either in the UI or using `make apply_license`. Open with `make open_kind`
+If using `kind-minimal-setup.yaml` then this is all you can do.
+
+If using the full stack then we can run demos. We'll need to apply a license, either in the UI or using `make apply_license_kind`. Open with `make open_kind`
 
 ### Testing on OpenShift
 

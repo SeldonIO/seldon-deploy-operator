@@ -32,6 +32,7 @@ spec:
       jwtSecretName: ""
       jwtSecretKey: ""
   elasticsearch:
+    basicAuth: false
     jwtSecretName: ""
     jwtSecretKey: ""
   requestLogger:
