@@ -158,5 +158,28 @@ open_cluster_with_istio:
 	ISTIO_INGRESS=$$(oc get route -n istio-system istio-ingressgateway -o jsonpath='{.spec.host}'); \
 	xdg-open http://$$ISTIO_INGRESS/seldon-deploy/
 
+#installs operator marketplace into a cluster
 operator-marketplace:
 	./operator-marketplace.sh
+
+build-kubectl-image:
+	docker build . --file=./Dockerfile.kubectl \
+			--tag=seldonio/kubectl:1.14.3
+push-kubectl-image:
+	docker push seldonio/kubectl:1.14.3
+
+#password can be found at https://connect.redhat.com/project/4903751/view
+redhat-kubectl-image-scan: build-kubectl-image push-kubectl-image
+	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
+		echo $${rh_password_kubectl} | docker login -u unused scan.connect.redhat.com --password-stdin
+	docker tag seldonio/kubectl:1.14.3 scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
+	docker push scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
+
+#note this is mc image is based on https://github.com/minio/mc/pull/2734 and is unproven
+build-minio-image:
+	docker build . --file=./Dockerfile.minioclient \
+			--tag=seldonio/mc-ubi:1.0
+push-minio-image:
+	docker push seldonio/mc-ubi:1.0
+
+#TODO: certified minio image
