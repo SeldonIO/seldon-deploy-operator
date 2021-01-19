@@ -115,16 +115,22 @@ Use [installation google doc](https://docs.google.com/document/d/1Z1mYh0ZlNWHypg
 TEST END TO END
 
 CORE 1.5.0 LINKUP, SERVERLESS AND ECK ELASTIC WORKING NOW
-WITH OPENSHIFT ELASTIC REQ LOGGER HIT https://github.com/openshift/elasticsearch-operator/issues/338
-CHECK ARGO AND MINIO?
+ARGO AND MINIO NOT CERTIFIED BUT DO WORK. SEE https://github.com/SeldonIO/seldon-deploy-operator/issues/13
 
-SEE GOOGLE DOC FOR HOW TO ENABLE ARGO. BUT NOTE IT BREAKS CATALOG https://github.com/operator-framework/operator-registry/issues/553
-
-OUTSTANDING ISSUE WITH MINIO https://github.com/minio/mc/issues/3574
+NEED TO TRY PLUGGING IN RH CONTAINER REGISTRY VERSIONS. SEE CSV IN MASTER BRANCH FOR HOW TO REPLACE THEM. 
 
 UBI VERSIONS OF NEW IMAGES
 SCRIPTS LIKE OLD openshift-full-setup ? IS IT WORTH IT AS THEY CHANGE ANYWAY? NO
-AUTOMATE CREATION OF CERTIFIED?
+
+PUBLIC RCR IMAGES DO WORK ON OPENSHIFT
+PROBLEM IS THEY WON'T WORK ON KIND... 
+WILL HAVE TO WRITE A SCRIPT THAT COPIES THE PACKAGEMANIFESTS AND THEN RUNS SOME PYTHON TO REPLACE THE IMAGES IN CERTIFIED
+
+THEN START PUSHING IMAGES
+CAN USE https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project
+
+TESTED THE MINIO IMAGE FROM THE PR BUT SHOULD PROBABLY DOUBLE-CHECK THE UBI ONE TOO
+COULD PUBLISH IT FIRST THOUGH
 
 ### Scorecard
 
