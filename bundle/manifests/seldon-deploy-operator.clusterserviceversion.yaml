@@ -17,7 +17,7 @@ metadata:
             },
             "batchjobs": {
               "mc": {
-                "image": "ryandawsonuk/mc:rhtest"
+                "image": "seldonio/mc-ubi:1.0"
               },
               "processor": {
                 "image": "seldonio/seldon-core-s2i-python37:1.5.1"
@@ -408,7 +408,7 @@ spec:
                 - name: RELATED_IMAGE_BATCH_PROCESSOR
                   value: seldonio/seldon-core-s2i-python37:1.5.1
                 - name: RELATED_IMAGE_MINIO_CLIENT
-                  value: ryandawsonuk/mc:rhtest
+                  value: seldonio/mc-ubi:1.0
                 image: quay.io/seldon/seldon-deploy-server-operator:1.0.0
                 imagePullPolicy: Always
                 name: manager

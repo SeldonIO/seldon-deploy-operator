@@ -61,7 +61,7 @@ spec:
             value: seldonio/seldon-core-s2i-python37:1.5.1
           #not a seldon image - would need to create ubi version (but is argo or minio available certified?)
           - name: RELATED_IMAGE_MINIO_CLIENT
-            value: ryandawsonuk/mc:rhtest
+            value: seldonio/mc-ubi:1.0
         resources:
           limits:
             cpu: 100m

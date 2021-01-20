@@ -31,6 +31,14 @@ update_openshift: bundle bundle-build bundle-push docker-build docker-push bundl
 create_bundle_image_%:
 	docker build . -f bundle-version.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle:v$* --no-cache
 
+.PHONY: create_bundle_image_certified
+create_bundle_image_certified_%:
+	docker build . -f bundle-version-certified.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle-cert:v$* --no-cache
+
+.PHONY: create_bundle_image_certified
+packagemanifests-certified:
+	./packagemanifests-certified.sh ${VERSION}
+
 .PHONY: push_bundle_image
 push_bundle_image_%:
 	docker push quay.io/seldon/seldon-deploy-operator-bundle:v$*

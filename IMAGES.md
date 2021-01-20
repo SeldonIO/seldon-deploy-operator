@@ -63,3 +63,21 @@ BATCH PROC IMAGE IS seldonio/seldon-core-s2i-python37:1.5.0. NEED TO CREATE A PR
 
 ONCE IMAGES PUBLISHED NEED TO VERIFY IN RH CONNECT AND PLUG IMAGES INTO CERT BUNDLE.
 CERT IMAGE NAMES IN https://github.com/SeldonIO/seldon-deploy-operator/blob/0.7.0/deploy/olm-catalog/seldon-deploy-operator/0.7.0/seldon-deploy-operator.v0.7.0.clusterserviceversion.yaml#L530
+
+#registry.connect.redhat.com/seldonio/seldon-deploy:0.7
+                - name: RELATED_IMAGE_DEPLOYMENT
+                  value: registry.connect.redhat.com/seldonio/seldon-deploy:0.7.0
+#registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
+                - name: RELATED_IMAGE_LOADTEST
+                  value: registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
+#registry.connect.redhat.com/seldonio/alibi-detect-server:1.2.1
+                - name: RELATED_IMAGE_ALIBIDETECT
+                  value: registry.connect.redhat.com/seldonio/alibi-detect-server:1.2.1
+#registry.connect.redhat.com/seldonio/seldon-request-logger:1.2.1
+                - name: RELATED_IMAGE_REQUESTLOGGER
+                  value: registry.connect.redhat.com/seldonio/seldon-request-logger:1.2.1
+#registry.connect.redhat.com/seldonio/kubectl:1.14.3
+                - name: RELATED_IMAGE_KUBECTL
+                  value: registry.connect.redhat.com/seldonio/kubectl:1.14.3
+#registry.connect.redhat.com/seldonio/seldon-deploy-operator:0.7.0
+                image: registry.connect.redhat.com/seldonio/seldon-deploy-operator:0.7.0

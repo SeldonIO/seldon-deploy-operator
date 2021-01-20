@@ -92,7 +92,7 @@ spec:
     processor:
       image: seldonio/seldon-core-s2i-python37:1.5.1
     mc:
-      image: ryandawsonuk/mc:rhtest
+      image: seldonio/mc-ubi:1.0
     pvc:
       defaultSize: 1Gi
 
