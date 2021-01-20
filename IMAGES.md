@@ -36,4 +36,29 @@ There's separate manifests for certified. This is because RCR images don't work 
 
 So should have two make targets for each of the above (either here or in Deploy repo), one for RCR and one for docker or quay.
 
-Make a table?
+The table below has the make targets for the images. Each should have two, one being certified.
+
+| Image      |  Make Targets                                        |  Status |
+| ---------- |  --------------------------------------------------- | ----------- |
+| Bundle     | create_bundle_image_% , ? See above link. Create?    |  TODO   |
+| Operator   | docker-build, redhat-image-scan                      | lic scan fail |
+| Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | scan fail with no reason |
+| Batch Proc | TODO                                                 | TODO |
+| Batch mc   | build-minio-image, NEED TO CREATE PROJECT            | TODO |
+| Req log    | In core, under components/seldon-request-logger      | republish, [image 6mo old](https://connect.redhat.com/project/3993051/images) |
+| kubectl    | build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed but repub |
+| loadtest   | deploy repo, tools/images/loadtest-image             | hasn't changed but repub |
+| alibi      | In core, under components/alibi-detect-server        | republish, [image 6mo old](https://connect.redhat.com/project/3993461/images)   |
+
+FOR BUNDLE WE NEED A MAKE GOAL TO BUILD THE CERTIFIED ONE. HAVEN'T BUILT THAT YET.
+NOT JUST RETAGGING LIKE THE OTHERS. FOR THAT CERTIFIED IS DIFFERENT.
+PROJECT IS https://connect.redhat.com/project/5892521/images/upload-image
+
+FOR OPERATOR IMAGE FAILING LIC SCAN - DEPLOY TO K8S AND EXEC INTO THEN LIST.
+
+DEPLOY OPERATOR SCAN FAILURE - https://connect.redhat.com/project/4805411/images
+DEPLOY IMAGE SCAN FAILURE - https://connect.redhat.com/project/4805801/images
+
+BATCH PROC IMAGE IS seldonio/seldon-core-s2i-python37:1.5.0. NEED TO CREATE A PROJECT AND PUBLISH. CAN PROB JUST EXTEND FROM BASE IMAGE TO ADD LICENSE IF THERE'S NO LICENSE.
+
+ONCE IMAGES PUBLISHED NEED TO VERIFY IN RH CONNECT AND PLUG IMAGES INTO CERT BUNDLE.

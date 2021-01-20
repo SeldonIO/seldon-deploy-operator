@@ -1,0 +1,555 @@
+--------------------------------------------------------------------------------
+seldonio/seldon-deploy  Enterprise License https://www.seldon.io/terms-and-policies/
+--------------------------------------------------------------------------------
+Enterprise Software Licence & Support Terms
+VERSION 2018-07-09
+
+PARTIES
+
+(1) Seldon Technologies Limited incorporated and registered in England and Wales with company number 09188032 with a registered office at Stapleton House 2nd Floor, 110 Clifton Street, Liverpool Street, London, EC2A 4HT (Seldon).
+
+(2) The entity detailed on the Order Form executed by its authorised signatory (Customer).
+
+
+
+1 DEFINITIONS AND INTERPRETATION
+
+1.1 In this Agreement (unless the context otherwise requires), the following words and phrases shall have the following meanings:
+
+Additional Support Fees refers to those fees payable in respect of Additional Support Services.
+
+Additional Support Services refers to those support services provided which are in excess of the Support Services.
+
+Agreement means these Enterprise Software Licence & Support Terms together with the Order Form and any document referred to, completed or to be completed therein in accordance with its provisions and any schedules.
+
+Authorised Users are those employees, agents and independent contractors of the Customer who are authorised by the Customer to use the Seldon Services and the Documentation, as detailed in the Order Form.
+
+Business Day is a day other than a Saturday, Sunday or public holiday in England when banks in London are open for business during the hours of 9am – 5pm on any Monday to Friday;
+
+Confidential Information: information that is proprietary or confidential and is either clearly labelled as such or identified as Confidential Information in clause 12.
+
+Contract Year is any 12-month period ending on any anniversary of the date of this Agreement.
+
+Customer Data is the data provided or inputted by the Customer, Authorised Users, or Seldon on the Customer’s behalf for the purpose of using the Seldon Services or facilitating the Customer’s use of the Seldon Services.
+
+Documentation is the documents which may be provided by Seldon for the Supported Software, in either printed text or machine-readable form, including the technical documentation, program specification and operations manual.
+
+Effective Date is the date the Order Form is signed by the Customer.
+
+Enterprise Licence is as referred to in clause 3.1.
+
+Enterprise Software Licence & Support Terms means these terms.
+
+Enterprise Software means the Open Source software licensed hereunder as the Supported Software with the functionality set out in the Specifications.
+
+Fees mean the fees set out in the Order Form payable by the Customer to Seldon in respect of the Seldon Services i.e. the Integration Fees, the Licence & Support Fees and any Additional Support Fees or Additional Server Fees as the case may be.
+
+Integration means the installation and integration of the Enterprise Software with the System.
+
+Integration Fees are as set out in the Order Form.
+
+Man Days are those hours for performance of the Integration or any Additional Support Services as may be agreed from time to time.
+
+Man Day Rate is that set out in the Order Form.
+
+Modification is any Maintenance Release or New Version which is acquired by the Customer.
+
+New Version is any new version of the Supported Software which from time to time is publicly marketed and offered as Open-Source Software or for purchase by Seldon in the course of its normal business, being a version which contains such significant differences from the previous versions as to be generally accepted in the marketplace as constituting a new product.
+
+Open-Source Software means any software programs which are licensed under any form of open-source licence meeting the Open Source Initiative’s Open Source Definition (http://www.opensource.org/docs/definition.php).
+
+Order Form: the relevant order form agreed and executed by the parties as set out on the front sheet of this Agreement.
+
+Seldon Services means the services detailed in the Order Form and at clause 3.1 provided by Seldon to the Customer in accordance with the terms of this Agreement.
+
+Intellectual Property includes, without limitation, patents, inventions, know how, trade secrets and other confidential information, registered designs, copyrights, database rights, design rights, rights affording equivalent protection to copyright, semiconductor topography rights, trade marks, service marks, logos, domain names, business names, trade names, moral rights, and all registrations or applications to register any of the aforesaid items, rights in the nature of any of the aforesaid items in any country or jurisdiction, rights in the nature of unfair competition rights and rights to sue for passing off.
+
+Specification(s) means the specification for the Enterprise Software as set out in Schedule 1.
+
+Support Services means the standard support services to be provided by Seldon in respect of the Enterprise Software as referred to in clause 7 and detailed in Schedule 2.
+
+Supported Software is as described in clause 7.
+
+Support Service Limits refer to the remit of the Support Services as set out in the Order Form.
+
+System means the Customer’s systems/sites.
+
+Term means the term of this Agreement as set out in the Order Form.
+
+
+
+2 THE AGREEMENT
+
+2.1 The Order Form and these terms & conditions including any document referred to herein together constitute this Agreement and such Agreement shall only come into force when an Order Form has been countersigned by Seldon.
+
+2.2 No other terms shall apply to the Seldon Services rendered by Seldon to the Customer other than the terms expressly set out in this Agreement and the relevant Order Form. For the avoidance of doubt the terms of any other purchase order shall not be legally binding and may not act as a form of offer, counter-offer, modification, addition to and/or variation of this Agreement and/or any Order Form.
+
+2.3 In the event of any conflict, the order of precedence shall be firstly, the Order Form, these terms and conditions including any documents referred to in this Agreement and lastly, any schedule to this Agreement.
+
+
+
+3 SELDON SERVICES
+
+3.1 Seldon shall:
+
+a) grant the Enterprise Software licence as set out at clause 4 and in accordance with the Specifications set out in Schedule 1 (the “Enterprise Licence”);
+
+b) provide the Integration as may be required in accordance with the Order Form and clause 5; and
+
+c) provide the Support Services as required in accordance with the Order Form and Schedule 2; and,
+
+d) make available the Documentation.
+
+(together, the “Seldon Services”)
+
+
+
+4 GRANT OF THE ENTERPRISE LICENCE
+
+4.1 In consideration of the Fees paid by the Customer to Seldon as set out in the Order Form, Seldon grants to the Customer a non-exclusive, non-transferable licence for the Term commencing on the Commencement Date as set out in the Order Form to use the Enterprise Software.
+
+4.2 In relation to the scope of use:
+
+a) for the purposes of clause 4.1, use of the Enterprise Software shall be permitted upon the terms found at http://www.apache.org/licenses/LICENSE-2.0 which shall be deemed to be incorporated herein by this reference;
+
+b) for the purposes of clause 4.1, “use of the Enterprise Software” means installing and loading the Enterprise Software into temporary memory or permanent storage on the relevant network server for distribution to other computers subject to the Authorised Users;
+
+c) the Customer may not use the Enterprise Software other than as specified in clause 4.1 and clause 4.2 without the prior written consent of Seldon, and the Customer acknowledges that additional fees may be payable on any change of use approved by Seldon and be subject to an Additional Server Fee;
+
+d) the Customer may make as many backup copies of the Enterprise Software as may be necessary for its lawful use. The Customer shall record the number and location of all copies of the Enterprise Software and take steps to prevent unauthorised copying.
+
+4.3 The Customer may not use any information provided by Seldon or obtained by the Customer during the Term to create any software whose expression is substantially similar to that of the Enterprise Software nor use such information in any manner which would be restricted by any copyright subsisting in it.
+
+4.4 The Customer shall not:
+
+a) sub-license, assign or novate the benefit or burden of this Agreement in whole or in part;
+
+b) allow the Enterprise Software to become the subject of any charge, lien or encumbrance; and
+
+c) deal in any other manner with any or all of its rights and obligations under this Agreement, without the prior written consent of Seldon, such consent not to be unreasonably withheld or delayed.
+
+4.5 Each party confirms it is acting on its own behalf and not for the benefit of any other person.
+
+4.6 Notwithstanding clause 12, a party assigning any or all of its rights under this Agreement may disclose to a proposed assignee any information in its possession that relates to this Agreement or its subject matter, the negotiations relating to it and the other party which is reasonably necessary to disclose for the purposes of the proposed assignment, provided that no disclosure pursuant to this clause 4.6 shall be made until notice of the identity of the proposed assignee has been given to the other party.
+
+4.7 The Customer shall:
+
+a) ensure that the number of persons using the Enterprise Software does not exceed the number of Authorised Users referred to in the Order Form;
+
+b) ensure that the Enterprise Software is installed on designated equipment only;
+
+c) keep a complete and accurate record of the Customer’s copying and disclosure of the Enterprise Software and its users, and produce such record to Seldon on request from time to time;
+
+d) notify Seldon as soon as it becomes aware of any unauthorised use of the Enterprise Software by any person;
+
+e) pay, for broadening the scope of the Enterprise Licence granted under this Agreement to cover the unauthorised use, an amount equal to the fees which Seldon would have levied (in accordance with its normal commercial terms then current) had it licensed any such unauthorised use on the date when such use commenced from such date to the date of payment.
+
+4.8 The Customer shall permit Seldon to inspect and have access to any premises (and to the computer equipment located there) at or on which the Enterprise Software is being kept or used, and have access to any records kept in connection with this Agreement, for the purposes of ensuring that the Customer is complying with the terms of this Agreement, provided that Seldon provides reasonable advance notice to the Customer of such inspections, which shall take place at reasonable times.
+
+
+
+5 INTEGRATION
+
+5.1 In consideration of the Fees paid by the Customer to Seldon as set out in the Order Form, Seldon shall install and integrate the Enterprise Software with the System in accordance with the agreed number of Man Days set out in the Order Form which shall be payable at the Man Day Rate.
+
+
+
+6 TERM & TERMINATION
+
+6.1 This Agreement shall commence on the Effective Date and shall continue for the Term stated in the Order Form unless terminated in accordance with the provisions of this Agreement or the Special Terms where applicable.
+
+6.2 Without affecting any other right or remedy available to it, either party may terminate this Agreement with immediate effect by giving written notice to the other party if:
+
+a) the other party fails to pay any amount due under this Agreement on the due date for payment and remains in default not less than 14 days after being notified in writing to make such payment;
+
+b) the other party commits a material breach of any other term of this Agreement which breach is irremediable or (if such breach is remediable) fails to remedy that breach within a period of 14 days after being notified in writing to do so;
+
+c) the other party becomes insolvent or is otherwise unable to pay its debts as they fall due.
+
+6.3 On termination of this Agreement for any reason, the Enterprise Licence granted under this Agreement shall immediately terminate and:
+
+a) each party shall return and make no further use of any equipment, property, Documentation and other items (and all copies of them) belonging to the other party;
+
+b) Seldon may destroy or otherwise dispose of any of the Customer Data in its possession; and,
+
+c) any rights, remedies, obligations or liabilities of the parties that have accrued up to the date of termination, including the right to claim damages in respect of any breach of the agreement which existed at or before the date of termination shall not be affected or prejudiced.
+
+
+
+7 SUPPORT SERVICES
+
+7.1 Seldon will provide the Support Services set out in Schedule 2 in respect of the Supported Software.
+
+7.2 The Supported Software includes:
+
+a) any Modification which is acquired by the Customer during the course of the Term and which accordingly becomes part of the Enterprise Software defined as the Supported Software under the Enterprise Licence; and
+
+b) any other software which Seldon and Customer agree should be Supported Software for the purposes of this Agreement.
+
+7.3 In relation to Maintenance Releases:
+
+a) as part of the Updating Service, Seldon shall from time to time make Maintenance Releases available to the Customer without charge; and
+
+b) if the Customer fails to acquire and install a Maintenance Release within one (1) month of Seldon notifying the Customer that such Maintenance Release is available for installation, Seldon may terminate this Agreement by giving one (1) months written notice to the Customer.
+
+7.4 Seldon shall appoint a Support Manager, who shall be responsible for the co-ordination of all matters relating to the Support Services. In addition to its Support Manager, Seldon shall provide sufficient Support Staff to fulfil its obligations under the terms of this Agreement. The Support Staff shall be suitably trained and experienced in the support and maintenance of the Supported Software.
+
+7.5 The Support Services shall be limited to the Support Service Limits set out in the Order Form. If any Support Services are required in excess of those levels, such Additional Support Services shall be provided subject to Seldon’s availability and shall accordingly incur Additional Support Fees.
+
+
+
+8 INTELLECTUAL PROPERTY RIGHTS
+
+8.1 The Customer acknowledges and agrees that Seldon and/or its licensors own all Intellectual Property rights in the Enterprise Software, the Seldon Services and the Documentation. Except as expressly stated herein, this Agreement does not grant the Customer any rights to, or in, patents, copyright, database right, trade secrets, trade names, trade marks (whether registered or unregistered), or any other rights or licences in respect of the Enterprise Software, the Seldon Services and the Documentation.
+
+8.2 Seldon confirms that it has all the rights in relation to the Enterprise Software, the Seldon Services and the Documentation that are necessary to grant all the rights it purports to grant hereunder, and in accordance with the terms of this Agreement.
+
+
+
+9 PAYMENT
+
+9.1 Seldon shall invoice the Customer for the Fees in accordance with the Order Form.
+
+9.2 The Customer shall by the Effective Date provide to Seldon valid, up-to-date and complete credit card details or approved purchase order information acceptable to Seldon and any other relevant valid, up-to-date and complete contact and billing details and, if the Customer provides:
+
+a) its credit card details to Seldon, the Customer hereby authorises Seldon to bill such credit card for the Licence & Support Fees, Integration Fees and any applicable Additional Server Fees or Additional Support Fees on or around the payment due date specified in the relevant invoice;
+
+b) its approved purchase order information to Seldon, the Customer shall pay each invoice within 14 days after the date of such invoice.
+
+9.3 If Seldon has not received payment within 14 days after the due date, and without prejudice to any its other rights and remedies, Seldon may (without liability to the Customer) suspend the Seldon Services in whole or in part and Seldon shall be under no obligation to provide any or all of the Seldon Services while the invoice(s) concerned remain unpaid.
+
+9.4 Seldon shall be entitled to increase the Fees annually upon 90 days’ prior notice to the Customer and the Order Form shall be deemed to have been amended accordingly.
+
+9.5 If the Customer fails to pay any amount payable by it under this Agreement Seldon may charge the Customer interest on the overdue amount (payable by the Customer immediately on demand) from the due date up to the date of actual payment, after as well as before judgment, at the rate in accordance with the Late Payment of Commercial Debts (Interest) Act 1998 and Late Payment of Commercial Debts Regulations 2002.
+
+9.6 All amounts due under this Agreement shall be paid by the Customer to Seldon in full without any set-off, counterclaim, deduction or withholding (other than any deduction or withholding of tax as required by law).
+
+
+
+10 WARRANTIES AND INDEMNITIES
+
+10.1 Each party represents and warrants that:
+
+a) it has the legal power and authority to enter into this Agreement;
+
+b) it will comply with all applicable laws in its performance under this Agreement; and,
+
+c) there is no outstanding litigation, arbitrated matter or other dispute to which it is a party which, if decided unfavourably to it, would reasonably be expected to have a potential or actual material adverse effect on its ability to fulfil its obligations under this Agreement.
+
+10.2 Seldon represents and warrants that:
+
+a) the Seldon Services to be performed under this Agreement shall be performed in a competent and professional manner and in accordance with the highest professional standards;
+
+b) all personnel used to provide the Seldon Services will be properly qualified in general accordance with best industry practice for the same;
+
+c) Seldon will provide the Seldon Services in an efficient and timely manner;
+
+d) the Enterprise Software will perform in all material respects and will include all of the facilities and functionality set out in the Specifications, and as otherwise agreed between the parties;
+
+e) the provision of the Seldon Services and the Customer’s use of the same in accordance with the terms herein, shall not infringe the Intellectual Property rights or any rights of any third party.
+
+10.3 The Customer acknowledges that it is exclusively responsible for:
+
+a) reviewing any new Modifications;
+
+a) ensuring that the staff of the Customer is trained in the proper use and operation of the Supported Software;
+
+b) ensuring the security, completeness and accuracy of all inputs and outputs;
+
+c) making regular backup copies of its data to ensure recovery of its data if the Supported Software malfunctions; and,
+
+d) the selection, use of and results obtained from any other programs, equipment, materials or services used in conjunction with the Supported Software.
+
+10.4 Except as expressly provided in this Agreement, neither party gives any other warranty save as otherwise provided herein and any warranty which might otherwise be implied or incorporated into this Agreement, whether by statute, common law or otherwise, is, insofar, as it is lawful to do so, hereby excluded.
+
+10.5 No representation or warranty is given by Seldon that all Issues will be fixed, or will be fixed within a specified period of time.
+
+10.6 The Customer shall defend, indemnify and hold harmless Seldon against claims, actions, proceedings, losses, damages, expenses and costs (including without limitation court costs and reasonable legal fees) arising out of or in connection with the Customer’s use of the Enterprise Software, Support Services and/or Documentation.
+
+10.7 All references to Seldon in this clause 10 shall, for the purposes of this clause only, be treated as including all employees, subcontractors and suppliers of Seldon and its Associates, all of whom shall have the benefit of the exclusions and limitations of liability set out in this Agreement.
+
+
+
+11 LIABILITY
+
+11.1 This clause 11 sets out the entire financial liability of Seldon (including any liability for the acts or omissions of its employees, agents and sub-contractors) to the Customer arising:
+
+a) under or in connection with this Agreement;
+
+b) in respect of any use made by the Customer of the Enterprise Software, Support Services and Documentation or any part of them; and,
+
+c) in respect of any representation, statement or tortious act or omission (including negligence) arising under or in connection with this Agreement.
+
+11.2 Except as expressly and specifically provided in this Agreement, the Customer assumes sole responsibility for results obtained from the use of the Enterprise Software, Support Services and Documentation by the Customer, and for conclusions drawn from such use.
+
+11.3 Seldon shall have no liability for any damage caused by errors or omissions in any information, instructions or scripts provided to Seldon by the Customer in connection with the Seldon Services, or any actions taken by Seldon at the Customer’s direction; all warranties, representations, conditions and all other terms of any kind whatsoever implied by statute or common law are, to the fullest extent permitted by applicable law, excluded from this Agreement; and, the Enterprise Software, Support Services and Documentation are provided to the Customer on an “as is” basis.
+
+11.4 Nothing in this Agreement excludes the liability of Seldon: for death or personal injury caused by Seldon’s negligence; or for fraud or fraudulent misrepresentation.
+
+11.5 Subject to clause 11.1 and clause 11.2, Seldon shall not be liable whether in tort (including for negligence or breach of statutory duty), contract, misrepresentation, restitution or otherwise for any loss of profits, loss of business, depletion of goodwill and/or similar losses or loss or corruption of data or information, or pure economic loss, or for any special, indirect or consequential loss, costs, damages, charges or expenses however arising under this Agreement; and, Seldon’s total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this Agreement shall be limited to the total Licence & Support Fees paid by the Customer during the Contract Year in which the liability arises.
+
+
+
+12 CONFIDENTIALITY AND PUBLICITY
+
+12.1 Each party shall, during the Term of this Agreement and thereafter, keep confidential all, and shall not use for its own purposes (other than implementation of this Agreement) nor without the prior written consent of the other disclose to any third party (except its professional advisors or as may be required by any law or any legal or regulatory authority) any Confidential Information.
+
+12.2 A party’s Confidential Information shall not be deemed to include information that: is or becomes publicly known other than through any act or omission of the receiving party; was in the other party’s lawful possession before the disclosure; is lawfully disclosed to the receiving party by a third party without restriction on disclosure; is independently developed by the receiving party, which independent development can be shown by written evidence; or is required to be disclosed by law, by any court of competent jurisdiction or by any regulatory or administrative body.
+
+12.3 Each party shall hold the other’s Confidential Information in confidence and, unless required by law, not make the other’s Confidential Information available to any third party, or use the other’s Confidential Information for any purpose other than the implementation of this Agreement.
+
+12.4 Each party shall take all reasonable steps to ensure that the other’s Confidential Information to which it has access is not disclosed or distributed by its employees or agents in violation of the terms of this Agreement.
+
+12.5 The Customer acknowledges that the terms of this Agreement are confidential and may not be disclosed by either party without the prior written consent of the other party. Seldon may only refer to the fact that the parties have an agreement in place and may only use the Customer’s name in Seldon sales, promotional and marketing materials with the Customer’s prior written consent, on a case-by-case basis.
+
+12.6 Seldon acknowledges that the Customer Data is the Confidential Information of the Customer.
+
+12.7 This clause 12 shall survive termination of this Agreement, however arising.
+
+
+
+13 CUSTOMER DATA
+
+13.1 The Customer shall own all right, title and interest in and to all of the Customer Data and shall have sole responsibility for the legality, reliability, integrity, accuracy and quality of the Customer Data. Customer shall be responsible for backing up the Customer Data and consequently, Seldon shall have no liability for any damage, deletion or loss of Customer Data.
+
+13.2 If Seldon processes any personal data on the Customer’s behalf when performing its obligations under this Agreement, the parties record their intention that the Customer shall be the data controller and Seldon shall be a data processor and in any such case:
+
+a) the Customer acknowledges and agrees that the personal data may be transferred or stored outside the EEA or the country where the Customer is located in order to carry out the Seldon Services under this Agreement;
+
+b) the Customer shall ensure that the Customer is entitled to transfer the relevant personal data to Seldon so that Seldon may lawfully use, process and transfer the personal data in accordance with this Agreement on the Customer’s behalf;
+
+c) the Customer shall ensure that the relevant third parties have been informed of, and have given their consent to, such use, processing, and transfer as required by all applicable data protection legislation;
+
+d) Seldon shall process the personal data only in accordance with the terms of this Agreement and any lawful instructions reasonably given by the Customer from time to time; and,
+
+e) each party shall take appropriate technical and organisational measures against unauthorised or unlawful processing of the personal data or its accidental loss, destruction or damage.
+
+13.3 In relation to any Customer Data which is also “personal data” under the Data Protection Act 1998, the General Data Protection Regulations or any other applicable legislation, Seldon warrants that it shall at all times act in accordance with such legislation and that any such personal data shall be collected, processed and retained in accordance with Seldon’s Privacy Policy.
+
+
+
+14 GENERAL
+
+14.1 Neither party shall be liable to the other if it is prevented from or delayed in performing its obligations under this Agreement, or from carrying on its business, by acts, events, omissions or accidents beyond its reasonable control provided that the other party is notified of such an event and its expected duration (“Force Majeure Event”).
+
+14.2 No variation of this Agreement shall be effective unless it is in writing and signed by the parties (or their authorised representatives).
+
+14.3 The Customer shall permit reasonable access by Seldon to its premises during Business Days to audit compliance with the terms of this Agreement and to remove items of the Enterprise Software that are not licensed and/or being used in accordance with the terms of this Agreement.
+
+14.4 No failure or delay by a party to exercise any right or remedy provided under this Agreement or by law shall constitute a waiver of that or any other right or remedy.
+
+14.5 Except as expressly provided in this Agreement, the rights and remedies provided under this Agreement are in addition to, and not exclusive of, any rights or remedies provided by law. If any provision (or part of a provision) of this Agreement is found by any court or administrative body of competent jurisdiction to be invalid, unenforceable or illegal, the other provisions shall remain in force.
+
+14.6 The Customer shall not, for the duration of this Agreement, and for a period of six (6) months following termination, directly or indirectly induce or attempt to induce any employee of Seldon who has been engaged in the provision, receipt, review or management of the Seldon Services or otherwise in connection with this Agreement to leave the employment of Seldon.
+
+14.7 If any invalid, unenforceable or illegal provision would be valid, enforceable or legal if some part of it were deleted, the provision shall apply with whatever Modification is necessary to give effect to the commercial intention of the parties.
+
+14.8 These terms, the Order Form and any documents referred to in these as well as the schedules, constitute the whole agreement between the parties and supersede any previous arrangement, understanding or agreement between them relating to the subject matter they cover.
+
+14.9 Each of the parties acknowledge and agree that in entering into this Agreement it does not rely on any undertaking, promise, assurance, statement, representation, warranty or understanding (whether in writing or not) of any person (whether party to this Agreement or not) relating to the subject matter of this Agreement, other than as expressly set out in this Agreement.
+
+14.10 The Customer shall not, without the prior written consent of Seldon, assign, transfer, charge, sub-contract or deal in any other manner with all or any of its rights or obligations under this Agreement. Seldon may at any time sub-license, assign, novate, charge or deal in any other manner with any or all of its rights and obligations under this Agreement particularly in the case of a merger, acquisition or change of control.
+
+14.11 Nothing in this Agreement is intended to or shall operate to create a partnership between the parties, or authorise either party to act as agent for the other, and neither party shall have the authority to act in the name or on behalf of or otherwise to bind the other in any way.
+
+14.12 This Agreement governs the relationship between the Customer and Seldon and does not create any third party beneficiary rights.
+
+14.13 Any notice required to be given under this Agreement shall be in writing and shall be delivered by hand or sent by pre-paid first-class post or recorded delivery post to the other party at its address set out in the Order Form, or such other address as may have been notified by that party for such purposes. A notice delivered by hand shall be deemed to have been received when delivered (or if delivery is not in business hours of a Business Day, at 9 am on the first Business Day following delivery). A correctly addressed notice sent by pre-paid first-class post or recorded delivery post shall be deemed to have been received at the time at which it would have been delivered in the normal course of post.
+
+14.14 This Agreement and any dispute or claim arising out of or in connection with it or its subject matter or formation (including non-contractual disputes or claims) shall be governed by and construed in accordance with the law of England and Wales.
+
+14.15 Each party irrevocably agrees that the courts of England and Wales shall have exclusive jurisdiction to settle any dispute or claim arising out of or in connection with this Agreement or its subject matter or formation (including non-contractual disputes or claims).
+
+Specification – Enterprise Software
+Schedule 1
+The products and services the Customer can expect to receive from the Enterprise Software referred to in the Order Form – Appendix A.
+
+Support Services
+Schedule 2
+1 INTRODUCTION
+
+1.1 This Schedule 2 describes the levels of service that the Customer will receive from Seldon in respect of the Supported Software.
+
+1.2 The Customer depends on the proper functioning of the Supported Software for its daily business operations and Seldon agrees to provide standard software Support Services to the Customer’s business subject to the Support Service Limits referred to in the Order Form.
+
+1.3 This Schedule 2 sets out amongst other things, what levels of support Customer is guaranteed to receive from Seldon and the process for Support Requests.
+
+
+
+2 DEFINITIONS
+
+The following terms shall have the following meanings. Any terms not defined in this Schedule 2 shall have the meaning given to them in the Enterprise Software Licence & Support Terms version 2018-07-09
+
+Initial Status Report refers to the first report issued by Seldon which also categorises the Issue severity.
+
+Issue is a defect in the accessibility or performance of the Enterprise Software i.e. an indication of a failure to meet the Specifications.
+
+Maintenance Release: a release of the Supported Software which corrects faults, adds functionality or otherwise amends or upgrades the Supported Software, but which does not constitute a New Version.
+
+Resolution refers to when Seldon deems the Issue resolved (or pending a Maintenance Release as the case may be) and the Support Request shall close.
+
+Resolution Updates are referred to in clause 3.6.
+
+Response Time Targets mean the elapsed time from the time that Seldon receives notification of an Issue from the Customer by way of a Support Request, until Seldon’s technical Support Staff notifies the Customer that Seldon has begun to provide assistance. Response times are measured from when an Issue is reported by the Customer.
+
+Support Services includes the standard software support services which includes the Updating Service.
+
+Support Hours mean the hours during which Seldon’s support team are available and therefore means 09:00 to 18:00 hours, Monday to Sunday, excluding U.K. public and bank holidays.
+
+Support Manager is the person appointed by Seldon from time to time in order to fulfil the role described in clause 7.4.
+
+Support Request is the request submitted by the Customer to Seldon seeking the Support Services.
+
+Support Request Procedure is referred to in clause 6.
+
+Support Staff are those individuals who perform Seldon’s obligations under this Agreement including (where the context permits) the Support Manager.
+
+Supported Software means the Enterprise Software licensed hereunder.
+
+Updating Service is the service to be supplied by Seldon to the Customer under clause 3.2.
+
+
+
+3 SCOPE OF THE SUPPORT SERVICES
+
+3.1 Seldon shall provide Customer with the Support Services to maintain the Supported Software in normal operating conditions.
+
+3.2 Seldon shall supply and the Customer shall take and pay for, the Support Services inclusive of the Updating Service.
+
+3.3 As part of the Support Services, Seldon will provide the advice and assistance of its knowledgeable staff and where appropriate Seldon’s engineers, agents and subcontractors.
+
+3.4 In the event that Customer requires Support Services, Customer shall submit a Support Request in accordance with the Support Request Procedure and Seldon shall use its reasonable endeavours to respond to the Issue in accordance with the Response Time Targets.
+
+3.5 Customer acknowledges that Seldon’s ability to provide the Support Services is dependent upon the full and timely co-operation of Customer (which Customer agrees to provide), as well as the accuracy and completeness of any information that Customer provides to Seldon.
+
+3.6 Customer will inform Seldon promptly in writing if at any time especially in response to Resolution Updates during the provision of the Support Services, Customer has reasonable grounds to believe that Seldon may be proceeding on the basis of any incorrect or out-of-date, content, information, data or assumption.
+
+3.7 Where a non-Critical Issue is to be corrected in a forthcoming Maintenance Release, then for a reasonable period before the issue of such Maintenance Release, Seldon may decline to provide assistance in respect of that non-Critical Issue.
+
+3.8 Seldon shall not be liable for any delays in providing a resolution which results from Customer’s failure to fulfil any of its obligations under this Agreement.
+
+
+
+4 EXCLUSIONS
+
+4.1 This Agreement is in the spirit of partnership and Seldon will always do everything possible to provide a Resolution to any Issue in a timely manner, however, the scope of the Support Services shall not include the diagnosis and rectification of any Issue resulting from:
+
+a) the improper use, misuse, operation or neglect of the Enterprise Software;
+
+b) the modification of the Enterprise Software or the merger (in whole or in part) with any other software, save where such modifications or merger has been conducted by Seldon or with Seldon’s express written consent;
+
+c) the failure of Customer to implement recommendations in respect of, or solutions to, Issues previously advised by Seldon, or the refusal or failure to install Maintenance Releases that contain fixes to such Issues;
+
+d) failure of any operating system, compiler, utility or software which is not owned or licensed by Seldon;
+
+e) any repair, adjustment, alteration or modification of the Enterprise Software by any person other than Seldon;
+
+f) the use of the Enterprise Software for a purpose for which it was not designed.
+
+4.2 Seldon may, in its discretion and at the request of Customer, provide the Support Services hereunder notwithstanding that the Issue results from circumstances described in Clause 4.1. Seldon shall in such circumstances be entitled to levy Additional Support Fees and shall provide advance notice of such to Customer for Customer’s acceptance which must be expressed in writing including email.
+
+4.3 This Agreement does not apply in circumstances where a Force Majeure Event occurs preventing Seldon from providing the Support Services in accordance with this Agreement and in such circumstances, Seldon shall not be liable.
+
+
+
+5 CUSTOMER OBLIGATIONS
+
+5.1 Customer shall:
+
+a) provide Seldon with access to, and use of, all information, data and documentation reasonably required by Seldon for the performance by Seldon of its obligations hereunder;
+
+b) provide clear and detailed information to Seldon when reporting the Issue and any further technical data on any points related to the Support Request where reasonably requested to do so by Seldon;
+
+c) adopt all necessary maintenance and back-up procedures that would normally be adopted by a prudent user and licensee and carry out all necessary backup procedures necessary to ensure the maintenance of data integrity in the event of data loss for any reason;
+
+d) co-operate fully with Seldon’s personnel in the diagnosis and correction of any Issue;
+
+e) provide at the Customer’s expense any telecommunication facilities (including terminal access to the specified system) reasonably required by Seldon for testing and diagnostic purposes and for remote investigation of Issues;
+
+f) copy and use any Maintenance Releases only in accordance with the Agreement;
+
+g) maintain procedures to facilitate reconstruction of any lost or altered files, data or programs to the extent deemed necessary by Seldon;
+
+h) make available to Seldon all information, facilities and services reasonably required by Seldon to enable Seldon to provide the Support Services; and,
+
+i) pay the applicable Fees promptly which shall be of the essence of the Agreement. It is a condition precedent of this Agreement that Customer must have fully paid up all Fees due and payable in order to receive (or continue to receive) the Support Services.
+
+5.2 During the Support Hours, the Customer shall provide Seldon or Seldon’s Support Staff duly authorised by Seldon with full, safe and uninterrupted access including remote access to the Customer’s premises and the Enterprise Software, the System and any other systems and facilities as may reasonably be required by Seldon for the purpose of performing the Support Services. Where the Support Services are to be performed at the Customer Premises, the Customer shall provide adequate working space and office facilities (including telephone) for use by the Support Staff and take reasonable care to ensure their health and safety.
+
+5.3 The Customer shall ensure that appropriate environmental conditions are maintained for the Supported Software and shall take all reasonable steps to ensure that the Supported Software is operated in a proper manner by the Authorised Users of Customer.
+
+5.4 The Customer shall indemnify Seldon against any losses, damages, costs (including legal fees) and expenses incurred by or awarded against Seldon as a result of the Customer’s breach of this Agreement howsoever arising or any negligent or wrongful act of the Customer, its officers, employees, contractors or agents.
+
+
+
+6 SUPPORT REQUEST PROCEDURE
+
+6.1 If Customer finds a potential Issue with the Enterprise Software, the following procedure should be followed:
+
+a) A Customer representative will advise Seldon of the Issue by submitting a Support Request
+
+b) On receipt of the Support Request, Seldon shall allocate a unique ticket number which number shall be quoted during any communication between Seldon and Customer;
+
+c) Seldon will next acknowledge the nature of the Issue in a written Initial Status Report in accordance with the Response Time Targets;
+
+d) If Seldon requests a documented example of the Issue to be provided by email, facsimile or first class or recorded post, Customer shall provide it without delay. Where Seldon are unable to replicate the Issue, Seldon will not be obliged to correct it until Customer provides the documented example;
+
+e) Seldon will work with Customer to resolve the Issue or to provide information and Customer will at all times co-operate with Seldon to ascertain the cause of an Issue and if requested by Seldon, Customer shall provide all relevant information, including in particular, details of material occurrences before, during and after the Issue, and screen prints of any Issue messages produced;
+
+f) Seldon shall use reasonable endeavours to provide a Resolution to a reported Issue within the Seldon Response Times but no warranty is given in this respect;
+
+g) If necessary, Seldon shall escalate the Issue to an appropriate expert for further analysis;
+
+h) Upon Resolution, the Support Request will be closed by Seldon.
+
+
+
+7 AVAILABILITY OF SUPPORT SERVICES
+
+7.1 In relation to the Support Services and subject to any Support Service Limits set forth in the Order Form, the Support Services shall be provided during the Support Hours and shall comprise:
+
+
+
+TELEPHONE SUPPORT: A telephone help desk to provide first-line technical support to Authorised Users of the Supported Software shall be available at +44 20 7193 6752;
+
+
+
+REMOTE ONLINE SUPPORT: Remote diagnosis and, where possible, correction of faults using the Supported Software management software shall be accessed by sending an email to support@seldon.io; and,
+
+
+
+ONSITE: Onsite support shall be provided by way of second-line onsite technical support. Diagnosis and rectification of Issues will usually be undertaken remotely. In the event that it proves necessary to provide any Support Services at Customer’s premises, travelling and other expenses will be chargeable as well as Additional Support Fees where applicable.
+
+
+
+7.2 Calls received outside of the Support Hours will be forwarded to a mobile phone and reasonable efforts will be made to answer/ action the call.
+
+7.3 Emails received outside of the Support Hours will be collected, however no action can be guaranteed until the next working day.
+
+
+
+8 ISSUE CLASSIFICATION
+
+8.1 Issue severity will be determined by Seldon acting reasonably upon receipt of a Support Request using the following as a guideline:
+
+Priority Level	Issue Severity	Description
+1	Critical	The Supported Software doesn’t function at all or performance is so poor as to render the Enterprise Software unusable.
+2	High	A major function/product is unusable which results in limited functionality or affects a large number of users .
+3	Medium	There is a loss of a function or resource that does NOT seriously affect the Enterprise Software’s functionality.
+4	Low	All other Issues.
+
+
+9 RESPONSE TIME TARGETS
+
+Issues will be responded to by Seldon in accordance with the following criteria, and tracked on a case by case basis.
+
+Priority Level	>Issue Severity	>Response Time Target
+1	>Critical	>15 minutes
+2	>High	>30 minutes
+3	>Medium	>8 hours
+4	>Low	>2 Business Days
+
+
+10 EARLY TERMINATION
+
+In the event there are five (5) days in a sixty (60) day period with Critical Issues being reported each lasting more than fifteen (15) minutes in duration, or a cumulative of 24 hours of such Issues during any one (1) month period, the Customer may terminate the Agreement by providing thirty (30) days written notice. The Customer must request such cancellation of the Agreement within fourteen (14) days of the latest Support Request which presents a Critical Issue, failing which, such opportunity to terminate the Agreement shall be waived.

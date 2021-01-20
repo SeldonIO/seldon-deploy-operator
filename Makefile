@@ -35,7 +35,6 @@ create_bundle_image_%:
 push_bundle_image_%:
 	docker push quay.io/seldon/seldon-deploy-operator-bundle:v$*
 
-
 create_bundles: docker-build docker-push create_bundle_image_1.0.0 create_bundle_image_0.7.0
 
 push_bundles: push_bundle_image_1.0.0 push_bundle_image_0.7.0
@@ -67,11 +66,18 @@ undeploy: kustomize
 
 # Build the docker image
 docker-build:
-	docker build . -t ${IMG} --no-cache
+	docker build . -t ${IMG} --build-arg VERSION=${VERSION} --no-cache
 
 # Push the docker image
 docker-push:
 	docker push ${IMG}
+
+#password can be found at https://connect.redhat.com/project/4805411/view
+redhat-image-scan: docker-build docker-push
+	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
+		echo $${rh_password_seldondeploy_operator} | docker login -u unused scan.connect.redhat.com --password-stdin
+	docker tag ${IMG} scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
+	docker push scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
 
 PATH  := $(PATH):$(PWD)/bin
 SHELL := env PATH=$(PATH) /bin/sh
@@ -175,7 +181,7 @@ redhat-kubectl-image-scan: build-kubectl-image push-kubectl-image
 	docker tag seldonio/kubectl:1.14.3 scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
 	docker push scan.connect.redhat.com/ospid-82f39479-3635-454f-909d-f3bd6f66fedc/kubectl:1.14.3
 
-#note this is mc image is based on https://github.com/minio/mc/pull/2734 and is unproven
+#note this is mc image is based on https://github.com/minio/mc/pull/2734
 build-minio-image:
 	docker build . --file=./Dockerfile.minioclient \
 			--tag=seldonio/mc-ubi:1.0
