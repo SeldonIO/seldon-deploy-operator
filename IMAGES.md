@@ -62,3 +62,4 @@ DEPLOY IMAGE SCAN FAILURE - https://connect.redhat.com/project/4805801/images
 BATCH PROC IMAGE IS seldonio/seldon-core-s2i-python37:1.5.0. NEED TO CREATE A PROJECT AND PUBLISH. CAN PROB JUST EXTEND FROM BASE IMAGE TO ADD LICENSE IF THERE'S NO LICENSE.
 
 ONCE IMAGES PUBLISHED NEED TO VERIFY IN RH CONNECT AND PLUG IMAGES INTO CERT BUNDLE.
+CERT IMAGE NAMES IN https://github.com/SeldonIO/seldon-deploy-operator/blob/0.7.0/deploy/olm-catalog/seldon-deploy-operator/0.7.0/seldon-deploy-operator.v0.7.0.clusterserviceversion.yaml#L530
