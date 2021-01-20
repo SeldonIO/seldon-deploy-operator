@@ -35,7 +35,7 @@ create_bundle_image_%:
 create_bundle_image_certified_%:
 	docker build . -f bundle-version-certified.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle-cert:v$* --no-cache
 
-.PHONY: create_bundle_image_certified
+.PHONY: packagemanifests-certified
 packagemanifests-certified:
 	./packagemanifests-certified.sh ${VERSION}
 

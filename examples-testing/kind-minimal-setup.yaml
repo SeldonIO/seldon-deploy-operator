@@ -5,7 +5,7 @@ metadata:
 spec:
   replicaCount: 1
   image:
-    image: docker.io/seldonio/seldon-deploy-server-ubi:1.0.1-dev
+    image: seldonio/seldon-deploy-server-ubi:1.0.1-dev
     pullPolicy: Always
   ingress:
     enabled: false
@@ -42,7 +42,7 @@ spec:
       jwtSecretKey: ""
   openshiftMarketplace:
     cleanupClusterServiceVersions: false
-    kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
+    kubectlCleanupImage: seldonio/kubectl:1.14.3
     seldonCore:
       subscription:
         create: false

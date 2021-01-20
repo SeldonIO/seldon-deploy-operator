@@ -3,7 +3,7 @@ replicaCount: 1
 
 #in RH marketplace images will come from RH hosting through an override in CSV - default to dockerhub ubi images
 image:
-  image: docker.io/seldonio/seldon-deploy-server-ubi:1.0.1-dev
+  image: seldonio/seldon-deploy-server-ubi:1.0.1-dev
   pullPolicy: Always
 
 loadtest:
@@ -195,7 +195,7 @@ elasticsearch:
 #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
 requestLogger:
   create: true
-  image: docker.io/seldonio/seldon-request-logger:1.5.1
+  image: seldonio/seldon-request-logger:1.5.1
   #increase logger replicas if there are high traffic volumes
   replicas: 1
   imagePullPolicy: IfNotPresent
@@ -221,7 +221,7 @@ requestLogger:
 
 openshiftMarketplace:
   cleanupClusterServiceVersions: false
-  kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
+  kubectlCleanupImage: seldonio/kubectl:1.14.3
   seldonCore:
     subscription:
       create: true
