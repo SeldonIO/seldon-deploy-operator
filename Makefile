@@ -202,7 +202,6 @@ build-batch-proc-image:
 push-batch-proc-image:
 	docker push seldonio/seldon-core-s2i-python37-cert:1.5.1
 
-#image for this one built in seldon core under wrappers/s2i/python
 redhat-batch-proc-image-scan: build-batch-proc-image push-batch-proc-image
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_batch_proc} | docker login -u unused scan.connect.redhat.com --password-stdin

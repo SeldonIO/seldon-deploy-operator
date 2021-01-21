@@ -59,7 +59,7 @@ FOR OPERATOR IMAGE FAILING LIC SCAN - DEPLOY TO K8S AND EXEC INTO THEN LIST.
 DEPLOY OPERATOR SCAN FAILURE - https://connect.redhat.com/project/4805411/images
 DEPLOY IMAGE SCAN FAILURE - https://connect.redhat.com/project/4805801/images
 MINIO IMAGE SCAN FAILURE - https://connect.redhat.com/project/5937511/images
-BATCH PROC SCAN IN PROGRESS - https://connect.redhat.com/project/5937521/images
+BATCH PROC LIC SCAN FAILURE - https://connect.redhat.com/project/5937521/images
 
 MINIO IMAGE SCAN FAILED BUT ALL INDIVIDUAL CHECKS PASSED
 SAME FOR DEPLOY. HAVE RAISED ISSUE WITH RED HAT.
