@@ -11,6 +11,6 @@ RUN chmod +x /usr/bin/mc
 RUN mkdir /.mc && chgrp -R 0 /.mc && chmod -R g=u /.mc
 
 ENTRYPOINT ["mc"]
-
+COPY apache2license.txt licenses/license.txt
 #basing on https://github.com/minio/mc/pull/2734/files for https://github.com/minio/mc/issues/3574
 USER 1001

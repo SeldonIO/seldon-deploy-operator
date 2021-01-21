@@ -196,7 +196,18 @@ redhat-minio-client-image-scan: build-minio-image push-minio-image
 	docker tag seldonio/mc-ubi:1.0 scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
 	docker push scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
 
+build-batch-proc-image:
+	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=1.5.1 \
+			--tag=seldonio/seldon-core-s2i-python37-cert:1.5.1
+push-batch-proc-image:
+	docker push seldonio/seldon-core-s2i-python37-cert:1.5.1
 
+#image for this one built in seldon core under wrappers/s2i/python
+redhat-batch-proc-image-scan: build-batch-proc-image push-batch-proc-image
+	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
+		echo $${rh_password_seldondeploy_batch_proc} | docker login -u unused scan.connect.redhat.com --password-stdin
+	docker tag seldonio/seldon-core-s2i-python37-cert:1.5.1 scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.5.1
+	docker push scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.5.1
 
 # bundle certifified images
 # most of this for testing as images in RHCR can't be overwritten, have to delete them from UI, which is a pain

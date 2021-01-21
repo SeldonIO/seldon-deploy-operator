@@ -58,26 +58,11 @@ FOR OPERATOR IMAGE FAILING LIC SCAN - DEPLOY TO K8S AND EXEC INTO THEN LIST.
 
 DEPLOY OPERATOR SCAN FAILURE - https://connect.redhat.com/project/4805411/images
 DEPLOY IMAGE SCAN FAILURE - https://connect.redhat.com/project/4805801/images
+MINIO IMAGE SCAN FAILURE - https://connect.redhat.com/project/5937511/images
+BATCH PROC SCAN IN PROGRESS - https://connect.redhat.com/project/5937521/images
 
-BATCH PROC IMAGE IS seldonio/seldon-core-s2i-python37:1.5.0. NEED TO CREATE A PROJECT AND PUBLISH. CAN PROB JUST EXTEND FROM BASE IMAGE TO ADD LICENSE IF THERE'S NO LICENSE.
+MINIO IMAGE SCAN FAILED BUT ALL INDIVIDUAL CHECKS PASSED
+SAME FOR DEPLOY. HAVE RAISED ISSUE WITH RED HAT.
 
-ONCE IMAGES PUBLISHED NEED TO VERIFY IN RH CONNECT AND PLUG IMAGES INTO CERT BUNDLE.
-CERT IMAGE NAMES IN https://github.com/SeldonIO/seldon-deploy-operator/blob/0.7.0/deploy/olm-catalog/seldon-deploy-operator/0.7.0/seldon-deploy-operator.v0.7.0.clusterserviceversion.yaml#L530
+CERT IMAGE NAMES IN packagemanifests-certified.sh
 
-#registry.connect.redhat.com/seldonio/seldon-deploy:0.7
-                - name: RELATED_IMAGE_DEPLOYMENT
-                  value: registry.connect.redhat.com/seldonio/seldon-deploy:0.7.0
-#registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
-                - name: RELATED_IMAGE_LOADTEST
-                  value: registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
-#registry.connect.redhat.com/seldonio/alibi-detect-server:1.2.1
-                - name: RELATED_IMAGE_ALIBIDETECT
-                  value: registry.connect.redhat.com/seldonio/alibi-detect-server:1.2.1
-#registry.connect.redhat.com/seldonio/seldon-request-logger:1.2.1
-                - name: RELATED_IMAGE_REQUESTLOGGER
-                  value: registry.connect.redhat.com/seldonio/seldon-request-logger:1.2.1
-#registry.connect.redhat.com/seldonio/kubectl:1.14.3
-                - name: RELATED_IMAGE_KUBECTL
-                  value: registry.connect.redhat.com/seldonio/kubectl:1.14.3
-#registry.connect.redhat.com/seldonio/seldon-deploy-operator:0.7.0
-                image: registry.connect.redhat.com/seldonio/seldon-deploy-operator:0.7.0
