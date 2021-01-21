@@ -3,7 +3,9 @@ VERSION ?= $(shell cat version.txt)
 #which replaces
 REPLACES ?= $(shell cat replaces.txt)
 # Default bundle image tag
-BUNDLE_IMG ?= quay.io/seldon/seldon-deploy-operator-bundle:$(VERSION)
+BUNDLE_IMG ?= quay.io/seldon/seldon-deploy-operator-bundle:v$(VERSION)
+# Certified bundle image tag
+BUNDLE_IMG_CERT ?= quay.io/seldon/seldon-deploy-operator-bundle-cert:v$(VERSION)
 # Options for 'bundle-build'
 DEFAULT_CHANNEL=stable
 CHANNELS=stable,alpha
@@ -30,14 +32,6 @@ update_openshift: bundle bundle-build bundle-push docker-build docker-push bundl
 .PHONY: create_bundle_image
 create_bundle_image_%:
 	docker build . -f bundle-version.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle:v$* --no-cache
-
-.PHONY: create_bundle_image_certified
-create_bundle_image_certified_%:
-	docker build . -f bundle-version-certified.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle-cert:v$* --no-cache
-
-.PHONY: packagemanifests-certified
-packagemanifests-certified:
-	./packagemanifests-certified.sh ${VERSION}
 
 .PHONY: push_bundle_image
 push_bundle_image_%:
@@ -196,4 +190,57 @@ build-minio-image:
 push-minio-image:
 	docker push seldonio/mc-ubi:1.0
 
-#TODO: certified minio image
+redhat-minio-client-image-scan: build-minio-image push-minio-image
+	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
+		echo $${rh_password_seldondeploy_minio_client} | docker login -u unused scan.connect.redhat.com --password-stdin
+	docker tag seldonio/mc-ubi:1.0 scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
+	docker push scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
+
+
+
+# bundle certifified images
+# most of this for testing as images in RHCR can't be overwritten, have to delete them from UI, which is a pain
+# certified operator image is pushed with redhat-image-scan
+# certified bundle with bundle_certified_push
+
+.PHONY: create_bundle_image_certified
+create_bundle_image_certified_%:
+	docker build . -f bundle-version-certified.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle-cert:v$* --no-cache
+
+.PHONY: packagemanifests-certified
+packagemanifests-certified:
+	./packagemanifests-certified.sh ${VERSION}
+
+
+opm_index_certified:
+	opm index add -c docker --bundles ${BUNDLE_IMG_CERT},quay.io/seldon/seldon-deploy-operator-bundle-cert:v0.7.0 --tag quay.io/seldon/test-deploy-catalog-cert:latest
+
+opm_push_certified:
+	docker push quay.io/seldon/test-deploy-catalog-cert:latest
+
+.PHONY: validate_bundle_image_certified
+validate_bundle_image_certified:
+	operator-sdk bundle validate ${BUNDLE_IMG_CERT}
+
+.PHONY: update_openshift_cert
+update_openshift_cert: create_bundles_cert push_bundles_cert validate_bundle_image_certified opm_index_certified opm_push_certified
+
+.PHONY: create_bundle_image
+create_bundle_image_cert_%:
+	docker build . -f bundle-version-certified.Dockerfile --build-arg VERSION=$* -t quay.io/seldon/seldon-deploy-operator-bundle-cert:v$* --no-cache
+
+.PHONY: push_bundle_image
+push_bundle_image_cert_%:
+	docker push quay.io/seldon/seldon-deploy-operator-bundle-cert:v$*
+
+create_bundles_cert: create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
+
+push_bundles_cert: push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
+
+build_push_cert: create_bundles_cert push_bundles_cert
+
+bundle_certified_push:
+	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
+		echo $${rh_password_seldondeploy_operator_bundle} | docker login -u unused scan.connect.redhat.com --password-stdin
+	docker tag ${BUNDLE_IMG_CERT} scan.connect.redhat.com/ospid-b1e676a5-be95-44e9-99b4-45ea93134805/seldon-deploy-operator-bundle:${VERSION}
+	docker push scan.connect.redhat.com/ospid-b1e676a5-be95-44e9-99b4-45ea93134805/seldon-deploy-operator-bundle:${VERSION}

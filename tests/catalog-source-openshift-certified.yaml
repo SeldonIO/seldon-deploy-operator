@@ -5,7 +5,7 @@ metadata:
   namespace: openshift-marketplace
 spec:
   sourceType: grpc
-  image: quay.io/seldon/test-deploy-catalog-certified:latest
+  image: quay.io/seldon/test-deploy-catalog-cert:latest
   displayName: Seldon Deploy Certified Catalog
   updateStrategy:
     registryPoll: 
