@@ -13,9 +13,8 @@ LOADTEST_IMAGE=registry.connect.redhat.com/seldonio/seldon-loadtester
 ALIBIDETECT_IMAGE=registry.connect.redhat.com/seldonio/alibi-detect-server
 REQUESTLOGGER_IMAGE=registry.connect.redhat.com/seldonio/seldon-request-logger
 KUBECTL_IMAGE=registry.connect.redhat.com/seldonio/kubectl
-#TODO: PLUG IN THE RHCR FOR BELOW WHEN CREATED
-BATCH_PROC_IMAGE=seldonio/seldon-core-s2i-python37
-MINIO_CLIENT_IMAGE=seldonio/mc-ubi
+BATCH_PROC_IMAGE=registry.connect.redhat.com/seldonio/seldon-batch-processor
+MINIO_CLIENT_IMAGE=registry.connect.redhat.com/seldonio/mc-ubi
 
 
 function update_images {
