@@ -7,5 +7,5 @@ LABEL name="Seldon Batch Processor" \
       release=$VERSION \
       summary="Seldon Batch Processor" \
       description="Image used for processing seldon batch jobs."
-COPY apache2license.txt licenses/license.txt
+COPY apache2license.txt /licenses/license.txt
 RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical

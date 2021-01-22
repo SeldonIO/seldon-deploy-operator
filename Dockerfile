@@ -8,7 +8,7 @@ LABEL name="Seldon Deploy Operator" \
       release=$VERSION \
       summary="Seldon Deploy Operator" \
       description="Helm-based Operator for installing Seldon Deploy."
-COPY deployenterpriselicense.txt licenses/license.txt
+COPY deployenterpriselicense.txt /licenses/license.txt
 
 ENV HOME=/opt/helm
 COPY watches.yaml ${HOME}/watches.yaml

@@ -40,22 +40,22 @@ The table below has the make targets for the images. Each should have two, one b
 
 | Image      |  Make Targets                                        |  Status |
 | ---------- |  --------------------------------------------------- | ----------- |
-| Bundle     | update_openshift_cert, build_push_cert               | push when others ready?  |
-| Operator   | docker-build, redhat-image-scan                      | lic scan fail |
-| Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | 1.0.1-dev published |
+| Bundle     | update_openshift_cert, build_push_cert               | needs all other images in order to pass  |
+| Operator   | docker-build, redhat-image-scan                      | pushed |
+| Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | 1.0.1-dev published but need a fixed version |
 | Batch Proc | build-batch-proc-image,redhat-batch-proc-image-scan  | pending approval |
 | Batch mc   | build-minio-image, redhat-minio-client-image-scan    | pending approval |
-| Req log    | In core, under components/seldon-request-logger      | republish, [image 6mo old](https://connect.redhat.com/project/3993051/images) |
+| Req log    | In core, under components/seldon-request-logger      | [pushed 1.5.1](https://connect.redhat.com/project/3993051/images) |
 | kubectl    | build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed not used, no need to repub |
-| loadtest   | deploy repo, tools/images/loadtest-image             | hasn't changed but maybe repub |
-| alibi      | In core, under components/alibi-detect-server        | republish, [image 6mo old](https://connect.redhat.com/project/3993461/images)   |
+| loadtest   | deploy repo, tools/images/loadtest-image             | hasn't changed, 0.1 still latest |
+| alibi      | In core, under components/alibi-detect-server        | [pushed 1.5.1](https://connect.redhat.com/project/3993461/images)   |
 
 
 
-FOR OPERATOR IMAGE FAILING LIC SCAN - DEPLOY TO K8S AND EXEC INTO THEN LIST. THOUGH SUSPECT IT'S PROBLEM WITH HELM OPERATOR BASE IMAGE.
+TODO: NEED A GOOD TAG FOR DEPLOY IMAGE AND TO POINT PROJECTS AT IT. THEN CAN PUSH FINAL BUNDLE
 
 BUNDLE PROJECT IS https://connect.redhat.com/project/5892521/images/upload-image
-DEPLOY OPERATOR SCAN FAILURE - https://connect.redhat.com/project/4805411/images
+DEPLOY OPERATOR PASSES - https://connect.redhat.com/project/4805411/images
 DEPLOY IMAGE PASSES - https://connect.redhat.com/project/4805801/images
 MINIO IMAGE PASSES - https://connect.redhat.com/project/5937511/images
 BATCH PROC PASSES - https://connect.redhat.com/project/5937521/images
