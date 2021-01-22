@@ -40,28 +40,25 @@ The table below has the make targets for the images. Each should have two, one b
 
 | Image      |  Make Targets                                        |  Status |
 | ---------- |  --------------------------------------------------- | ----------- |
-| Bundle     | create_bundle_image_% , ? See above link. Create?    |  TODO   |
+| Bundle     | update_openshift_cert, build_push_cert               | push when others ready?  |
 | Operator   | docker-build, redhat-image-scan                      | lic scan fail |
-| Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | scan fail with no reason |
-| Batch Proc | TODO                                                 | TODO |
-| Batch mc   | build-minio-image, NEED TO CREATE PROJECT            | TODO |
+| Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | 1.0.1-dev published |
+| Batch Proc | build-batch-proc-image,redhat-batch-proc-image-scan  | pending approval |
+| Batch mc   | build-minio-image, redhat-minio-client-image-scan    | pending approval |
 | Req log    | In core, under components/seldon-request-logger      | republish, [image 6mo old](https://connect.redhat.com/project/3993051/images) |
-| kubectl    | build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed but repub |
-| loadtest   | deploy repo, tools/images/loadtest-image             | hasn't changed but repub |
+| kubectl    | build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed not used, no need to repub |
+| loadtest   | deploy repo, tools/images/loadtest-image             | hasn't changed but maybe repub |
 | alibi      | In core, under components/alibi-detect-server        | republish, [image 6mo old](https://connect.redhat.com/project/3993461/images)   |
 
-FOR BUNDLE WE NEED A MAKE GOAL TO BUILD THE CERTIFIED ONE. HAVEN'T BUILT THAT YET.
-NOT JUST RETAGGING LIKE THE OTHERS. FOR THAT CERTIFIED IS DIFFERENT.
-PROJECT IS https://connect.redhat.com/project/5892521/images/upload-image
+
 
 FOR OPERATOR IMAGE FAILING LIC SCAN - DEPLOY TO K8S AND EXEC INTO THEN LIST. THOUGH SUSPECT IT'S PROBLEM WITH HELM OPERATOR BASE IMAGE.
 
+BUNDLE PROJECT IS https://connect.redhat.com/project/5892521/images/upload-image
 DEPLOY OPERATOR SCAN FAILURE - https://connect.redhat.com/project/4805411/images
-DEPLOY IMAGE SCAN FAILURE - https://connect.redhat.com/project/4805801/images
+DEPLOY IMAGE PASSES - https://connect.redhat.com/project/4805801/images
 MINIO IMAGE PASSES - https://connect.redhat.com/project/5937511/images
 BATCH PROC PASSES - https://connect.redhat.com/project/5937521/images
-
-NEED TO UPDATE packagemanifests-certified.sh with IMAGE NAMES, NOT ALL THERE OR BEING REPLACED.
 
 CERT IMAGE NAMES IN packagemanifests-certified.sh
 
