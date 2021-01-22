@@ -19,8 +19,6 @@ spec:
   - match:
     - uri:
         prefix: {{ .Values.virtualService.prefix }}
-    rewrite:
-      uri: /
     route:
     - destination:
         host: {{ include "seldon-deploy.fullname" . }}

@@ -1,0 +1,20 @@
+# permissions for end users to view seldondeploys.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: seldondeploy-viewer-role
+rules:
+- apiGroups:
+  - machinelearning.seldon.io
+  resources:
+  - seldondeploys
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - machinelearning.seldon.io
+  resources:
+  - seldondeploys/status
+  verbs:
+  - get

@@ -1,0 +1,4 @@
+## Append samples you want in your CSV to this file as resources ##
+resources:
+- machinelearning.seldon_v1alpha1_seldondeploy.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

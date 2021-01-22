@@ -26,6 +26,9 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+{{- if .Values.requestLogger.trigger.broker }}
+  broker: {{ .Values.requestLogger.trigger.broker }}
+{{- end }}
   subscriber:
     ref:
       apiVersion: v1
@@ -44,7 +47,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.requestLogger.replicas }}
   selector:
     matchLabels:
       app: seldon-request-logger
@@ -64,6 +67,18 @@ spec:
               value: {{ .Values.requestLogger.elasticsearch.port | quote }}
             - name: ELASTICSEARCH_PROTOCOL
               value: {{ .Values.requestLogger.elasticsearch.protocol | quote }}
+{{- if .Values.elasticsearch.basicAuth }}
+            - name: "ELASTICSEARCH_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearch.secret.name }}
+                  key: {{ .Values.elasticsearch.secret.userKey }}
+            - name: "ELASTICSEARCH_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearch.secret.name }}
+                  key: {{ .Values.elasticsearch.secret.passwordKey }}
+{{- end }}
 {{- if .Values.requestLogger.elasticsearch.jwtSecretName }}
             - name: ELASTICSEARCH_TOKEN
               valueFrom:
@@ -71,6 +86,8 @@ spec:
                   name: {{ .Values.requestLogger.elasticsearch.jwtSecretName }}
                   key: {{ .Values.requestLogger.elasticsearch.jwtSecretKey }}
 {{- end }}
+          resources:
+{{ toYaml .Values.requestLogger.resources | indent 12 }}
 ---
 apiVersion: v1
 kind: Service

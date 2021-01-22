@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: seldon-deploy-catalog-certified
+  namespace: openshift-marketplace
+spec:
+  sourceType: grpc
+  image: quay.io/seldon/test-deploy-catalog-cert:latest
+  displayName: Seldon Deploy Certified Catalog
+  updateStrategy:
+    registryPoll: 
+      interval: 30m

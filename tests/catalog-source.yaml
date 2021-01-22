@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: seldon-deploy-catalog
+  namespace: marketplace
+spec:
+  sourceType: grpc
+  image: quay.io/seldon/test-deploy-catalog:latest
+  displayName: Seldon Deploy Catalog
+  updateStrategy:
+    registryPoll: 
+      interval: 30m

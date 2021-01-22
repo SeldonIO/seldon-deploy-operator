@@ -1,0 +1,60 @@
+apiVersion: machinelearning.seldon.io/v1alpha1
+kind: SeldonDeploy
+metadata:
+  name: seldondeploy-sample-kind-full
+spec:
+  replicaCount: 1
+  image:
+    image: seldonio/seldon-deploy-server-ubi:1.0.1-dev
+    pullPolicy: Always
+  ingress:
+    enabled: false
+  resources:
+    limits:
+      cpu: 500m
+      memory: 350Mi
+    requests:
+      cpu: 100m
+      memory: 200Mi
+  serviceAccount:
+    create: true
+  gitops:
+    argocd:
+      enabled: false
+  virtualService:
+    create: false
+  rbac:
+    create: true
+    clusterWide: true
+    readNamespaces: true
+  prometheus:
+    seldon:
+      jwtSecretName: ""
+      jwtSecretKey: ""
+  elasticsearch:
+    basicAuth: false
+    jwtSecretName: ""
+    jwtSecretKey: ""
+  requestLogger:
+    create: false
+    elasticsearch:
+      jwtSecretName: ""
+      jwtSecretKey: ""
+  openshiftMarketplace:
+    cleanupClusterServiceVersions: false
+    kubectlCleanupImage: seldonio/kubectl:1.14.3
+    seldonCore:
+      subscription:
+        create: false
+        apiVersion: "operators.coreos.com/v1alpha1"
+        channel: "stable"
+        metricsPath: "/metrics"
+        istioEnabled: true
+        requestLoggerEndpoint: "http://broker-ingress.knative-eventing.svc.cluster.local/seldon-logs/default"
+      istioGateway:
+        create: false
+        name: "seldon-gateway"
+        namespace: "istio-system"
+    prometheus:
+      monitorSpecs:
+        create: false

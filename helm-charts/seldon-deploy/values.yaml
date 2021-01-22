@@ -1,16 +1,16 @@
 
 replicaCount: 1
 
-#TODO: these should be RH UBI images
+#in RH marketplace images will come from RH hosting through an override in CSV - default to dockerhub ubi images
 image:
-  image: seldonio/seldon-deploy:0.0.0
+  image: seldonio/seldon-deploy-server-ubi:1.0.1-dev
   pullPolicy: Always
 
 loadtest:
-  image: seldonio/hey-loadtester:0.1
+  image: seldonio/hey-loadtester-ubi:0.1
 
 alibidetect:
-  image: seldonio/alibi-detect-server:0.0.1
+  image: seldonio/alibi-detect-server:1.5.1
 
 nameOverride: ""
 fullnameOverride: ""
@@ -19,6 +19,12 @@ service:
   type: ClusterIP
   port: 80
 
+# Default user id to add to all Pod Security Context as the default
+# Use this to ensure all container run as non-root by default
+# For openshift leave blank as usually this will be injected automatically on an openshift cluster
+# to all pods.
+defaultUserID: ""
+
 # boolean to enable app-level auth (defaults to "false")
 enableAppAuth: false
 
@@ -26,7 +32,6 @@ enableAppAuth: false
 enableAppAnalytics: false
 
 env:
-  GITOPS_FORMAT: "json"
   USERID_CLAIM_KEY: "name" # claim to be used as userid (defaults to "preferred_username")
   # if using app level auth then set below env vars
   # OIDC_PROVIDER oidc providerURL
@@ -34,11 +39,12 @@ env:
   # CLIENT_SECRET oidc client secret
   # REDIRECT_URL  `${oidc_redirect_url}/seldon-deploy/auth/callback`
   # OIDC_SCOPES oidc scopes (defaults to "profile email groups")
+  # RESOURCE_URI resourceURI
   # if enableAppAnalytics enabled use token
   # APP_ANALYTICS_TOKEN: ""
 
 docker:
-  user: "unkown"
+  user: "unknown"
 
 ingress:
   enabled: false
@@ -54,25 +60,42 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-# resources, such as Minikube. If you do want to specify resources, uncomment the following
-# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-# limits:
-#   cpu: 100m
-#   memory: 128Mi
-# requests:
-#   cpu: 100m
-#   memory: 128Mi
+resources:
+  limits:
+    cpu: 500m
+    memory: 350Mi
+  requests:
+    cpu: 100m
+    memory: 200Mi
 
 serviceAccount:
   create: true
 
-github:
-  user: ""
-  token: ""
-  email: ""
+gitops:
+  git:
+    secret: "git-creds"
+    #user, token and email can be blank if secret is provided
+    user: ""
+    email: ""
+    token: ""
+    skipVerifyGit: true
+    webhook:
+      service:
+        create: true
+        loadBalancerSourceRanges: {}
+  fileFormat: "json"
+  argocd:
+    enabled: true
+    namespace: argocd
+
+batchjobs:
+  serviceAccount: "workflow"
+  processor:
+    image: seldonio/seldon-core-s2i-python37:1.5.1
+  mc:
+    image: seldonio/mc-ubi:1.0
+  pvc:
+    defaultSize: 1Gi
 
 kfserving:
   protocol: "http"
@@ -113,18 +136,22 @@ serviceAccountName: seldon-deploy
 
 ingressGateway:
   seldonIngressService: "istio-ingressgateway"
-  kfServingIngressService: "kfserving-ingressgateway"
+  kfServingIngressService: "istio-ingressgateway"
   ingressNamespace: "istio-system"
 
 virtualService:
   create: true
   prefix: "/seldon-deploy/"
   gateways:
-    - seldon-gateway.istio-system.svc.cluster.local
+    - istio-system/seldon-gateway
 
 rbac:
   create: true
+  #clusterWide rbac is needed for deploy to see and create resources in different namespaces
   clusterWide: false
+  #reading namespaces is needed for single deploy to be used across namespaces, even if rbac gets added for each specific namespace
+  #for single namespace mode with just roles, turn off cluserWide and turn off readNamespaces
+  readNamespaces: true
 
 nodeSelector: {}
 
@@ -132,16 +159,13 @@ tolerations: []
 
 affinity: {}
 
-imagePullSecrets:
-  - name: regcred
-
-skipVerifyGit: true
 skipVerifyHttpCalls: true
 
 
 prometheus:
   seldon:
-    url: "http://prometheus-operated.seldon:9090/api/v1/"
+    url: "https://prometheus-user-workload.openshift-user-workload-monitoring:9091/api/v1/"
+    # if using community operator then above becomes "http://prometheus-operated.seldon:9090/api/v1/"
     # resource metrics may come from different prometheus than req metrics - set only if different
     resourceMetricsUrl: "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
     # see https://github.com/openshift/cluster-monitoring-operator/issues/768
@@ -149,51 +173,63 @@ prometheus:
     serviceMetricName: "exported_service"
     #leave below empty/commented for prom without token-based auth
     #basic auth can be handled by putting user:pass in url.
-    jwtSecretName: "jwt-elastic"
-    jwtSecretKey: "jwt-elastic.txt"
+    jwtSecretName: "jwt-seldon"
+    jwtSecretKey: "jwt-seldon.txt"
   knative:
     url: "http://prometheus-system-np.knative-monitoring.svc.cluster.local:8080/api/v1/"
 
 
 elasticsearch:
-  url: "https://elasticsearch.openshift-logging:9200"
-  #leave below empty/commented for elastic without token-based auth
-  #basic auth can be handled by putting user:pass in urls.elasticsearch
-  jwtSecretName: "jwt-elastic"
-  jwtSecretKey: "jwt-elastic.txt"
-
-argocd:
-  url: "https://argocd-server.argocd.svc.cluster.local"
+  url: "https://elasticsearch-seldon-es-http.seldon-logs:9200"
+  #enable below for elastic with user and password
+  basicAuth: true
+  secret:
+    name: "elastic-credentials"
+    userKey: "username"
+    passwordKey: "password"
+  #or instead below for token-based auth
+  #jwtSecretName: "jwt-seldon"
+  #jwtSecretKey: "jwt-seldon.txt"
 
 #only create request logger if you've not already installed it outside of helm (or first delete existing install)
 #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
 requestLogger:
   create: true
-  image: docker.io/seldonio/seldon-request-logger:0.3.1
+  image: seldonio/seldon-request-logger:1.5.1
+  #increase logger replicas if there are high traffic volumes
+  replicas: 1
   imagePullPolicy: IfNotPresent
   elasticsearch:
-    host: "elasticsearch.openshift-logging"
+    host: "elasticsearch-seldon-es-http.seldon-logs"
     port: "9200"
     protocol: "https"
-    jwtSecretName: "jwt-elastic"
-    jwtSecretKey: "jwt-elastic.txt"
+  #    jwtSecretName: "jwt-seldon"
+  #    jwtSecretKey: "jwt-seldon.txt"
   namespace:
     create: false
     name: seldon-logs
   trigger:
-    apiVersion: "eventing.knative.dev/v1alpha1"
+    apiVersion: "eventing.knative.dev/v1"
+    broker: "default"
+  resources:
+    limits:
+      cpu: 600m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 200Mi
 
 openshiftMarketplace:
-  cleanupClusterServiceVersions: true
-  kubectlCleanupImage: docker.io/seldonio/kubectl:1.14.3
+  cleanupClusterServiceVersions: false
+  kubectlCleanupImage: seldonio/kubectl:1.14.3
   seldonCore:
     subscription:
       create: true
       apiVersion: "operators.coreos.com/v1alpha1"
-      channel: "alpha"
+      channel: "stable"
       metricsPath: "/metrics"
       istioEnabled: true
-      requestLoggerEndpoint: "http://default-broker.seldon-logs"
+      requestLoggerEndpoint: "http://broker-ingress.knative-eventing.svc.cluster.local/seldon-logs/default"
     istioGateway:
       create: true
       name: "seldon-gateway"

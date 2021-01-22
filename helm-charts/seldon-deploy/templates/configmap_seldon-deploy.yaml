@@ -13,8 +13,8 @@ data:
   prometheusNamespaceMetricName: {{ .Values.prometheus.seldon.namespaceMetricName }}
   prometheusServiceMetricName: {{ .Values.prometheus.seldon.serviceMetricName }}
   elasticsearchUrl: {{ .Values.elasticsearch.url }}
-  argocdUrl: {{ .Values.argocd.url }}
-  skipVerifyGit: '{{ .Values.skipVerifyGit }}'
+  argocdEnabled: {{ .Values.gitops.argocd.enabled | quote}}
+  skipVerifyGit: '{{ .Values.gitops.git.skipVerifyGit }}'
   skipVerifyHttpCalls: '{{ .Values.skipVerifyHttpCalls }}'
   seldonIngressService: {{ .Values.ingressGateway.seldonIngressService }}
   ingressNamespace: {{ .Values.ingressGateway.ingressNamespace }}

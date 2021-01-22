@@ -1,4 +1,5 @@
 FROM registry.access.redhat.com/ubi8/ubi
+RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical
 LABEL name="Seldon Kubectl" \
       vendor="Seldon Technologies" \
       version="1.14.3" \
@@ -6,6 +7,6 @@ LABEL name="Seldon Kubectl" \
       summary="Seldon Kubectl" \
       description="Used within helm chart for delete hook."
 ADD https://storage.googleapis.com/kubernetes-release/release/v1.14.3/bin/linux/amd64/kubectl /bin/kubectl
-COPY apache2license.txt licenses/license.txt
+COPY apache2license.txt /licenses/license.txt
 RUN chmod +x /bin/kubectl
 CMD ["sh"]

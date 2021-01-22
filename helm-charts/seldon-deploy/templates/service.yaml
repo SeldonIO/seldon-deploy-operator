@@ -8,6 +8,10 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  {{- if .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{ toYaml .Values.service.loadBalancerSourceRanges | indent 4 }}
+  {{- end }}
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}

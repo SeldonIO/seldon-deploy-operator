@@ -1,0 +1,15 @@
+{{- if and .Values.gitops.argocd.enabled .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: seldon-deploy-rolebinding
+  namespace: '{{ .Values.gitops.argocd.namespace }}'
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: seldon-deploy-argocd
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "seldon-deploy.serviceAccountName" . }}
+    namespace: '{{ .Release.Namespace }}'
+{{- end }}

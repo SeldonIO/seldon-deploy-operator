@@ -1,0 +1,10 @@
+enableAppAuth: false # auth handled by kubeflow authservice
+
+env:
+  USERID_CLAIM_KEY: "name" # kubeflow dex uses name for unique id
+  OIDC_PROVIDER: "http://dex.auth.svc.cluster.local:5556/dex" # oidc issuerURL
+  CLIENT_ID: "kubeflow-oidc-authservice" # oidc client ID
+
+virtualService:
+  gateways:
+    - kubeflow/kubeflow-gateway
