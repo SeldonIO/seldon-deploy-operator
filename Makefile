@@ -196,6 +196,8 @@ redhat-minio-client-image-scan: build-minio-image push-minio-image
 	docker tag seldonio/mc-ubi:1.0 scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
 	docker push scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
 
+seldonio/seldon-core-s2i-python37-ubi8:1.6.0-dev
+
 build-batch-proc-image:
 	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=1.5.1 \
 			--tag=seldonio/seldon-core-s2i-python37-cert:1.5.1

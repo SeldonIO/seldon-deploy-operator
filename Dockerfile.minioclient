@@ -1,4 +1,5 @@
 FROM registry.access.redhat.com/ubi8/ubi
+RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical
 LABEL name="Seldon Minio Client" \
       vendor="Seldon Technologies" \
       version="mc pr 2734" \
