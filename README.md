@@ -165,7 +165,10 @@ Each new release needs to be based on the latest seldon deploy helm chart. The m
 
 Note that the makefile refers to a particular version in version.txt.
 
+Otherewise the operator is itself an image. It's just a special type of project in the RH UI with its own special checks.
+
 ### Publishing Docs
 
 TODO: see previous version but makefile has all changed
-point to the correct link
+point to the correct RH/IBM system
+Note it needs markdown https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing
