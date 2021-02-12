@@ -51,14 +51,11 @@ The table below has the make targets for the images. Each should have two, one b
 | alibi      | In core, under components/alibi-detect-server        | [pushed 1.5.1](https://connect.redhat.com/project/3993461/images)   |
 
 
-
-TODO: NEED A GOOD TAG FOR DEPLOY IMAGE AND TO POINT PROJECTS AT IT. THEN CAN PUSH FINAL BUNDLE
-
 BUNDLE PROJECT IS https://connect.redhat.com/project/5892521/images/upload-image
-DEPLOY OPERATOR PASSES - https://connect.redhat.com/project/4805411/images
-DEPLOY IMAGE PASSES - https://connect.redhat.com/project/4805801/images
-MINIO IMAGE PASSES - https://connect.redhat.com/project/5937511/images
-BATCH PROC PASSES - https://connect.redhat.com/project/5937521/images
+DEPLOY OPERATOR IS - https://connect.redhat.com/project/4805411/images
+DEPLOY IMAGE IS - https://connect.redhat.com/project/4805801/images
+MINIO IMAGE IS - https://connect.redhat.com/project/5937511/images
+BATCH PROC IS - https://connect.redhat.com/project/5937521/images
 
 CERT IMAGE NAMES IN packagemanifests-certified.sh
 

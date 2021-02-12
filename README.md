@@ -111,28 +111,10 @@ Adjust namespace if not clusterwide.
 
 Use [installation google doc](https://docs.google.com/document/d/1Z1mYh0ZlNWHypgqVD64y6rAq0Bz6WW_LFXc0D0Big74/edit?usp=sharing) for setting up dependencies or running minimal version.
 
+Test as applicable e.g. using Deploy demos.
 
-TEST END TO END
+Note you can only test a demo if you've got the necessary dependencies. So not batch as there are [limitations for argo and minio](https://github.com/SeldonIO/seldon-deploy-operator/issues/13)
 
-CORE 1.5.0 LINKUP, SERVERLESS AND ECK ELASTIC WORKING NOW
-ARGO AND MINIO NOT CERTIFIED BUT DO WORK. SEE https://github.com/SeldonIO/seldon-deploy-operator/issues/13
-
-NEED TO TRY PLUGGING IN RH CONTAINER REGISTRY VERSIONS. SEE CSV IN MASTER BRANCH FOR HOW TO REPLACE THEM. 
-
-UBI VERSIONS OF NEW IMAGES
-SCRIPTS LIKE OLD openshift-full-setup ? IS IT WORTH IT AS THEY CHANGE ANYWAY? NO
-
-HAVE SCRIPTS FOR CERTIFIED PACKAGEMANIFESTS
-BUT CERT BUNDLE FAILING VALIDATION
-NEED TO PUSH THE IMAGES, INCL CERT BUNDLE
-SEE IMAGES.md
-RH CONNECT PROJECTS
-THEN GET SCANS WORKING
-
-CAN USE https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project
-
-TESTED THE MINIO IMAGE FROM THE PR BUT SHOULD PROBABLY DOUBLE-CHECK THE UBI ONE TOO
-COULD PUBLISH IT FIRST THOUGH
 
 ### Scorecard
 
@@ -142,6 +124,45 @@ TODO: this fails. Do I have to use quay as seems it can't pull from dockerhub?
 
 ## Maintaining This Project
 
-Each new release needs to be based on the latest seldon deploy helm chart. 
 
-TODO: see previous version but makefile has all changed
+### Testing on OpenShift
+
+There are multiple ways to setup OpenShift clusters but we have a [preferred method for seldon test clusters](https://seldonio.atlassian.net/wiki/spaces/COMPANY/pages/159318256/Creating+an+Openshift+cluster).
+
+### Pushing Images
+
+To push images you need `~/.config/seldon/seldon-core/redhat-image-passwords.sh` configured. Get from [1password](https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=f4hgces2dvxqirpcsir2uiqbe4&v=65l42gglwnfjheao6fu4pmxeti)
+
+### Publishing Images of Dependencies
+
+Images are published with Makefiles but some in core, some deploy and some here. See IMAGES.md for details.
+
+Note that the Makefile commands are only part of it. You also have to press 'publish' in the Red Hat UI.
+
+If you need a new image for a new component then that's a new project and requires filling out a form for Red Hat.
+
+### Publishing Operator
+
+Each new release needs to be based on the latest seldon deploy helm chart. The makefile references a get-helm-chart script for this.
+
+Note that the makefile refers to a particular version in version.txt.
+
+There are separate folders for certified vs not certified versions. This is because certified has to be hosted in redhat container registry and approved so can't iterate so fast on that.
+
+Otherewise the operator is itself an image. It's just a special type of project in the RH UI with its own special checks.
+
+A good walkthrough is https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project
+
+### Publishing Docs
+
+The listing is maintained in https://www.ibm.com/marketplace/workbench/provider/dashboard
+
+There is meant to be equivalent to https://marketplace.redhat.com/partner/products/9697de171a307b0dce64e423c2d7946a
+
+But for me only IBM system works.
+
+I think you have to create an account with IBM.
+
+I've been chatting with Kamaldeep Singh Sehmbey via cognitive-app.slack.com
+
+Note it needs markdown https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing
