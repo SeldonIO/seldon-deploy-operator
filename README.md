@@ -142,6 +142,30 @@ TODO: this fails. Do I have to use quay as seems it can't pull from dockerhub?
 
 ## Maintaining This Project
 
-Each new release needs to be based on the latest seldon deploy helm chart. 
+
+### Testing on OpenShift
+
+There are multiple ways to setup OpenShift clusters but we have a [preferred method for seldon test clusters](https://seldonio.atlassian.net/wiki/spaces/COMPANY/pages/159318256/Creating+an+Openshift+cluster).
+
+### Pushing Images
+
+To push images you need `~/.config/seldon/seldon-core/redhat-image-passwords.sh` configured. Get from [1password](https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=f4hgces2dvxqirpcsir2uiqbe4&v=65l42gglwnfjheao6fu4pmxeti)
+
+### Publishing Images of Dependencies
+
+Images are published with Makefiles but some in core, some deploy and some here. See IMAGES.md for details.
+
+Note that the Makefile commands are only part of it. You also have to press 'publish' in the Red Hat UI.
+
+If you need a new image for a new component then that's a new project and requires filling out a form for Red Hat.
+
+### Publishing Operator
+
+Each new release needs to be based on the latest seldon deploy helm chart. The makefile references a get-helm-chart script for this.
+
+Note that the makefile refers to a particular version in version.txt.
+
+### Publishing Docs
 
 TODO: see previous version but makefile has all changed
+point to the correct link
