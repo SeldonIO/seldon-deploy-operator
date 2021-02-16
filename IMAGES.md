@@ -16,6 +16,8 @@ The script that was used to push it was https://github.com/SeldonIO/seldon-deplo
 
 A checklist is run on the redhat side. That is shown under 'Checklist' in the UI. licenses are required in Docker images.
 
+Approval is also needed for new projects. There's a 'Obtain distribution approval from Red Hat' step under checklist.
+
 # List of Images
 
 Bundle (packages the catalog listing)
@@ -38,20 +40,23 @@ So should have two make targets for each of the above (either here or in Deploy 
 
 The table below has the make targets for the images. Each should have two, one being certified.
 
+Note the bundle image needs all other images to be published (not approved) in order to pass.
+
 | Image      |  Make Targets                                        |  Status |
 | ---------- |  --------------------------------------------------- | ----------- |
-| Bundle     | update_openshift_cert, build_push_cert               | needs all other images in order to pass  |
-| Operator   | docker-build, redhat-image-scan                      | pushed |
-| Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | 1.0.1-dev published but need a fixed version |
-| Batch Proc | build-batch-proc-image,redhat-batch-proc-image-scan  | pending approval |
-| Batch mc   | build-minio-image, redhat-minio-client-image-scan    | pending approval |
+| Bundle     | update_openshift_cert, build_push_cert               | Failed on alm-examples section - raised case 02870927  |
+| Operator   | docker-build, redhat-image-scan                      | 1.0.0 published |
+| Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | 1.0.0 published |
+| Batch Proc | build-batch-proc-image,redhat-batch-proc-image-scan  | 1.5.1 published |
+| Batch mc   | build-minio-image, redhat-minio-client-image-scan    | 1.0 published |
 | Req log    | In core, under components/seldon-request-logger      | [pushed 1.5.1](https://connect.redhat.com/project/3993051/images) |
 | kubectl    | build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed not used, no need to repub |
 | loadtest   | deploy repo, tools/images/loadtest-image             | hasn't changed, 0.1 still latest |
 | alibi      | In core, under components/alibi-detect-server        | [pushed 1.5.1](https://connect.redhat.com/project/3993461/images)   |
 
+There are additional make targets for pushing to RCR.
 
-BUNDLE PROJECT IS https://connect.redhat.com/project/5892521/images/upload-image
+BUNDLE PROJECT IS https://connect.redhat.com/project/5892521/images
 DEPLOY OPERATOR IS - https://connect.redhat.com/project/4805411/images
 DEPLOY IMAGE IS - https://connect.redhat.com/project/4805801/images
 MINIO IMAGE IS - https://connect.redhat.com/project/5937511/images

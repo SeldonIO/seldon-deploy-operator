@@ -130,6 +130,37 @@ TODO: this fails. Do I have to use quay as seems it can't pull from dockerhub?
 
 ## Maintaining This Project
 
+### Steps for Publishing a New Deploy Version
+
+* First change the version in version.txt.
+* Run `make get-helm-chart` to pull in latest helm chart.
+* If there have been changes in the values file then you'll have to update examples in examples-testing and config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml
+* Look at the history of the values file in deploy to determine this.
+* Run through all the tests above - kind and in openshift and with marketplace and all the dependencies.
+* If anything has changed in an openshift version, update the docs (see 'publishing docs' below).
+* Note that if tags of depedency images change then these references have to change. Best to search workspace and especially check packagemanifests-certified.sh
+* Publish images - see IMAGES.md
+
+### Contacts
+
+See https://seldonio.atlassian.net/wiki/spaces/COMPANY/pages/1201078285/Tech+Contacts
+
+### Systems Involved
+
+RCR - redhat container registry - integrated with connect.redhat.com for publishing official images.
+https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=f4hgces2dvxqirpcsir2uiqbe4&v=65l42gglwnfjheao6fu4pmxeti
+
+connect.redhat.com - system for publishing images and bundles and other RH stuff (including raising issues with the system via https://connect.redhat.com/support/technology-partner/).
+https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=pbdteciyqnp3rsxpcrkaxevftm&v=po7kyvksukhlrsurwmygolab3a
+
+Quay.io - for test images before switching to RCR for publication (as that has manual steps).
+https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=taumgl2tiapt2dnphzbugepjxy&v=65l42gglwnfjheao6fu4pmxeti
+
+IBM provider workbench for listing documentation.
+https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=vdgkpe3ii5bm6vkzycvw4tepni&v=po7kyvksukhlrsurwmygolab3a
+
+cloud.redhat.com for creating clusters
+https://seldonio.atlassian.net/wiki/spaces/COMPANY/pages/159318256/Creating+an+Openshift+cluster
 
 ### Testing on OpenShift
 
@@ -163,9 +194,13 @@ A good walkthrough is https://redhat-connect.gitbook.io/partner-guide-for-red-ha
 
 The listing is maintained in https://www.ibm.com/marketplace/workbench/provider/dashboard
 
+The account for this is in (1password)[https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=vdgkpe3ii5bm6vkzycvw4tepni&v=po7kyvksukhlrsurwmygolab3a]
+
 There is meant to be equivalent to https://marketplace.redhat.com/partner/products/9697de171a307b0dce64e423c2d7946a
 
-But for me only IBM system works.
+Or possibly http://marketplace.redhat.com/en-us/account/partner-management
+
+But for me only IBM system fully works.
 
 I think you have to create an account with IBM.
 

@@ -21,7 +21,6 @@ function update_images {
   # some versions hardcoded because can be different!
   # can't just align them as seldon core versions could clash (e.g. 1.0.0)
 
-  # TODO: need to be consistent on using or not using docker.io prefix
   # there are two seds for each, first is for references in alm_examples (matched by including quotes)
 
     #this one is actually special as it appears in containerImage and image but not in alm_examples
