@@ -2,6 +2,12 @@
 
 This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk.
 
+Intended as a [Red Hat Marketplace operator](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project) but can be run outside openshfit.
+
+It is a helm-based operator. So basically an image that runs helm and can install a helm chart in response to a CRD being posted. The CRD maps directly to a values file.
+
+There are dependencies needed for running Deploy and marketplace imposes restrictions on these. See [installation google doc](https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing)
+
 ## Building
 
 To build and push just the operator:
@@ -109,7 +115,7 @@ kubectl get subscriptions.operators.coreos.com -n openshift-operators seldon-dep
 ```
 Adjust namespace if not clusterwide.
 
-Use [installation google doc](https://docs.google.com/document/d/1Z1mYh0ZlNWHypgqVD64y6rAq0Bz6WW_LFXc0D0Big74/edit?usp=sharing) for setting up dependencies or running minimal version.
+Use [installation google doc](https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing) for setting up dependencies or running minimal version.
 
 Test as applicable e.g. using Deploy demos.
 
