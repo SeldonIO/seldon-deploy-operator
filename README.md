@@ -166,3 +166,9 @@ I think you have to create an account with IBM.
 I've been chatting with Kamaldeep Singh Sehmbey via cognitive-app.slack.com
 
 Note it needs markdown https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing
+
+### Troubleshooting Publication Issues
+
+If you hit a bug in the Red Hat systems then raise an issue via https://connect.redhat.com/support/technology-partner/
+
+We also have a slack channel and some direct contacts.
