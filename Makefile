@@ -245,7 +245,7 @@ create_bundle_image_cert_%:
 push_bundle_image_cert_%:
 	docker push quay.io/seldon/seldon-deploy-operator-bundle-cert:v$*
 
-create_bundles_cert: create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
+create_bundles_cert: packagemanifests-certified create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
 
 push_bundles_cert: push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
 

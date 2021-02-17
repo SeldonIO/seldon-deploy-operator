@@ -219,6 +219,7 @@ metadata:
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/SeldonIO/seldon-deploy-operator
     support: Seldon Dev
+    description: The Seldon deploy operator allows the creation of Seldon Deploy applications to provide management, monitoring and updating of machine learning models from a range of technologies. It includes the ability to run explanations as well as outlier, drift and adversarial detection against running models. There is a full metrics and logging integration via Prometheus and ELK stacks as well as full GitOps operations to allow full auditing and recovery of updated models.
   name: seldon-deploy-operator.v1.0.0
   namespace: placeholder
 spec:
