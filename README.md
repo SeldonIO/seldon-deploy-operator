@@ -1,6 +1,6 @@
 # Seldon Deploy Operator
 
-This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk.
+This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk (v1.2.0).
 
 Intended as a [Red Hat Marketplace operator](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project) but can be run outside openshfit.
 
@@ -200,7 +200,7 @@ There is meant to be equivalent to https://marketplace.redhat.com/partner/produc
 
 Or possibly http://marketplace.redhat.com/en-us/account/partner-management
 
-But for me only IBM system fully works.
+They're in transition. For me only IBM system fully works for editing but only RH system works for adding new editors.
 
 I think you have to create an account with IBM.
 

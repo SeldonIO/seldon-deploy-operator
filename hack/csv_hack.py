@@ -30,6 +30,12 @@ def update_replaces(csv, replaces):
     csv["spec"]["replaces"] = "seldon-deploy-operator.v"+replaces
     return csv
 
+#need this or get warning: metadata.annotations.description is not defined
+#told by RH support in case 02870927 that it needs to be in both places
+def description_workaround(csv):
+    csv["metadata"]["annotations"]["description"] = csv["spec"]["description"]
+    return csv
+
 def str_presenter(dumper, data):
     if len(data.splitlines()) > 1:  # check for multiline string
         return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
@@ -43,6 +49,7 @@ def main(argv):
         csv = yaml.safe_load(stream)
         csv = update_container_image(csv, opts.version)
         csv = update_replaces(csv, opts.replaces)
+        csv = description_workaround(csv)
         fdata = yaml.dump(csv, width=1000, default_flow_style=False, sort_keys=False)
         with open(opts.path, "w") as outfile:
             outfile.write(fdata)
