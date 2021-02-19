@@ -44,7 +44,7 @@ Note the bundle image needs all other images to be published (not approved) in o
 
 | Image      |  Make Targets                                        |  Status |
 | ---------- |  --------------------------------------------------- | ----------- |
-| Bundle     | update_openshift_cert, build_push_cert               | Failed on alm-examples section - raised case 02870927  |
+| Bundle     | update_openshift_cert, build_push_cert               | 1.0.0 published under tag 1.0.6  |
 | Operator   | docker-build, redhat-image-scan                      | 1.0.0 published |
 | Deploy     | deploy repo, build_image_redhat & redhat-image-scan  | 1.0.0 published |
 | Batch Proc | build-batch-proc-image,redhat-batch-proc-image-scan  | 1.5.1 published |
