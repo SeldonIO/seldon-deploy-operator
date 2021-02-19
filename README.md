@@ -124,9 +124,11 @@ Note you can only test a demo if you've got the necessary dependencies. So not b
 
 ### Scorecard
 
-First have a bundle built. Then `make scorecard`
+First have a bundle built. Then `make scorecard`. But no point running this.
 
-TODO: this fails. Do I have to use quay as seems it can't pull from dockerhub?
+Problem is that it deploys the manifest from config/samples, which is the alm-examples one. That needs the dependencies.
+
+That example is the one that shows up in marketplace. Would need RH to decouple scorecard from alm-examples to use this.
 
 ## Maintaining This Project
 
