@@ -84,7 +84,7 @@ Check the Subscription and CSV:
 kubectl get subscriptions.operators.coreos.com -n marketplace seldon-deploy-operator-subsription -o yaml
 kubectl get ClusterServiceVersion -n marketplace
 ```
-Note here the operator will be namespace only ((OwnNamespace mode)[https://catalog.redhat.com/software/operators/detail/5f0f35842991b4207fcdb202/deploy]) so will only manage SeldonDeploy instances in marketplace namespace.
+Note here the operator will be namespace only ([OwnNamespace mode](https://catalog.redhat.com/software/operators/detail/5f0f35842991b4207fcdb202/deploy)) so will only manage SeldonDeploy instances in marketplace namespace.
 
 Now we create a deploy instance.
 
@@ -142,7 +142,8 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 * If anything has changed in an openshift version, update the docs (see 'publishing docs' below).
 * Note that if tags of depedency images change then these references have to change. Best to search workspace and especially check packagemanifests-certified.sh
 * Publish images - see IMAGES.md
-
+* After publication contact IBM (see contacts below) to confirm new version of [bundle](https://catalog.redhat.com/software/containers/seldonio/seldon-deploy-operator-bundle/5f77569a29373868204224e3) has gone to their queue 
+ 
 ### Contacts
 
 See https://seldonio.atlassian.net/wiki/spaces/COMPANY/pages/1201078285/Tech+Contacts
@@ -196,7 +197,7 @@ A good walkthrough is https://redhat-connect.gitbook.io/partner-guide-for-red-ha
 
 The listing is maintained in https://www.ibm.com/marketplace/workbench/provider/dashboard
 
-The account for this is in (1password)[https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=vdgkpe3ii5bm6vkzycvw4tepni&v=po7kyvksukhlrsurwmygolab3a]
+The account for this is in [1password](https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=vdgkpe3ii5bm6vkzycvw4tepni&v=po7kyvksukhlrsurwmygolab3a)
 
 There is meant to be equivalent to https://marketplace.redhat.com/partner/products/9697de171a307b0dce64e423c2d7946a
 
