@@ -44,7 +44,7 @@ Note the bundle image needs all other images to be published (not approved) in o
 
 There is a make target for pushing each image. They don't all follow the same versioning and are in different git repos.
 
-Go through each of the below and check whether the version deploy references is published in Red Hat Container Registry.
+Go through each of the below and check whether the version deploy references is published in Red Hat Container Registry if changed (links further down).
 
 | Image      | Git Repo   | Make Targets                                        |  Status |
 | ---------- | ---------- | --------------------------------------------------- | ----------- |
