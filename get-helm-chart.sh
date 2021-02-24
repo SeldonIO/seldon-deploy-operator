@@ -7,7 +7,8 @@ set -o xtrace
 
 STARTUP_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-SELDON_DEPLOY_VERSION=v0.7.0
+VERSION=$(cat version.txt)
+SELDON_DEPLOY_VERSION="v"$VERSION
 
 TEMPRESOURCES=${STARTUP_DIR}/tempresources
 

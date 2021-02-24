@@ -134,14 +134,16 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 
 ### Steps for Publishing a New Deploy Version
 
-* First change the version in version.txt.
+* First change the version in version.txt and also replaces.txt (which is the version before this).
 * Run `make get-helm-chart` to pull in latest helm chart.
 * If there have been changes in the values file then you'll have to update examples in examples-testing and config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml
 * Look at the history of the values file in deploy to determine this.
+* To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
 * Run through all the tests above - kind and in openshift and with marketplace and all the dependencies.
 * If anything has changed in an openshift version, update the docs (see 'publishing docs' below).
 * Note that if tags of depedency images change then these references have to change. Best to search workspace and especially check packagemanifests-certified.sh
-* Publish images - see IMAGES.md
+* Publish images - see [IMAGES.md](IMAGES.md)
+* Publish docs - see docs section below
 * After publication contact IBM (see contacts below) to confirm new version of [bundle](https://catalog.redhat.com/software/containers/seldonio/seldon-deploy-operator-bundle/5f77569a29373868204224e3) has gone to their queue 
  
 ### Contacts
@@ -175,7 +177,7 @@ To push images you need `~/.config/seldon/seldon-core/redhat-image-passwords.sh`
 
 ### Publishing Images of Dependencies
 
-Images are published with Makefiles but some in core, some deploy and some here. See IMAGES.md for details.
+Images are published with Makefiles but some in core, some deploy and some here. See [IMAGES.md](IMAGES.md) for details.
 
 Note that the Makefile commands are only part of it. You also have to press 'publish' in the Red Hat UI.
 
