@@ -142,7 +142,7 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 * Before updating/publishing check the opm_index command in the Makefile. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
 * To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
 * Run through all the tests above - kind and in openshift and with marketplace and all the dependencies.
-* If anything has changed in an openshift version, update the docs (see 'publishing docs' below).
+* If anything has changed in an openshift version (e.g. a change to user-workload-monitoring), update the docs (see 'publishing docs' below).
 * Note that if tags of depedency images change then these references have to change. Best to search workspace and especially check packagemanifests-certified.sh
 * Publish images - see [IMAGES.md](IMAGES.md)
 * Publish docs - see docs section below
