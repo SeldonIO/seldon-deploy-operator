@@ -37,10 +37,12 @@ To test in KIND with entire stack:
 This is a minimal setup just for checking installation. No Deploy features work.
 
 * `kind create cluster`
+* `kubectl create ns seldon-logs`
 * `make install`
 * `make deploy`
 * `kubectl apply -n seldon-system -f ./examples-testing/kind-minimal-setup.yaml`
-*  Port-forward to deploy to see UI, though you can't deploy anything in this setup.
+*  Port-forward to deploy (`kubectl port-forward -n seldon-system svc/seldondeploy-sample-kind-full-seldon-deploy 8080:80`) 
+to see UI, though you can't deploy anything in this setup.
 
 ### OLM Deployment
 
@@ -109,7 +111,7 @@ kubectl get catalogsource seldon-deploy-catalog -n openshift-marketplace -o yaml
 ```
 Choose the operator in the UI. Be sure to get the right version.
 
-If clusterwide then check with:
+If clusterwide (initially only option) then check with:
 ```bash
 kubectl get subscriptions.operators.coreos.com -n openshift-operators seldon-deploy-operator -o yaml
 ```
@@ -117,7 +119,7 @@ Adjust namespace if not clusterwide.
 
 Use [installation google doc](https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing) for setting up dependencies or running minimal version.
 
-Test as applicable e.g. using Deploy demos.
+Test as applicable e.g. using Deploy demos. The google doc points at how to open or you can use `make open_cluster_with_istio`.
 
 Note you can only test a demo if you've got the necessary dependencies. So not batch as there are [limitations for argo and minio](https://github.com/SeldonIO/seldon-deploy-operator/issues/13)
 
@@ -134,7 +136,10 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 
 ### Steps for Publishing a New Deploy Version
 
-* First change the version in version.txt and also replaces.txt (which is the version before this).
+* First check the deploy image is published from deploy repo with `make build_image_redhat` and `make push_to_dockerhub_ubi`.
+* That image should be plugged into the values file, either in deploy or when copied over (later step). 
+* Referenced images in values file will come across with values file but examples and manager.yaml need manual update (see [IMAGES.md](IMAGES.md))
+* Then in seldon-deploy-operator change the version in version.txt and also replaces.txt (which is the version before this).
 * If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files)
 * Run `make get-helm-chart` to pull in latest helm chart.
 * If there have been changes in the values file then you'll have to update examples in examples-testing and config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml
