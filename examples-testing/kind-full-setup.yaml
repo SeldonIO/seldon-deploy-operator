@@ -7,6 +7,9 @@ spec:
   image:
     image: seldonio/seldon-deploy-server-ubi:1.0.1-dev
     pullPolicy: Always
+  #uncomment below to use imagePullSecrets e.g. to avoid docker rate-limiting
+  imagePullSecrets:
+  #  - name: regcred
   resources:
     limits:
       cpu: 500m
@@ -49,27 +52,31 @@ spec:
 
 
   elasticsearch:
-    url: "http://elasticsearch-master.seldon-logs.svc.cluster.local:9200"
-    #leave below empty/commented for elastic without token-based auth
-    #basic auth can be handled by putting user:pass in urls.elasticsearch
-    jwtSecretName: ""
-    jwtSecretKey: ""
-
+    url: "https://elasticsearch-seldon-es-http.seldon-logs:9200"
+    #enable below for elastic with user and password
+    basicAuth: true
+    secret:
+      name: "elastic-credentials"
+      userKey: "username"
+      passwordKey: "password"
+    #or instead below for token-based auth
+    #jwtSecretName: "jwt-seldon"
+    #jwtSecretKey: "jwt-seldon.txt"
 
   #only create request logger if you've not already installed it outside of helm (or first delete existing install)
   #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
   requestLogger:
     create: true
-    image: seldonio/seldon-request-logger:1.5.1
+    image: seldonio/seldon-request-logger:1.7.0
     #increase logger replicas if there are high traffic volumes
     replicas: 1
     imagePullPolicy: IfNotPresent
     elasticsearch:
-      host: "elasticsearch-master.seldon-logs.svc.cluster.local"
+      host: "elasticsearch-seldon-es-http.seldon-logs"
       port: "9200"
-      protocol: "http"
-      jwtSecretName: ""
-      jwtSecretKey: ""
+      protocol: "https"
+      #    jwtSecretName: "jwt-seldon"
+      #    jwtSecretKey: "jwt-seldon.txt"
     namespace:
       create: false
       name: seldon-logs
@@ -102,3 +109,8 @@ spec:
     prometheus:
       monitorSpecs:
         create: false
+
+  metadata:
+    pg:
+      enabled: false
+      secret: "metadata-postgres"

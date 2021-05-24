@@ -7,6 +7,9 @@ spec:
   image:
     image: seldonio/seldon-deploy-server-ubi:1.0.1-dev
     pullPolicy: Always
+  #uncomment below to use imagePullSecrets e.g. to avoid docker rate-limiting
+  imagePullSecrets:
+  #  - name: regcred
   ingress:
     enabled: false
   resources:

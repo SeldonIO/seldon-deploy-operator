@@ -135,9 +135,11 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 ### Steps for Publishing a New Deploy Version
 
 * First change the version in version.txt and also replaces.txt (which is the version before this).
+* If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files)
 * Run `make get-helm-chart` to pull in latest helm chart.
 * If there have been changes in the values file then you'll have to update examples in examples-testing and config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml
 * Look at the history of the values file in deploy to determine this.
+* Before updating/publishing check the opm_index command in the Makefile. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
 * To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
 * Run through all the tests above - kind and in openshift and with marketplace and all the dependencies.
 * If anything has changed in an openshift version, update the docs (see 'publishing docs' below).
