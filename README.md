@@ -138,7 +138,7 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 
 * First check the deploy image is published from deploy repo with `make build_image_redhat` and `make push_to_dockerhub_ubi`.
 * That image should be plugged into the values file, either in deploy or when copied over (later step). 
-* Referenced images in values file will come across with values file but examples and manager.yaml need manual update (see [IMAGES.md](IMAGES.md))
+* Referenced images in values file will come across with values file but examples, manager.yaml and packagemanifests-certified.sh need manual update (see [IMAGES.md](IMAGES.md))
 * Then in seldon-deploy-operator change the version in version.txt and also replaces.txt (which is the version before this).
 * If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files)
 * Run `make get-helm-chart` to pull in latest helm chart.
@@ -149,7 +149,8 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 * Run through all the tests above - kind and in openshift and with marketplace and all the dependencies.
 * If anything has changed in an openshift version (e.g. a change to user-workload-monitoring), update the docs (see 'publishing docs' below).
 * Note that if tags of depedency images change then these references have to change. Best to search workspace and especially check packagemanifests-certified.sh
-* Publish images - see [IMAGES.md](IMAGES.md)
+* Before publishing update the `create_bundles_cert` and `push_bundles_cert` make targets to include the new version.
+* Publish images - see [IMAGES.md](IMAGES.md) for how to publish (all make targets listed there).
 * Publish docs - see docs section below
 * After publication contact IBM (see contacts below) to confirm new version of [bundle](https://catalog.redhat.com/software/containers/seldonio/seldon-deploy-operator-bundle/5f77569a29373868204224e3) has gone to their queue 
  

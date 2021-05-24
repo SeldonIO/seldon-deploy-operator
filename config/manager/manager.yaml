@@ -56,9 +56,9 @@ spec:
           #registry.connect.redhat.com/seldonio/kubectl:1.14.3
           - name: RELATED_IMAGE_KUBECTL
             value: seldonio/kubectl:1.14.3
-          #registry.connect.redhat.com/seldonio/seldon-core-s2i-python37:1.5.0 - doesn't exist yet
+          #registry.connect.redhat.com/seldonio/seldon-core-s2i-python37:1.6.0
           - name: RELATED_IMAGE_BATCH_PROCESSOR
-            value: seldonio/seldon-core-s2i-python37:1.5.1
+            value: seldonio/seldon-core-s2i-python37:1.6.0
           #not a seldon image - would need to create ubi version (but is argo or minio available certified?)
           - name: RELATED_IMAGE_MINIO_CLIENT
             value: seldonio/mc-ubi:1.0

@@ -34,17 +34,17 @@ function update_images {
     sed -i 's#"seldonio/hey-loadtester-ubi:.*$#'\"${LOADTEST_IMAGE}:0.1\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
     sed -i 's#value: seldonio/hey-loadtester-ubi:.*$#value: '${LOADTEST_IMAGE}:0.1'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
-    sed -i 's#"seldonio/alibi-detect-server:.*$#'\"${ALIBIDETECT_IMAGE}:1.5.1\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
-    sed -i 's#value: seldonio/alibi-detect-server:.*$#value: '${ALIBIDETECT_IMAGE}:1.5.1'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#"seldonio/alibi-detect-server:.*$#'\"${ALIBIDETECT_IMAGE}:1.6.0-PR2923\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#value: seldonio/alibi-detect-server:.*$#value: '${ALIBIDETECT_IMAGE}:1.6.0-PR2923'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
-    sed -i 's#"seldonio/seldon-request-logger:.*$#'\"${REQUESTLOGGER_IMAGE}:1.5.1\"',''#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
-    sed -i 's#value: seldonio/seldon-request-logger:.*$#value: '${REQUESTLOGGER_IMAGE}:1.5.1'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#"seldonio/seldon-request-logger:.*$#'\"${REQUESTLOGGER_IMAGE}:1.7.0\"',''#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#value: seldonio/seldon-request-logger:.*$#value: '${REQUESTLOGGER_IMAGE}:1.7.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
     sed -i 's#"seldonio/kubectl:.*$#'\"${KUBECTL_IMAGE}:1.14.3''\"',''#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
     sed -i 's#value: seldonio/kubectl:.*$#value: '${KUBECTL_IMAGE}:1.14.3'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
-    sed -i 's#"seldonio/seldon-core-s2i-python37:.*$#'\"${BATCH_PROC_IMAGE}:1.5.1\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
-    sed -i 's#value: seldonio/seldon-core-s2i-python37:.*$#value: '${BATCH_PROC_IMAGE}:1.5.1'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#"seldonio/seldon-core-s2i-python37:.*$#'\"${BATCH_PROC_IMAGE}:1.6.0\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#value: seldonio/seldon-core-s2i-python37:.*$#value: '${BATCH_PROC_IMAGE}:1.6.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
     sed -i 's#"seldonio/mc-ubi:.*$#'\"${MINIO_CLIENT_IMAGE}:1.0\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
     sed -i 's#value: seldonio/mc-ubi:.*$#value: '${MINIO_CLIENT_IMAGE}:1.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
