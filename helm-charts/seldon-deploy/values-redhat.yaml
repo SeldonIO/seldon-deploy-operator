@@ -14,7 +14,7 @@ loadtest:
   image: seldonio/hey-loadtester-ubi:0.1
 
 alibidetect:
-  image: seldonio/alibi-detect-server:1.6.0-PR2923
+  image: seldonio/alibi-detect-server:1.7.0
 
 nameOverride: ""
 fullnameOverride: ""

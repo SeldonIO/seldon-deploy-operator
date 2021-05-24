@@ -199,16 +199,16 @@ redhat-minio-client-image-scan: build-minio-image push-minio-image
 seldonio/seldon-core-s2i-python37-ubi8:1.6.0-dev
 
 build-batch-proc-image:
-	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=1.5.1 \
-			--tag=seldonio/seldon-core-s2i-python37-cert:1.5.1
+	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=1.6.0 \
+			--tag=seldonio/seldon-core-s2i-python37-cert:1.6.0
 push-batch-proc-image:
-	docker push seldonio/seldon-core-s2i-python37-cert:1.5.1
+	docker push seldonio/seldon-core-s2i-python37-cert:1.6.0
 
 redhat-batch-proc-image-scan: build-batch-proc-image push-batch-proc-image
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_batch_proc} | docker login -u unused scan.connect.redhat.com --password-stdin
-	docker tag seldonio/seldon-core-s2i-python37-cert:1.5.1 scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.5.1
-	docker push scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.5.1
+	docker tag seldonio/seldon-core-s2i-python37-cert:1.6.0 scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.6.0
+	docker push scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.6.0
 
 # bundle certifified images
 # most of this for testing as images in RHCR can't be overwritten, have to delete them from UI, which is a pain
@@ -245,9 +245,9 @@ create_bundle_image_cert_%:
 push_bundle_image_cert_%:
 	docker push quay.io/seldon/seldon-deploy-operator-bundle-cert:v$*
 
-create_bundles_cert: packagemanifests-certified create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
+create_bundles_cert: packagemanifests-certified create_bundle_image_cert_1.2.0 create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
 
-push_bundles_cert: push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
+push_bundles_cert: push_bundle_image_cert_1.2.0 push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
 
 build_push_cert: create_bundles_cert push_bundles_cert
 

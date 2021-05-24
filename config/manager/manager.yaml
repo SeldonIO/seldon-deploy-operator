@@ -47,10 +47,10 @@ spec:
           #registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
           - name: RELATED_IMAGE_LOADTEST
             value: seldonio/hey-loadtester-ubi:0.1
-          #registry.connect.redhat.com/seldonio/alibi-detect-server:1.2.1
+          #registry.connect.redhat.com/seldonio/alibi-detect-server:1.7.0
           - name: RELATED_IMAGE_ALIBIDETECT
-            value: seldonio/alibi-detect-server:1.6.0-PR2923
-          #registry.connect.redhat.com/seldonio/seldon-request-logger:1.2.1
+            value: seldonio/alibi-detect-server:1.7.0
+          #registry.connect.redhat.com/seldonio/seldon-request-logger:1.7.0
           - name: RELATED_IMAGE_REQUESTLOGGER
             value: seldonio/seldon-request-logger:1.7.0
           #registry.connect.redhat.com/seldonio/kubectl:1.14.3
