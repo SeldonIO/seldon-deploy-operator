@@ -64,9 +64,9 @@ spec:
             value: seldonio/mc-ubi:1.0
         resources:
           limits:
-            cpu: 100m
-            memory: 90Mi
+            cpu: 400m
+            memory: 400Mi
           requests:
-            cpu: 100m
-            memory: 60Mi
+            cpu: 200m
+            memory: 100Mi
       terminationGracePeriodSeconds: 10
