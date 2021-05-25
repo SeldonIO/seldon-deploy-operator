@@ -198,7 +198,7 @@ redhat-minio-client-image-scan: build-minio-image push-minio-image
 
 build-batch-proc-image:
 	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=1.7.0 \
-			--tag=seldonio/seldon-core-s2i-python37-cert:1.7.0
+			--tag=seldonio/seldon-core-s2i-python37-cert:1.7.0 --no-cache
 push-batch-proc-image:
 	docker push seldonio/seldon-core-s2i-python37-cert:1.7.0
 
@@ -223,7 +223,7 @@ packagemanifests-certified:
 
 
 opm_index_certified:
-	opm index add -c docker --bundles ${BUNDLE_IMG_CERT},quay.io/seldon/seldon-deploy-operator-bundle-cert:v0.7.0 --tag quay.io/seldon/test-deploy-catalog-cert:latest
+	opm index add -c docker --bundles ${BUNDLE_IMG_CERT},quay.io/seldon/seldon-deploy-operator-bundle-cert:v1.0.0,quay.io/seldon/seldon-deploy-operator-bundle-cert:v0.7.0 --tag quay.io/seldon/test-deploy-catalog-cert:latest
 
 opm_push_certified:
 	docker push quay.io/seldon/test-deploy-catalog-cert:latest

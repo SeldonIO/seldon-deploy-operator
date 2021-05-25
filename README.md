@@ -147,7 +147,7 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 * You can look at the history of the values file in deploy to determine what has changed since last release.
 * Referenced images in values file will come across with values file but [config/samples]((config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)), [examples-testing](examples-testing/), [manager.yaml](config/manager/manager.yaml) and [packagemanifests-certified.sh](packagemanifests-certified.sh) need manual update (see [IMAGES.md](IMAGES.md))
 * Updating the above-referenced files should cover all uses of the dependent images (those referenced in values-redhat.yaml and [IMAGES.md](IMAGES.md)) but best to search workspace for each version to make sure none missed.
-* Before updating/publishing check the opm_index command in the Makefile. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
+* Before updating/publishing check the `opm_index` and `opm_index_certified` commands in the Makefile. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
 * To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
 * Run through all the tests above - kind and in openshift and with marketplace and all the dependencies. Note these tests use quay/dockerhub images. The corresponding images in red hat container registry have to be approved before use.
 * If anything has changed in an openshift version (e.g. a change to user-workload-monitoring), update the docs (see 'publishing docs' below).
