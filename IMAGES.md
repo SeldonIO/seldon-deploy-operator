@@ -53,7 +53,7 @@ Versions referenced in the below table and in the make targets *should checked a
 | Bundle     | here       |update_openshift_cert, build_push_cert               | 1.2.0 pending  |
 | Operator   | here       |docker-build, redhat-image-scan                      | 1.2.0 pending |
 | Deploy     | deploy     |build_image_redhat & redhat-image-scan  | 1.2.0 pending |
-| Batch Proc | here       |build-batch-proc-image,redhat-batch-proc-image-scan  | 1.6.0 pending |
+| Batch Proc | here       |build-batch-proc-image,redhat-batch-proc-image-scan  | 1.7.0 pending |
 | Batch mc   | here       |build-minio-image, redhat-minio-client-image-scan    | 1.0 published |
 | Req log    | core       |under components/seldon-request-logger      | [1.7.0 published](https://connect.redhat.com/project/3993051/images) |
 | kubectl    | here       |build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed not used, no need to repub |

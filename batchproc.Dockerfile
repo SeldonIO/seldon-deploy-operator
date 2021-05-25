@@ -1,5 +1,5 @@
 ARG VERSION
-FROM seldonio/seldon-core-s2i-python37-ubi8:1.6.0-dev
+FROM seldonio/seldon-core-s2i-python37-ubi8:$VERSION
 ARG VERSION
 LABEL name="Seldon Batch Processor" \
       vendor="Seldon Technologies" \

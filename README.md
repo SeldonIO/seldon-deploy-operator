@@ -137,22 +137,26 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 ### Steps for Publishing a New Deploy Version
 
 * First check the deploy image is published from deploy repo with `make build_image_redhat` and `make push_to_dockerhub_ubi`.
-* That image should be plugged into the values file, either in deploy or when copied over (later step). 
-* Then in seldon-deploy-operator change the version in version.txt and also replaces.txt (which is the version before this).
-* If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files)
+* This new version of the seldonio/seldon-deploy-server-ubi image should be plugged into the values file. You could plug into deploy's [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) before release or in seldon-deploy-operator when copied over (later step). 
+* Then in seldon-deploy-operator change the version in [version.txt](version.txt) and also [replaces.txt](replaces.txt) (which is the version before this).
+* If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files inc [bundle.Dockerfile](bundle.Dockerfile))
 * Run `make get-helm-chart` to pull in latest helm chart.
-* If there have been changes in the values file then you'll have to update examples in examples-testing and config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml
-* Look at the history of the values file in deploy to determine this.
-* Referenced images in values file will come across with values file but examples, manager.yaml and packagemanifests-certified.sh need manual update (see [IMAGES.md](IMAGES.md))
+* Note that the deploy image (seldonio/seldon-deploy-server-ubi) may not have been updated in the deploy [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) file (see first step) and if so you'll need to update here.
+* If there have been changes in the values file then you'll have to update examples in examples-testing and [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)
+* [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml) is best updated by copy-pasting the [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) and changing the indentation but [examples-testing](examples-testing/) files need to be updated with the specific changes
+* You can look at the history of the values file in deploy to determine what has changed since last release.
+* Referenced images in values file will come across with values file but [config/samples]((config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)), [examples-testing](examples-testing/), [manager.yaml](config/manager/manager.yaml) and [packagemanifests-certified.sh](packagemanifests-certified.sh) need manual update (see [IMAGES.md](IMAGES.md))
+* Updating the above-referenced files should cover all uses of the dependent images (those referenced in values-redhat.yaml and [IMAGES.md](IMAGES.md)) but best to search workspace for each version to make sure none missed.
 * Before updating/publishing check the opm_index command in the Makefile. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
 * To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
-* Run through all the tests above - kind and in openshift and with marketplace and all the dependencies.
+* Run through all the tests above - kind and in openshift and with marketplace and all the dependencies. Note these tests use quay/dockerhub images. The corresponding images in red hat container registry have to be approved before use.
 * If anything has changed in an openshift version (e.g. a change to user-workload-monitoring), update the docs (see 'publishing docs' below).
-* Note that if tags of depedency images change then these references have to change. Best to search workspace and especially check packagemanifests-certified.sh
-* Before publishing update the `create_bundles_cert` and `push_bundles_cert` make targets to include the new version.
+* Before publishing update the `create_bundles_cert` and `push_bundles_cert` make targets in [Makefile](Makefile) to include the new version.
 * Publish images - see [IMAGES.md](IMAGES.md) for how to publish (all make targets listed there).
 * Publish docs - see docs section below
 * After publication contact IBM (see contacts below) to confirm new version of [bundle](https://catalog.redhat.com/software/containers/seldonio/seldon-deploy-operator-bundle/5f77569a29373868204224e3) has gone to their queue 
+ 
+ [Video explaining the above](https://us02web.zoom.us/rec/share/uUZBYABuiPJmtZU4jX67hZN8z8wy6jdbj8Tp4jAGRO_iK7kphsg1i2a3DEn-gxZ2.-dlNKTUa032I79P4)
  
 ### Contacts
 

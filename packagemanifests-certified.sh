@@ -43,8 +43,8 @@ function update_images {
     sed -i 's#"seldonio/kubectl:.*$#'\"${KUBECTL_IMAGE}:1.14.3''\"',''#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
     sed -i 's#value: seldonio/kubectl:.*$#value: '${KUBECTL_IMAGE}:1.14.3'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
-    sed -i 's#"seldonio/seldon-core-s2i-python37:.*$#'\"${BATCH_PROC_IMAGE}:1.6.0\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
-    sed -i 's#value: seldonio/seldon-core-s2i-python37:.*$#value: '${BATCH_PROC_IMAGE}:1.6.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#"seldonio/seldon-core-s2i-python37:.*$#'\"${BATCH_PROC_IMAGE}:1.7.0\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#value: seldonio/seldon-core-s2i-python37:.*$#value: '${BATCH_PROC_IMAGE}:1.7.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
     sed -i 's#"seldonio/mc-ubi:.*$#'\"${MINIO_CLIENT_IMAGE}:1.0\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
     sed -i 's#value: seldonio/mc-ubi:.*$#value: '${MINIO_CLIENT_IMAGE}:1.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
