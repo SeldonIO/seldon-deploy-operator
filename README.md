@@ -217,7 +217,7 @@ There is meant to be equivalent to https://marketplace.redhat.com/partner/produc
 
 Or possibly http://marketplace.redhat.com/en-us/account/partner-management
 
-They're in transition. For me only IBM system fully works for editing but only RH system works for adding new editors.
+For me only IBM system fully works for editing but only RH system works for adding new editors. Seems to be intended.
 
 I think you have to create an account with IBM.
 
