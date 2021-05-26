@@ -6,6 +6,7 @@ REPLACES ?= $(shell cat replaces.txt)
 BUNDLE_IMG ?= quay.io/seldon/seldon-deploy-operator-bundle:v$(VERSION)
 # Certified bundle image tag
 BUNDLE_IMG_CERT ?= quay.io/seldon/seldon-deploy-operator-bundle-cert:v$(VERSION)
+BATCH_IMG_TAG=1.9.0-dev
 # Options for 'bundle-build'
 DEFAULT_CHANNEL=stable
 CHANNELS=stable,alpha
@@ -197,16 +198,16 @@ redhat-minio-client-image-scan: build-minio-image push-minio-image
 	docker push scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
 
 build-batch-proc-image:
-	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=1.7.0 \
-			--tag=seldonio/seldon-core-s2i-python37-cert:1.7.0 --no-cache
+	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=$(BATCH_IMG_TAG) \
+			--tag=seldonio/seldon-core-s2i-python37-cert:$(BATCH_IMG_TAG) --no-cache
 push-batch-proc-image:
-	docker push seldonio/seldon-core-s2i-python37-cert:1.7.0
+	docker push seldonio/seldon-core-s2i-python37-cert:$(BATCH_IMG_TAG)
 
 redhat-batch-proc-image-scan: build-batch-proc-image push-batch-proc-image
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_batch_proc} | docker login -u unused scan.connect.redhat.com --password-stdin
-	docker tag seldonio/seldon-core-s2i-python37-cert:1.7.0 scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.7.0
-	docker push scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.7.0
+	docker tag seldonio/seldon-core-s2i-python37-cert:$(BATCH_IMG_TAG) scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:$(BATCH_IMG_TAG)
+	docker push scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:$(BATCH_IMG_TAG)
 
 # bundle certifified images
 # most of this for testing as images in RHCR can't be overwritten, have to delete them from UI, which is a pain

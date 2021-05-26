@@ -20,7 +20,7 @@ metadata:
                 "image": "registry.connect.redhat.com/seldonio/mc-ubi:1.0"
               },
               "processor": {
-                "image": "registry.connect.redhat.com/seldonio/seldon-batch-processor:1.7.0"
+                "image": "registry.connect.redhat.com/seldonio/seldon-batch-processor:1.9.0-dev"
               },
               "pvc": {
                 "defaultSize": "1Gi"
@@ -417,7 +417,7 @@ spec:
                 - name: RELATED_IMAGE_KUBECTL
                   value: registry.connect.redhat.com/seldonio/kubectl:1.14.3
                 - name: RELATED_IMAGE_BATCH_PROCESSOR
-                  value: registry.connect.redhat.com/seldonio/seldon-batch-processor:1.7.0
+                  value: registry.connect.redhat.com/seldonio/seldon-batch-processor:1.9.0-dev
                 - name: RELATED_IMAGE_MINIO_CLIENT
                   value: registry.connect.redhat.com/seldonio/mc-ubi:1.0
                 image: registry.connect.redhat.com/seldonio/seldon-deploy-operator:1.2.0

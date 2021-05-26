@@ -101,7 +101,7 @@ spec:
   batchjobs:
     serviceAccount: "workflow"
     processor:
-      image: seldonio/seldon-core-s2i-python37:1.7.0
+      image: seldonio/seldon-core-s2i-python37:1.9.0-dev
     mc:
       image: seldonio/mc-ubi:1.0
     pvc:

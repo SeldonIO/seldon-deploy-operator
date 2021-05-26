@@ -20,7 +20,7 @@ metadata:
                 "image": "seldonio/mc-ubi:1.0"
               },
               "processor": {
-                "image": "seldonio/seldon-core-s2i-python37:1.5.1"
+                "image": "seldonio/seldon-core-s2i-python37:1.9.0-dev"
               },
               "pvc": {
                 "defaultSize": "1Gi"
@@ -417,7 +417,7 @@ spec:
                 - name: RELATED_IMAGE_KUBECTL
                   value: seldonio/kubectl:1.14.3
                 - name: RELATED_IMAGE_BATCH_PROCESSOR
-                  value: seldonio/seldon-core-s2i-python37:1.5.1
+                  value: seldonio/seldon-core-s2i-python37:1.9.0-dev
                 - name: RELATED_IMAGE_MINIO_CLIENT
                   value: seldonio/mc-ubi:1.0
                 image: quay.io/seldon/seldon-deploy-server-operator:1.2.0
