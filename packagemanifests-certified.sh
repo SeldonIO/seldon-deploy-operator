@@ -34,8 +34,8 @@ function update_images {
     sed -i 's#"seldonio/hey-loadtester-ubi:.*$#'\"${LOADTEST_IMAGE}:0.1\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
     sed -i 's#value: seldonio/hey-loadtester-ubi:.*$#value: '${LOADTEST_IMAGE}:0.1'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
-    sed -i 's#"seldonio/alibi-detect-server:.*$#'\"${ALIBIDETECT_IMAGE}:1.7.0\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
-    sed -i 's#value: seldonio/alibi-detect-server:.*$#value: '${ALIBIDETECT_IMAGE}:1.7.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#"seldonio/alibi-detect-server:.*$#'\"${ALIBIDETECT_IMAGE}:1.8.0\"'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
+    sed -i 's#value: seldonio/alibi-detect-server:.*$#value: '${ALIBIDETECT_IMAGE}:1.8.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
 
     sed -i 's#"seldonio/seldon-request-logger:.*$#'\"${REQUESTLOGGER_IMAGE}:1.7.0\"',''#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml
     sed -i 's#value: seldonio/seldon-request-logger:.*$#value: '${REQUESTLOGGER_IMAGE}:1.7.0'#' ${CSV_FOLDER}/seldon-deploy-operator.v${VERSION}.clusterserviceversion.yaml

@@ -13,7 +13,7 @@ metadata:
           "spec": {
             "affinity": {},
             "alibidetect": {
-              "image": "registry.connect.redhat.com/seldonio/alibi-detect-server:1.7.0"
+              "image": "registry.connect.redhat.com/seldonio/alibi-detect-server:1.8.0"
             },
             "batchjobs": {
               "mc": {
@@ -411,7 +411,7 @@ spec:
                 - name: RELATED_IMAGE_LOADTEST
                   value: registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
                 - name: RELATED_IMAGE_ALIBIDETECT
-                  value: registry.connect.redhat.com/seldonio/alibi-detect-server:1.7.0
+                  value: registry.connect.redhat.com/seldonio/alibi-detect-server:1.8.0
                 - name: RELATED_IMAGE_REQUESTLOGGER
                   value: registry.connect.redhat.com/seldonio/seldon-request-logger:1.7.0
                 - name: RELATED_IMAGE_KUBECTL
