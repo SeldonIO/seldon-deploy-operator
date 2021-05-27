@@ -40,7 +40,7 @@ So should have two make targets for each of the above (either here or in Deploy 
 
 The table below has the make targets for the images. Each should have two, one being certified.
 
-Note the bundle image needs all other images to be published (not approved) in order to pass.
+Note the bundle image needs all other images to be published in order to pass.
 
 There is a make target for pushing each image. They don't all follow the same versioning and are in different git repos.
 
