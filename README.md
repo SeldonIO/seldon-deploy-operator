@@ -173,7 +173,7 @@ https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1p
 Quay.io - for test images before switching to RCR for publication (as that has manual steps).
 https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=taumgl2tiapt2dnphzbugepjxy&v=65l42gglwnfjheao6fu4pmxeti
 
-IBM provider workbench for listing documentation.
+Red Hat marketplace workbench for listing documentation. You have to [go through the correct red hat marketplace partner link](https://marketplace.redhat.com/partner/products) to get to it. And sometimes you have to hit the edit button multiple times.
 https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=vdgkpe3ii5bm6vkzycvw4tepni&v=po7kyvksukhlrsurwmygolab3a
 
 cloud.redhat.com for creating clusters
