@@ -212,7 +212,7 @@ redhat-batch-proc-image-scan: build-batch-proc-image push-batch-proc-image
 # bundle certifified images
 # most of this for testing as images in RHCR can't be overwritten, have to delete them from UI, which is a pain
 # certified operator image is pushed with redhat-image-scan
-# certified bundle with bundle_certified_push
+# certified bundle with bundle_cert_push
 
 .PHONY: create_bundle_image_certified
 create_bundle_image_certified_%:
@@ -250,7 +250,7 @@ push_bundles_cert: push_bundle_image_cert_1.2.0 push_bundle_image_cert_1.0.0 pus
 
 build_push_cert: create_bundles_cert push_bundles_cert
 
-bundle_certified_push:
+bundle_cert_push:
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_operator_bundle} | docker login -u unused scan.connect.redhat.com --password-stdin
 	docker tag ${BUNDLE_IMG_CERT} scan.connect.redhat.com/ospid-b1e676a5-be95-44e9-99b4-45ea93134805/seldon-deploy-operator-bundle:${VERSION}
