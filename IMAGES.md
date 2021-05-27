@@ -79,3 +79,6 @@ ALIBI DETECT - https://connect.redhat.com/project/3993461/images
 
 CERT IMAGE NAMES IN packagemanifests-certified.sh
 
+*Every image needs to be manually published* by expanding and pressing publish in the UI:
+
+![publishbutton](publishbutton.jpg)
