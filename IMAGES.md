@@ -52,14 +52,14 @@ Versions referenced in the below table and in the make targets *should checked a
 | ---------- | ---------- | --------------------------------------------------- | ----------- |
 | Bundle     | here       |update_openshift_cert, build_push_cert               | 1.2.0 pending  |
 | Operator   | here       |docker-build, redhat-image-scan                      | 1.2.0 pending |
-| Deploy     | deploy     |build_image_redhat & redhat-image-scan  | 1.2.0 pending |
-| Batch Proc | here       |build-batch-proc-image,redhat-batch-proc-image-scan  | 1.9.0-dev pending |
+| Deploy     | deploy     |build_image_redhat & redhat-image-scan               | 1.2.0 published |
+| Batch Proc | here       |build-batch-proc-image,redhat-batch-proc-image-scan  | 1.9.0-dev published (had to use that version to pass sec scan) |
 | Batch Proc | core       |above inherits core wrappers/s2i/python build_redhat | ------------- |
 | Batch mc   | here       |build-minio-image, redhat-minio-client-image-scan    | 1.0 published |
-| Req log    | core       |under components/seldon-request-logger      | [1.7.0 published](https://connect.redhat.com/project/3993051/images) |
+| Req log    | core       |under components/seldon-request-logger               | 1.7.0 published) |
 | kubectl    | here       |build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed not used, no need to repub |
 | loadtest   | deploy     |deploy repo, tools/images/loadtest-image             | hasn't changed, 0.1 still latest |
-| alibi      | core       |under components/alibi-detect-server                 | [using 1.7.0 (published) even though deploy released against 1.7.0](https://connect.redhat.com/project/3993461/images)   |
+| alibi      | core       |under components/alibi-detect-server                 | using 1.8.0 (published) even though deploy released against a [PR version near 1.7.0](https://github.com/SeldonIO/seldon-deploy/blob/v1.2.0/tools/seldon-deploy-install/sd-setup/helm-charts/seldon-deploy/values.yaml#L12)   |
 
 There are additional make targets for pushing to RCR.
 
@@ -72,6 +72,10 @@ DEPLOY IMAGE IS - https://connect.redhat.com/project/4805801/images
 MINIO IMAGE IS - https://connect.redhat.com/project/5937511/images
 
 BATCH PROC IS - https://connect.redhat.com/project/5937521/images
+
+REQ LOGGER - https://connect.redhat.com/project/3993051/images
+
+ALIBI DETECT - https://connect.redhat.com/project/3993461/images
 
 CERT IMAGE NAMES IN packagemanifests-certified.sh
 
