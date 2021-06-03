@@ -13,14 +13,14 @@ metadata:
           "spec": {
             "affinity": {},
             "alibidetect": {
-              "image": "seldonio/alibi-detect-server:1.8.0"
+              "image": "registry.connect.redhat.com/seldonio/alibi-detect-server:1.8.0"
             },
             "batchjobs": {
               "mc": {
-                "image": "seldonio/mc-ubi:1.0"
+                "image": "registry.connect.redhat.com/seldonio/mc-ubi:1.0"
               },
               "processor": {
-                "image": "seldonio/seldon-core-s2i-python37:1.9.0-dev"
+                "image": "registry.connect.redhat.com/seldonio/seldon-batch-processor:1.9.0-dev"
               },
               "pvc": {
                 "defaultSize": "1Gi"
@@ -70,7 +70,7 @@ metadata:
               }
             },
             "image": {
-              "image": "seldonio/seldon-deploy-server-ubi:1.2.0",
+              "image": "registry.connect.redhat.com/seldonio/seldon-deploy:1.2.0",
               "pullPolicy": "Always"
             },
             "ingress": {
@@ -97,7 +97,7 @@ metadata:
               "requestForm": "{{ .KfServingProtocol }}://{{ .IngressServiceName }}/v1/models/{{ .ModelName }}:predict"
             },
             "loadtest": {
-              "image": "seldonio/hey-loadtester-ubi:0.1"
+              "image": "registry.connect.redhat.com/seldonio/seldon-loadtester:0.1"
             },
             "metadata": {
               "pg": {
@@ -109,7 +109,7 @@ metadata:
             "nodeSelector": {},
             "openshiftMarketplace": {
               "cleanupClusterServiceVersions": false,
-              "kubectlCleanupImage": "seldonio/kubectl:1.14.3",
+              "kubectlCleanupImage": "registry.connect.redhat.com/seldonio/kubectl:1.14.3",
               "prometheus": {
                 "monitorSpecs": {
                   "create": true
@@ -157,7 +157,7 @@ metadata:
                 "port": "9200",
                 "protocol": "https"
               },
-              "image": "seldonio/seldon-request-logger:1.7.0",
+              "image": "registry.connect.redhat.com/seldonio/seldon-request-logger:1.7.0",
               "imagePullPolicy": "IfNotPresent",
               "namespace": {
                 "create": false,
@@ -223,7 +223,7 @@ metadata:
     capabilities: Seamless Upgrades
     categories: AI/Machine Learning
     certified: 'false'
-    containerImage: quay.io/seldon/seldon-deploy-server-operator:1.2.0
+    containerImage: registry.connect.redhat.com/seldonio/seldon-deploy-operator:1.2.0
     createdAt: '2020-12-11 15:00:00'
     operators.operatorframework.io/builder: operator-sdk-v1.7.1+git
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
@@ -407,20 +407,20 @@ spec:
                 - name: OPERATOR_NAME
                   value: seldon-deploy-operator
                 - name: RELATED_IMAGE_DEPLOYMENT
-                  value: seldonio/seldon-deploy-server-ubi:1.2.0
+                  value: registry.connect.redhat.com/seldonio/seldon-deploy:1.2.0
                 - name: RELATED_IMAGE_LOADTEST
-                  value: seldonio/hey-loadtester-ubi:0.1
+                  value: registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
                 - name: RELATED_IMAGE_ALIBIDETECT
-                  value: seldonio/alibi-detect-server:1.8.0
+                  value: registry.connect.redhat.com/seldonio/alibi-detect-server:1.8.0
                 - name: RELATED_IMAGE_REQUESTLOGGER
-                  value: seldonio/seldon-request-logger:1.7.0
+                  value: registry.connect.redhat.com/seldonio/seldon-request-logger:1.7.0
                 - name: RELATED_IMAGE_KUBECTL
-                  value: seldonio/kubectl:1.14.3
+                  value: registry.connect.redhat.com/seldonio/kubectl:1.14.3
                 - name: RELATED_IMAGE_BATCH_PROCESSOR
-                  value: seldonio/seldon-core-s2i-python37:1.9.0-dev
+                  value: registry.connect.redhat.com/seldonio/seldon-batch-processor:1.9.0-dev
                 - name: RELATED_IMAGE_MINIO_CLIENT
-                  value: seldonio/mc-ubi:1.0
-                image: quay.io/seldon/seldon-deploy-server-operator:1.2.0
+                  value: registry.connect.redhat.com/seldonio/mc-ubi:1.0
+                image: registry.connect.redhat.com/seldonio/seldon-deploy-operator:1.2.0
                 imagePullPolicy: Always
                 name: manager
                 resources:

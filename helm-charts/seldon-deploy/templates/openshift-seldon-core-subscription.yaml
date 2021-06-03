@@ -21,5 +21,5 @@ spec:
         value: {{ .Values.openshiftMarketplace.seldonCore.subscription.metricsPath | quote }}
       - name: EXECUTOR_REQUEST_LOGGER_DEFAULT_ENDPOINT
         value: {{ .Values.openshiftMarketplace.seldonCore.subscription.requestLoggerEndpoint | quote }}
-  startingCSV: seldon-operator.v1.5.0
+  startingCSV: seldon-operator.v1.7.0
 {{- end -}}

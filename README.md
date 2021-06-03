@@ -1,6 +1,6 @@
 # Seldon Deploy Operator
 
-This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk (v1.2.0).
+This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk (v1.7.2).
 
 Intended as a [Red Hat Marketplace operator](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project) but can be run outside openshfit.
 
@@ -37,10 +37,12 @@ To test in KIND with entire stack:
 This is a minimal setup just for checking installation. No Deploy features work.
 
 * `kind create cluster`
+* `kubectl create ns seldon-logs`
 * `make install`
 * `make deploy`
 * `kubectl apply -n seldon-system -f ./examples-testing/kind-minimal-setup.yaml`
-*  Port-forward to deploy to see UI, though you can't deploy anything in this setup.
+*  Port-forward to deploy (`kubectl port-forward -n seldon-system svc/seldondeploy-sample-kind-full-seldon-deploy 8080:80`) 
+to see UI, though you can't deploy anything in this setup.
 
 ### OLM Deployment
 
@@ -48,7 +50,7 @@ First need a cluster e.g. `kind create cluster`.
 
 For KIND or other clusters without OLM, we [first install OLM](https://sdk.operatorframework.io/docs/olm-integration/quickstart-bundle/)
 
-* Install OLM - `operator-sdk olm install` (tested with 0.17)
+* Install OLM - `operator-sdk olm install` (tested with 1.7.2)
 
 * Install marketplace - `make operator-marketplace`
 
@@ -109,7 +111,7 @@ kubectl get catalogsource seldon-deploy-catalog -n openshift-marketplace -o yaml
 ```
 Choose the operator in the UI. Be sure to get the right version.
 
-If clusterwide then check with:
+If clusterwide (initially only option) then check with:
 ```bash
 kubectl get subscriptions.operators.coreos.com -n openshift-operators seldon-deploy-operator -o yaml
 ```
@@ -117,7 +119,7 @@ Adjust namespace if not clusterwide.
 
 Use [installation google doc](https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing) for setting up dependencies or running minimal version.
 
-Test as applicable e.g. using Deploy demos.
+Test as applicable e.g. using Deploy demos. The google doc points at how to open or you can use `make open_cluster_with_istio`.
 
 Note you can only test a demo if you've got the necessary dependencies. So not batch as there are [limitations for argo and minio](https://github.com/SeldonIO/seldon-deploy-operator/issues/13)
 
@@ -134,17 +136,27 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 
 ### Steps for Publishing a New Deploy Version
 
-* First change the version in version.txt and also replaces.txt (which is the version before this).
+* First check the deploy image is published from deploy repo with `make build_image_redhat` and `make push_to_dockerhub_ubi`.
+* This new version of the seldonio/seldon-deploy-server-ubi image should be plugged into the values file. You could plug into deploy's [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) before release or in seldon-deploy-operator when copied over (later step). 
+* Then in seldon-deploy-operator change the version in [version.txt](version.txt) and also [replaces.txt](replaces.txt) (which is the version before this).
+* If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files inc [bundle.Dockerfile](bundle.Dockerfile))
 * Run `make get-helm-chart` to pull in latest helm chart.
-* If there have been changes in the values file then you'll have to update examples in examples-testing and config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml
-* Look at the history of the values file in deploy to determine this.
+* Note that the deploy image (seldonio/seldon-deploy-server-ubi) may not have been updated in the deploy [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) file (see first step) and if so you'll need to update here.
+* If there have been changes in the values file then you'll have to update examples in examples-testing and [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)
+* [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml) is best updated by copy-pasting the [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) and changing the indentation but [examples-testing](examples-testing/) files need to be updated with the specific changes
+* You can look at the history of the values file in deploy to determine what has changed since last release.
+* Referenced images in values file will come across with values file but [config/samples]((config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)), [examples-testing](examples-testing/), [manager.yaml](config/manager/manager.yaml) and [packagemanifests-certified.sh](packagemanifests-certified.sh) need manual update (see [IMAGES.md](IMAGES.md))
+* Updating the above-referenced files should cover all uses of the dependent images (those referenced in values-redhat.yaml and [IMAGES.md](IMAGES.md)) but best to search workspace for each version to make sure none missed.
+* Before updating/publishing check the `opm_index` and `opm_index_certified` commands in the Makefile. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
 * To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
-* Run through all the tests above - kind and in openshift and with marketplace and all the dependencies.
-* If anything has changed in an openshift version, update the docs (see 'publishing docs' below).
-* Note that if tags of depedency images change then these references have to change. Best to search workspace and especially check packagemanifests-certified.sh
-* Publish images - see [IMAGES.md](IMAGES.md)
+* Run through all the tests above - kind and in openshift and with marketplace and all the dependencies. Note these tests use quay/dockerhub images. The corresponding images in red hat container registry have to be approved before use.
+* If anything has changed in an openshift version (e.g. a change to user-workload-monitoring), update the docs (see 'publishing docs' below).
+* Before publishing update the `create_bundles_cert` and `push_bundles_cert` make targets in [Makefile](Makefile) to include the new version.
+* Publish images - see [IMAGES.md](IMAGES.md) for how to publish (all make targets listed there).
 * Publish docs - see docs section below
 * After publication contact IBM (see contacts below) to confirm new version of [bundle](https://catalog.redhat.com/software/containers/seldonio/seldon-deploy-operator-bundle/5f77569a29373868204224e3) has gone to their queue 
+ 
+ [Video explaining the above](https://us02web.zoom.us/rec/share/uUZBYABuiPJmtZU4jX67hZN8z8wy6jdbj8Tp4jAGRO_iK7kphsg1i2a3DEn-gxZ2.-dlNKTUa032I79P4)
  
 ### Contacts
 
@@ -161,7 +173,7 @@ https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1p
 Quay.io - for test images before switching to RCR for publication (as that has manual steps).
 https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=taumgl2tiapt2dnphzbugepjxy&v=65l42gglwnfjheao6fu4pmxeti
 
-IBM provider workbench for listing documentation.
+Red Hat marketplace workbench for listing documentation. You have to [go through the correct red hat marketplace partner link](https://marketplace.redhat.com/partner/products) to get to it. And sometimes you have to hit the edit button multiple times.
 https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=vdgkpe3ii5bm6vkzycvw4tepni&v=po7kyvksukhlrsurwmygolab3a
 
 cloud.redhat.com for creating clusters
@@ -205,7 +217,7 @@ There is meant to be equivalent to https://marketplace.redhat.com/partner/produc
 
 Or possibly http://marketplace.redhat.com/en-us/account/partner-management
 
-They're in transition. For me only IBM system fully works for editing but only RH system works for adding new editors.
+For me only IBM system fully works for editing but only RH system works for adding new editors. Seems to be intended.
 
 I think you have to create an account with IBM.
 

@@ -25,7 +25,9 @@ data:
   kfServingProtocol: {{ .Values.kfserving.protocol | quote }}
   seldonCurlForm: {{ .Values.seldon.curlForm | quote }}
   seldonTensorflowCurlForm: {{ .Values.seldon.tensorFlowCurlForm | quote }}
+  seldonKFServingV2CurlForm: {{ .Values.seldon.kfservingV2CurlForm | quote }}  
   seldonRequestForm: {{ .Values.seldon.seldonRequestForm | quote }}
   seldonTensorflowRequestForm: {{ .Values.seldon.tensorflowRequestForm | quote }}
+  seldonV2RequestForm: {{ .Values.seldon.v2RequestForm | quote }}
   seldonExplainForm: {{ .Values.seldon.explainForm | quote }}
   seldonProtocol: {{ .Values.seldon.protocol | quote }}

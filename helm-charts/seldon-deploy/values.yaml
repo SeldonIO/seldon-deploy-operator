@@ -3,14 +3,18 @@ replicaCount: 1
 
 #in RH marketplace images will come from RH hosting through an override in CSV - default to dockerhub ubi images
 image:
-  image: seldonio/seldon-deploy-server-ubi:1.0.1-dev
+  image: seldonio/seldon-deploy-server-ubi:1.2.0
   pullPolicy: Always
+
+#uncomment below to use imagePullSecrets e.g. to avoid docker rate-limiting
+# imagePullSecrets:
+#  - name: regcred
 
 loadtest:
   image: seldonio/hey-loadtester-ubi:0.1
 
 alibidetect:
-  image: seldonio/alibi-detect-server:1.5.1
+  image: seldonio/alibi-detect-server:1.8.0
 
 nameOverride: ""
 fullnameOverride: ""
@@ -62,8 +66,8 @@ ingress:
 
 resources:
   limits:
-    cpu: 500m
-    memory: 350Mi
+    cpu: 800m
+    memory: 800Mi
   requests:
     cpu: 100m
     memory: 200Mi
@@ -91,9 +95,9 @@ gitops:
 batchjobs:
   serviceAccount: "workflow"
   processor:
-    image: seldonio/seldon-core-s2i-python37:1.5.1
+    image: seldonio/seldon-core-s2i-python37:1.9.0-dev
   mc:
-    image: seldonio/mc-ubi:1.0
+    image: minio/mc:latest
   pvc:
     defaultSize: 1Gi
 
@@ -122,10 +126,14 @@ seldon:
   tensorFlowCurlForm: |
     CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')<br>
     curl -k -H "Content-Type: application/json" {{ .SeldonProtocol }}://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict -d '{{ .Payload }}'
+  kfservingV2CurlForm: |
+    CLUSTER_IP=$(oc get route -n {{ .IngressNamespace }} {{ .IngressServiceName }} -o jsonpath='{.spec.host}')<br>
+    curl -k -H "Content-Type: application/json" {{ .SeldonProtocol }}://$CLUSTER_IP/seldon/{{ .Namespace }}/{{ .ModelName }}/v2/models/{{ .GraphModelName }}/infer -d '{{ .Payload }}'
   #Forms for cluster-internal calls.
   #e.g. could be changed to skip ingress by setting to "http://{{ .ModelName }}-{{ .ModelName }}-{{ .Predictor }}.{{ .Namespace }}:8000/api/v0.1/predictions"
   seldonRequestForm: "{{ .SeldonProtocol }}://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/api/v0.1/predictions"
   tensorflowRequestForm: "{{ .SeldonProtocol }}://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v1/models/:predict"
+  v2RequestForm: "{{ .SeldonProtocol }}://{{ .IngressServiceName }}/seldon/{{ .Namespace }}/{{ .ModelName }}/v2/models/{{ .ModelName }}/infer"
   #explainer call for seldon can go straight to predictor rather than ingress as not worried about loadbalancing a canary
   explainForm: "http://{{ .ModelName }}-{{ .Predictor }}-explainer.{{ .Namespace }}:9000/v1/models/{{ .ModelName }}:explain"
 
@@ -148,7 +156,7 @@ virtualService:
 rbac:
   create: true
   #clusterWide rbac is needed for deploy to see and create resources in different namespaces
-  clusterWide: false
+  clusterWide: true
   #reading namespaces is needed for single deploy to be used across namespaces, even if rbac gets added for each specific namespace
   #for single namespace mode with just roles, turn off cluserWide and turn off readNamespaces
   readNamespaces: true
@@ -164,7 +172,7 @@ skipVerifyHttpCalls: true
 
 prometheus:
   seldon:
-    url: "https://prometheus-user-workload.openshift-user-workload-monitoring:9091/api/v1/"
+    url: "https://thanos-querier.openshift-monitoring.svc:9091/api/v1/"
     # if using community operator then above becomes "http://prometheus-operated.seldon:9090/api/v1/"
     # resource metrics may come from different prometheus than req metrics - set only if different
     resourceMetricsUrl: "https://prometheus-k8s.openshift-monitoring:9091/api/v1/"
@@ -193,9 +201,10 @@ elasticsearch:
 
 #only create request logger if you've not already installed it outside of helm (or first delete existing install)
 #if namespace.create is false then assumes namespace existing with a knative broker (kubectl get broker -n seldon-logs)
+#detectors are created in the namespace requestLogger.namespace.name so rbac is created there
 requestLogger:
   create: true
-  image: seldonio/seldon-request-logger:1.5.1
+  image: seldonio/seldon-request-logger:1.7.0
   #increase logger replicas if there are high traffic volumes
   replicas: 1
   imagePullPolicy: IfNotPresent
@@ -203,8 +212,8 @@ requestLogger:
     host: "elasticsearch-seldon-es-http.seldon-logs"
     port: "9200"
     protocol: "https"
-  #    jwtSecretName: "jwt-seldon"
-  #    jwtSecretKey: "jwt-seldon.txt"
+#    jwtSecretName: "jwt-seldon"
+#    jwtSecretKey: "jwt-seldon.txt"
   namespace:
     create: false
     name: seldon-logs
@@ -237,3 +246,8 @@ openshiftMarketplace:
   prometheus:
     monitorSpecs:
       create: true
+
+metadata:
+  pg:
+    enabled: false
+    secret: "metadata-postgres"

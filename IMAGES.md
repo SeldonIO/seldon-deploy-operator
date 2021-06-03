@@ -40,23 +40,26 @@ So should have two make targets for each of the above (either here or in Deploy 
 
 The table below has the make targets for the images. Each should have two, one being certified.
 
-Note the bundle image needs all other images to be published (not approved) in order to pass.
+Note the bundle image needs all other images to be published in order to pass.
 
 There is a make target for pushing each image. They don't all follow the same versioning and are in different git repos.
 
 Go through each of the below and check whether the version deploy references is published in Red Hat Container Registry if changed (links further down).
 
-| Image      | Git Repo   | Make Targets                                        |  Status |
-| ---------- | ---------- | --------------------------------------------------- | ----------- |
-| Bundle     | here       |update_openshift_cert, build_push_cert               | 1.0.0 published under tag 1.0.6  |
-| Operator   | here       |docker-build, redhat-image-scan                      | 1.0.0 published |
-| Deploy     | deploy     |build_image_redhat & redhat-image-scan  | 1.0.0 published |
-| Batch Proc | here       |build-batch-proc-image,redhat-batch-proc-image-scan  | 1.5.1 published |
-| Batch mc   | here       |build-minio-image, redhat-minio-client-image-scan    | 1.0 published |
-| Req log    | core       |under components/seldon-request-logger      | [pushed 1.5.1](https://connect.redhat.com/project/3993051/images) |
-| kubectl    | here       |build-kubectl-image, redhat-kubectl-image-scan       | hasn't changed not used, no need to repub |
-| loadtest   | deploy     |deploy repo, tools/images/loadtest-image             | hasn't changed, 0.1 still latest |
-| alibi      | core       |under components/alibi-detect-server                 | [pushed 1.5.1](https://connect.redhat.com/project/3993461/images)   |
+Versions referenced in the below table and in the make targets *should checked against the deploy values and be updated if needed* per-release (inc in Makefiles).
+
+| Image      | Git Repo | Make Targets                                         |  Status |
+| ---------- | -------- | ---------------------------------------------------- | ----------- |
+| Bundle     | here     |update_openshift_cert build_push_cert bundle_cert_push| 1.2.0 published  |
+| Operator   | here     |docker-build, redhat-image-scan                       | 1.2.0 published |
+| Deploy     | deploy   |build_image_redhat & redhat-image-scan                | 1.2.0 published |
+| Batch Proc | here     |build-batch-proc-image,redhat-batch-proc-image-scan   | 1.9.0-dev published (had to use that version to pass sec scan) |
+| Batch Proc | core     |above inherits core wrappers/s2i/python build_redhat  | ------------- |
+| Batch mc   | here     |build-minio-image, redhat-minio-client-image-scan     | 1.0 published |
+| Req log    | core     |under components/seldon-request-logger                | 1.7.0 published |
+| kubectl    | here     |build-kubectl-image, redhat-kubectl-image-scan        | hasn't changed not used, no need to repub |
+| loadtest   | deploy   |deploy repo, tools/images/loadtest-image              | hasn't changed, 0.1 still latest |
+| alibi      | core     |under components/alibi-detect-server                  | using 1.8.0 (published) even though deploy released against a [PR version near 1.7.0](https://github.com/SeldonIO/seldon-deploy/blob/v1.2.0/tools/seldon-deploy-install/sd-setup/helm-charts/seldon-deploy/values.yaml#L12)   |
 
 There are additional make targets for pushing to RCR.
 
@@ -70,5 +73,12 @@ MINIO IMAGE IS - https://connect.redhat.com/project/5937511/images
 
 BATCH PROC IS - https://connect.redhat.com/project/5937521/images
 
+REQ LOGGER - https://connect.redhat.com/project/3993051/images
+
+ALIBI DETECT - https://connect.redhat.com/project/3993461/images
+
 CERT IMAGE NAMES IN packagemanifests-certified.sh
 
+*Every image needs to be manually published* by expanding and pressing publish in the UI:
+
+![publishbutton](publishbutton.jpg)

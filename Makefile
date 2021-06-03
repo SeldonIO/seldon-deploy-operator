@@ -6,6 +6,7 @@ REPLACES ?= $(shell cat replaces.txt)
 BUNDLE_IMG ?= quay.io/seldon/seldon-deploy-operator-bundle:v$(VERSION)
 # Certified bundle image tag
 BUNDLE_IMG_CERT ?= quay.io/seldon/seldon-deploy-operator-bundle-cert:v$(VERSION)
+BATCH_IMG_TAG=1.9.0-dev
 # Options for 'bundle-build'
 DEFAULT_CHANNEL=stable
 CHANNELS=stable,alpha
@@ -21,7 +22,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 IMG ?= quay.io/seldon/seldon-deploy-server-operator:${VERSION}
 
 opm_index:
-	opm index add -c docker --bundles ${BUNDLE_IMG},quay.io/seldon/seldon-deploy-operator-bundle:v0.7.0 --tag quay.io/seldon/test-deploy-catalog:latest
+	opm index add -c docker --bundles ${BUNDLE_IMG},quay.io/seldon/seldon-deploy-operator-bundle:v1.0.0,quay.io/seldon/seldon-deploy-operator-bundle:v0.7.0 --tag quay.io/seldon/test-deploy-catalog:latest
 
 opm_push:
 	docker push quay.io/seldon/test-deploy-catalog:latest
@@ -105,8 +106,8 @@ ifeq (, $(shell which helm-operator 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
-	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.2.0/helm-operator-v1.2.0-$(ARCHOPER)-$(OSOPER) ;\
-	mv helm-operator-v1.2.0-$(ARCHOPER)-$(OSOPER) ./bin/helm-operator ;\
+	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.7.2/helm-operator-v1.7.2-$(ARCHOPER)-$(OSOPER) ;\
+	mv helm-operator-v1.7.2-$(ARCHOPER)-$(OSOPER) ./bin/helm-operator ;\
 	chmod +x ./bin/helm-operator ;\
 	}
 HELM_OPERATOR=$(realpath ./bin/helm-operator)
@@ -196,24 +197,22 @@ redhat-minio-client-image-scan: build-minio-image push-minio-image
 	docker tag seldonio/mc-ubi:1.0 scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
 	docker push scan.connect.redhat.com/ospid-ffe3e0f1-959a-4871-803b-182742f8b59e/mc-ubi:1.0
 
-seldonio/seldon-core-s2i-python37-ubi8:1.6.0-dev
-
 build-batch-proc-image:
-	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=1.5.1 \
-			--tag=seldonio/seldon-core-s2i-python37-cert:1.5.1
+	docker build . --file=./batchproc.Dockerfile --build-arg VERSION=$(BATCH_IMG_TAG) \
+			--tag=seldonio/seldon-core-s2i-python37-cert:$(BATCH_IMG_TAG) --no-cache
 push-batch-proc-image:
-	docker push seldonio/seldon-core-s2i-python37-cert:1.5.1
+	docker push seldonio/seldon-core-s2i-python37-cert:$(BATCH_IMG_TAG)
 
 redhat-batch-proc-image-scan: build-batch-proc-image push-batch-proc-image
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_batch_proc} | docker login -u unused scan.connect.redhat.com --password-stdin
-	docker tag seldonio/seldon-core-s2i-python37-cert:1.5.1 scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.5.1
-	docker push scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:1.5.1
+	docker tag seldonio/seldon-core-s2i-python37-cert:$(BATCH_IMG_TAG) scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:$(BATCH_IMG_TAG)
+	docker push scan.connect.redhat.com/ospid-920169d0-d0e5-446e-8db5-614d0d75198e/seldon-batch-processor:$(BATCH_IMG_TAG)
 
 # bundle certifified images
 # most of this for testing as images in RHCR can't be overwritten, have to delete them from UI, which is a pain
 # certified operator image is pushed with redhat-image-scan
-# certified bundle with bundle_certified_push
+# certified bundle with bundle_cert_push
 
 .PHONY: create_bundle_image_certified
 create_bundle_image_certified_%:
@@ -225,7 +224,7 @@ packagemanifests-certified:
 
 
 opm_index_certified:
-	opm index add -c docker --bundles ${BUNDLE_IMG_CERT},quay.io/seldon/seldon-deploy-operator-bundle-cert:v0.7.0 --tag quay.io/seldon/test-deploy-catalog-cert:latest
+	opm index add -c docker --bundles ${BUNDLE_IMG_CERT},quay.io/seldon/seldon-deploy-operator-bundle-cert:v1.0.0,quay.io/seldon/seldon-deploy-operator-bundle-cert:v0.7.0 --tag quay.io/seldon/test-deploy-catalog-cert:latest
 
 opm_push_certified:
 	docker push quay.io/seldon/test-deploy-catalog-cert:latest
@@ -245,13 +244,13 @@ create_bundle_image_cert_%:
 push_bundle_image_cert_%:
 	docker push quay.io/seldon/seldon-deploy-operator-bundle-cert:v$*
 
-create_bundles_cert: packagemanifests-certified create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
+create_bundles_cert: packagemanifests-certified create_bundle_image_cert_1.2.0 create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
 
-push_bundles_cert: push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
+push_bundles_cert: push_bundle_image_cert_1.2.0 push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
 
 build_push_cert: create_bundles_cert push_bundles_cert
 
-bundle_certified_push:
+bundle_cert_push:
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_operator_bundle} | docker login -u unused scan.connect.redhat.com --password-stdin
 	docker tag ${BUNDLE_IMG_CERT} scan.connect.redhat.com/ospid-b1e676a5-be95-44e9-99b4-45ea93134805/seldon-deploy-operator-bundle:${VERSION}
