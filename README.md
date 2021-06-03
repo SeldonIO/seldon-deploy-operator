@@ -230,3 +230,14 @@ Note it needs markdown https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB
 If you hit a bug in the Red Hat systems then raise an issue via https://connect.redhat.com/support/technology-partner/
 
 We also have a slack channel and some direct contacts.
+
+### Common Mistakes/Issues/Gotchas
+
+* Image vulnerability scans can sometimes take a long time - occasionally as much as 13 hrs
+* Scans sometimes come back without a reason - if so raise issue https://connect.redhat.com/support/technology-partner/
+* Don't worry too much about category when raising these issues - there's rarely a good one but they get re-routed
+* If vulnerability scan fails without a reason it's like a base image needing updating
+* Dependent images must be published first
+* End user has to go through marketplace url when installing, not operatorhub (different from testing flow)
+* Be careful when following RH docs - easy to miss something
+
