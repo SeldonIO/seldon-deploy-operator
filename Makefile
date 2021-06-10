@@ -77,7 +77,7 @@ docker-push:
 	docker push ${IMG}
 
 #password can be found at https://connect.redhat.com/project/4805411/view
-redhat-image-scan: #docker-build docker-push
+redhat-image-scan: docker-build docker-push
 	source ~/.config/seldon/seldon-core/redhat-image-passwords.sh && \
 		echo $${rh_password_seldondeploy_operator} | docker login -u unused scan.connect.redhat.com --password-stdin
 	docker tag ${IMG} scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}

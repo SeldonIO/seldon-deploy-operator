@@ -1,6 +1,6 @@
 # Seldon Deploy Operator
 
-This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk (v1.7.2).
+This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk (v1.8.0).
 
 Intended as a [Red Hat Marketplace operator](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project) but can be run outside openshfit.
 
@@ -56,7 +56,7 @@ First need a cluster e.g. `kind create cluster`.
 
 For KIND or other clusters without OLM, we [first install OLM](https://sdk.operatorframework.io/docs/olm-integration/quickstart-bundle/)
 
-* Install OLM - `operator-sdk olm install` (tested with 1.7.2)
+* Install OLM - `operator-sdk olm install` (tested with 1.8.0)
 
 * Install marketplace - `make operator-marketplace`
 
