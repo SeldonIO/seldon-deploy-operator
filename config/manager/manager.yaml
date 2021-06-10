@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         #registry.connect.redhat.com/seldonio/seldon-deploy-operator:1.0.0
-      - image: quay.io/seldon/seldon-deploy-server-operator:1.0.0
+      - image: quay.io/seldon/seldon-deploy-server-operator:1.2.1
         imagePullPolicy: Always
         args:
         - "--enable-leader-election"
@@ -43,7 +43,7 @@ spec:
             value: "seldon-deploy-operator"
           #registry.connect.redhat.com/seldonio/seldon-deploy:0.7
           - name: RELATED_IMAGE_DEPLOYMENT
-            value: seldonio/seldon-deploy-server-ubi:1.2.0
+            value: seldonio/seldon-deploy-server-ubi:1.2.1
           #registry.connect.redhat.com/seldonio/seldon-loadtester:0.1
           - name: RELATED_IMAGE_LOADTEST
             value: seldonio/hey-loadtester-ubi:0.1

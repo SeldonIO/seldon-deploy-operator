@@ -25,3 +25,4 @@ cd ${STARTUP_DIR}
 
 cp -r ${TEMPRESOURCES}/seldon-deploy/tools/seldon-deploy-install/sd-setup/helm-charts ${STARTUP_DIR}/helm-charts
 cp ${STARTUP_DIR}/helm-charts/seldon-deploy/values-redhat.yaml ${STARTUP_DIR}/helm-charts/seldon-deploy/values.yaml
+rm ${STARTUP_DIR}/helm-charts/seldon-deploy/values-redhat.yaml

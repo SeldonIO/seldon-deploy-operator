@@ -50,9 +50,9 @@ Versions referenced in the below table and in the make targets *should checked a
 
 | Image      | Git Repo | Make Targets                                         |  Status |
 | ---------- | -------- | ---------------------------------------------------- | ----------- |
-| Bundle     | here     |update_openshift_cert build_push_cert bundle_cert_push| 1.2.0 published  |
-| Operator   | here     |docker-build, redhat-image-scan                       | 1.2.0 published |
-| Deploy     | deploy   |build_image_redhat & redhat-image-scan                | 1.2.0 published |
+| Bundle     | here     |update_openshift_cert bundle_cert_push| 1.2.0 published  |
+| Operator   | here     |docker-build, redhat-image-scan                       | 1.2.1 published |
+| Deploy     | deploy   |build_image_redhat & redhat-image-scan                | 1.2.1 published |
 | Batch Proc | here     |build-batch-proc-image,redhat-batch-proc-image-scan   | 1.9.0-dev published (had to use that version to pass sec scan) |
 | Batch Proc | core     |above inherits core wrappers/s2i/python build_redhat  | ------------- |
 | Batch mc   | here     |build-minio-image, redhat-minio-client-image-scan     | 1.0 published |

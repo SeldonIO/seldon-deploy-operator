@@ -3,6 +3,3 @@ kind: OperatorGroup
 metadata:
   name: seldon-operatorgroup
   namespace: marketplace
-spec:
-  targetNamespaces:
-  - marketplace  

@@ -1,6 +1,6 @@
 ARG VERSION
 # Build the manager binary
-FROM quay.io/operator-framework/helm-operator:v1.7.2
+FROM quay.io/operator-framework/helm-operator:v1.8.0
 ARG VERSION
 LABEL name="Seldon Deploy Operator" \
       vendor="Seldon Technologies" \

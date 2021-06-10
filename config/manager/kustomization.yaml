@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: quay.io/seldon/seldon-deploy-server-operator
-  newTag: 1.2.0
+  newTag: 1.2.1
