@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 # Current Operator version
 VERSION ?= $(shell cat version.txt)
 #which replaces
@@ -22,7 +23,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 IMG ?= quay.io/seldon/seldon-deploy-server-operator:${VERSION}
 
 opm_index:
-	opm index add -c docker --bundles ${BUNDLE_IMG},quay.io/seldon/seldon-deploy-operator-bundle:v1.0.0,quay.io/seldon/seldon-deploy-operator-bundle:v0.7.0 --tag quay.io/seldon/test-deploy-catalog:latest
+	opm index add -c docker --bundles ${BUNDLE_IMG},quay.io/seldon/seldon-deploy-operator-bundle:v1.2.0,quay.io/seldon/seldon-deploy-operator-bundle:v1.0.0,quay.io/seldon/seldon-deploy-operator-bundle:v0.7.0 --tag quay.io/seldon/test-deploy-catalog:latest
 
 opm_push:
 	docker push quay.io/seldon/test-deploy-catalog:latest
@@ -83,7 +84,7 @@ redhat-image-scan: docker-build docker-push
 	docker push scan.connect.redhat.com/ospid-86da5593-9bfc-43ff-954d-0bc8dbb796f1/seldon-deploy-operator:${VERSION}
 
 PATH  := $(PATH):$(PWD)/bin
-SHELL := env PATH=$(PATH) /bin/sh
+SHELL := env PATH=$(PATH) /bin/bash
 OS    = $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH  = $(shell uname -m | sed 's/x86_64/amd64/')
 OSOPER   = $(shell uname -s | tr '[:upper:]' '[:lower:]' | sed 's/darwin/apple-darwin/' | sed 's/linux/linux-gnu/')
@@ -118,7 +119,7 @@ endif
 # Generate bundle manifests and metadata, then validate generated files.
 .PHONY: bundle
 bundle: kustomize
-	rm -r bundle
+	rm -rf bundle
 	operator-sdk generate kustomize manifests -q
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
 	$(KUSTOMIZE) build config/manifests | operator-sdk generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
@@ -224,7 +225,7 @@ packagemanifests-certified:
 
 
 opm_index_certified:
-	opm index add -c docker --bundles ${BUNDLE_IMG_CERT},quay.io/seldon/seldon-deploy-operator-bundle-cert:v1.0.0,quay.io/seldon/seldon-deploy-operator-bundle-cert:v0.7.0 --tag quay.io/seldon/test-deploy-catalog-cert:latest
+	opm index add -c docker --bundles ${BUNDLE_IMG_CERT},quay.io/seldon/seldon-deploy-operator-bundle-cert:v1.2.0,quay.io/seldon/seldon-deploy-operator-bundle-cert:v1.0.0,quay.io/seldon/seldon-deploy-operator-bundle-cert:v0.7.0 --tag quay.io/seldon/test-deploy-catalog-cert:latest
 
 opm_push_certified:
 	docker push quay.io/seldon/test-deploy-catalog-cert:latest
@@ -244,9 +245,9 @@ create_bundle_image_cert_%:
 push_bundle_image_cert_%:
 	docker push quay.io/seldon/seldon-deploy-operator-bundle-cert:v$*
 
-create_bundles_cert: packagemanifests-certified create_bundle_image_cert_1.2.0 create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
+create_bundles_cert: packagemanifests-certified create_bundle_image_cert_1.2.1 create_bundle_image_cert_1.2.0 create_bundle_image_cert_1.0.0 create_bundle_image_cert_0.7.0
 
-push_bundles_cert: push_bundle_image_cert_1.2.0 push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
+push_bundles_cert: push_bundle_image_cert_1.2.1 push_bundle_image_cert_1.2.0 push_bundle_image_cert_1.0.0 push_bundle_image_cert_0.7.0
 
 build_push_cert: create_bundles_cert push_bundles_cert
 

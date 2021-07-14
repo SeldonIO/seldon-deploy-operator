@@ -1,6 +1,6 @@
 # Seldon Deploy Operator
 
-This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk (v1.7.2).
+This operator can be used for installing instances of Seldon Deploy. Built with operator-sdk (v1.8.0).
 
 Intended as a [Red Hat Marketplace operator](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/certify-your-operator/certify-your-operator-bundle-image/creating-operator-bundle-image-project) but can be run outside openshfit.
 
@@ -9,6 +9,12 @@ It is a helm-based operator. So basically an image that runs helm and can instal
 There are dependencies needed for running Deploy and marketplace imposes restrictions on these. See [installation google doc](https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing)
 
 ## Building
+
+Dependencies
+
+ * [Operator SDK](https://sdk.operatorframework.io/)
+   * Tested with 1.8.0
+
 
 To build and push just the operator:
 ```bash
@@ -42,7 +48,7 @@ This is a minimal setup just for checking installation. No Deploy features work.
 * `make deploy`
 * `kubectl apply -n seldon-system -f ./examples-testing/kind-minimal-setup.yaml`
 *  Port-forward to deploy (`kubectl port-forward -n seldon-system svc/seldondeploy-sample-kind-full-seldon-deploy 8080:80`) 
-to see UI, though you can't deploy anything in this setup.
+[to see UI](http://localhost:8080/seldon-deploy/), though you can't deploy anything in this setup. 
 
 ### OLM Deployment
 
@@ -50,7 +56,7 @@ First need a cluster e.g. `kind create cluster`.
 
 For KIND or other clusters without OLM, we [first install OLM](https://sdk.operatorframework.io/docs/olm-integration/quickstart-bundle/)
 
-* Install OLM - `operator-sdk olm install` (tested with 1.7.2)
+* Install OLM - `operator-sdk olm install` (tested with 1.8.0)
 
 * Install marketplace - `make operator-marketplace`
 
@@ -136,25 +142,27 @@ That example is the one that shows up in marketplace. Would need RH to decouple 
 
 ### Steps for Publishing a New Deploy Version
 
-* First check the deploy image is published from deploy repo with `make build_image_redhat` and `make push_to_dockerhub_ubi`.
-* This new version of the seldonio/seldon-deploy-server-ubi image should be plugged into the values file. You could plug into deploy's [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) before release or in seldon-deploy-operator when copied over (later step). 
-* Then in seldon-deploy-operator change the version in [version.txt](version.txt) and also [replaces.txt](replaces.txt) (which is the version before this).
-* If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files inc [bundle.Dockerfile](bundle.Dockerfile))
-* Run `make get-helm-chart` to pull in latest helm chart.
-* Note that the deploy image (seldonio/seldon-deploy-server-ubi) may not have been updated in the deploy [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) file (see first step) and if so you'll need to update here.
-* If there have been changes in the values file then you'll have to update examples in examples-testing and [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)
-* [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml) is best updated by copy-pasting the [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) and changing the indentation but [examples-testing](examples-testing/) files need to be updated with the specific changes
-* You can look at the history of the values file in deploy to determine what has changed since last release.
-* Referenced images in values file will come across with values file but [config/samples]((config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)), [examples-testing](examples-testing/), [manager.yaml](config/manager/manager.yaml) and [packagemanifests-certified.sh](packagemanifests-certified.sh) need manual update (see [IMAGES.md](IMAGES.md))
-* Updating the above-referenced files should cover all uses of the dependent images (those referenced in values-redhat.yaml and [IMAGES.md](IMAGES.md)) but best to search workspace for each version to make sure none missed.
-* Before updating/publishing check the `opm_index` and `opm_index_certified` commands in the Makefile. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
-* To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
-* Run through all the tests above - kind and in openshift and with marketplace and all the dependencies. Note these tests use quay/dockerhub images. The corresponding images in red hat container registry have to be approved before use.
-* If anything has changed in an openshift version (e.g. a change to user-workload-monitoring), update the docs (see 'publishing docs' below).
-* Before publishing update the `create_bundles_cert` and `push_bundles_cert` make targets in [Makefile](Makefile) to include the new version.
-* Publish images - see [IMAGES.md](IMAGES.md) for how to publish (all make targets listed there).
-* Publish docs - see docs section below
-* After publication contact IBM (see contacts below) to confirm new version of [bundle](https://catalog.redhat.com/software/containers/seldonio/seldon-deploy-operator-bundle/5f77569a29373868204224e3) has gone to their queue 
+ 1. First check the deploy image is published from deploy repo with `make build_image_redhat` and `make push_to_dockerhub_ubi`. Ensure you are in the release branch, e.g. `git checkout v1.2.1`
+ 1. This new version of the seldonio/seldon-deploy-server-ubi image should be plugged into the values file. You could plug into deploy's [values-redhat.yaml](https://github.com/SeldonIO/seldon-deploy/blob/master/tools/seldon-deploy-install/sd-setup/helm-charts/seldon-deploy/values-redhat.yaml) before release or in [seldon-deploy-operator](helm-charts/seldon-deploy/values-redhat.yaml) when copied over (later step). 
+ 1. Then in seldon-deploy-operator change the version in [version.txt](version.txt) and also [replaces.txt](replaces.txt) (which is the version before this).
+ 1.  If the target openshift version has changed then change that too (in the various bundle-*.Dockerfile files inc [bundle.Dockerfile](bundle.Dockerfile))
+ 1. Run `make get-helm-chart` to pull in latest helm chart. Will need to save values.yaml if you have changed this as it will be overwritten.
+    * Note that the deploy image (seldonio/seldon-deploy-server-ubi) may not have been updated in the deploy [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) file (see first step) and if so you'll need to update here.
+ 1. If there have been changes in the values file then you'll have to update examples in examples-testing and [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)
+    * [config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml](config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml) is best updated by copy-pasting the [values-redhat.yaml](helm-charts/seldon-deploy/values-redhat.yaml) and changing the indentation but [examples-testing](examples-testing/) files need to be updated with the specific changes
+    * You can look at the history of the values file in deploy to determine what has changed since last release.
+ 1. Update referenced images in the values file will come across with the values file but [config/samples]((config/samples/machinelearning.seldon_v1alpha1_seldondeploy.yaml)), [examples-testing](examples-testing/), [manager.yaml](config/manager/manager.yaml) and [packagemanifests-certified.sh](packagemanifests-certified.sh) need manual update to correct image tags (see [IMAGES.md](IMAGES.md))
+    * Updating the above-referenced files should cover all uses of the dependent images (those referenced in values-redhat.yaml and [IMAGES.md](IMAGES.md)) but best to search workspace for each version to make sure none missed.
+ 1. Update the `opm_index` and `opm_index_certified` commands in the Makefile to include the previous version in the list of images. If you don't add all versions (inc past) to its list, you'll hit `bundle specifies a non-existent replacement` error.
+ 1. To build and push test images for deploy operator and its bundle you can run `make update_openshift` (this is run during testing steps but can also run first).
+ 1.  Run through all the tests above - kind and in openshift and with marketplace and all the dependencies. Note these tests use quay/dockerhub images. The corresponding images in red hat container registry have to be approved before use.
+ 1. If anything has changed in an openshift version (e.g. a change to user-workload-monitoring), update the docs (see 'publishing docs' below).
+ 1. Before publishing update the `create_bundles_cert` and `push_bundles_cert` make targets in [Makefile](Makefile) to include the new version.
+ 1. Publish images except bundle - see [IMAGES.md](IMAGES.md) for how to publish (all make targets listed there).
+ 1. Run `make openshift_update_cert`
+ 1. Publish bundle except bundle - see [IMAGES.md](IMAGES.md) for how to publish
+ 1. Publish docs - see docs section below
+ 1.  After publication contact IBM (see contacts below) to confirm new version of [bundle](https://catalog.redhat.com/software/containers/seldonio/seldon-deploy-operator-bundle/5f77569a29373868204224e3) has gone to their queue 
  
  [Video explaining the above](https://us02web.zoom.us/rec/share/uUZBYABuiPJmtZU4jX67hZN8z8wy6jdbj8Tp4jAGRO_iK7kphsg1i2a3DEn-gxZ2.-dlNKTUa032I79P4)
  
@@ -209,19 +217,12 @@ A good walkthrough is https://redhat-connect.gitbook.io/partner-guide-for-red-ha
 
 ### Publishing Docs
 
-The listing is maintained in https://www.ibm.com/marketplace/workbench/provider/dashboard
+The listing is maintained in https://marketplace.redhat.com/partner/products/9697de171a307b0dce64e423c2d7946a
+ (replacing https://www.ibm.com/marketplace/workbench/provider/dashboard)
 
 The account for this is in [1password](https://start.1password.com/open/i?a=SSGQBEYWPRHN7GYLNPQYAOU7QA&h=team-seldon.1password.com&i=vdgkpe3ii5bm6vkzycvw4tepni&v=po7kyvksukhlrsurwmygolab3a)
 
-There is meant to be equivalent to https://marketplace.redhat.com/partner/products/9697de171a307b0dce64e423c2d7946a
-
-Or possibly http://marketplace.redhat.com/en-us/account/partner-management
-
-For me only IBM system fully works for editing but only RH system works for adding new editors. Seems to be intended.
-
-I think you have to create an account with IBM.
-
-I've been chatting with Kamaldeep Singh Sehmbey via cognitive-app.slack.com
+Access management is handled at:  http://marketplace.redhat.com/en-us/account/partner-management
 
 Note it needs markdown https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing
 

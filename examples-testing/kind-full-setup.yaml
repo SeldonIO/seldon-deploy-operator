@@ -5,7 +5,7 @@ metadata:
 spec:
   replicaCount: 1
   image:
-    image: seldonio/seldon-deploy-server-ubi:1.2.0
+    image: seldonio/seldon-deploy-server-ubi:1.2.1
     pullPolicy: Always
   #uncomment below to use imagePullSecrets e.g. to avoid docker rate-limiting
   #imagePullSecrets:

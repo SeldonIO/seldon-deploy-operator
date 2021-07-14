@@ -111,6 +111,14 @@ spec:
                   name: {{ .Values.metadata.pg.secret }}
                   key: sslmode
             {{- end}}
+            {{- if .Values.metadata.disableRuntimeWatchers }}
+            - name: "DISABLE_RUNTIME_META"
+              value: "true"
+            {{- end }}
+            {{- if .Values.metadata.disableRuntimeWatchers }}
+            - name: "DISABLE_RUNTIME_META_WATCHERS"
+              value: "true"
+            {{- end}}
             {{- if and .Values.gitops.git.secret .Values.gitops.argocd.enabled }}
             - name: "GIT_USER"
               valueFrom:
@@ -252,3 +260,4 @@ spec:
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
   {{- end }}
+

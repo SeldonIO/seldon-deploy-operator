@@ -15,11 +15,6 @@ LABEL operators.operatorframework.io.metrics.project_layout=helm.sdk.operatorfra
 LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
 LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
-#seems these have to be put in manually but bundle scan fails without them
-LABEL com.redhat.openshift.versions="v4.7"
-LABEL com.redhat.delivery.operator.bundle=true
-LABEL com.redhat.delivery.backport=false
-
 # Copy files to locations specified by labels.
 COPY bundle/manifests /manifests/
 COPY bundle/metadata /metadata/
