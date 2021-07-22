@@ -226,6 +226,12 @@ Access management is handled at:  http://marketplace.redhat.com/en-us/account/pa
 
 Note it needs markdown https://docs.google.com/document/d/1a_KHXZI4H_2-CdJl89ejB_zGNsq_gCDDmD6jMCsF3gc/edit?usp=sharing
 
+### Updating Quickstarts
+
+Fork https://github.com/red-hat-data-services/odh-dashboard
+
+Create a PR to updates the [seldon quickstarts](https://github.com/red-hat-data-services/odh-dashboard/tree/master/data/quickstarts) - Usually by updating the links to new version of Deploy but might also need to change actually demo instructions. 
+
 ### Troubleshooting Publication Issues
 
 If you hit a bug in the Red Hat systems then raise an issue via https://connect.redhat.com/support/technology-partner/
